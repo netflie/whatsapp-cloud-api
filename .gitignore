@@ -3,3 +3,4 @@ composer.phar
 .env
 /tests/WhatsAppCloudApiTestConfiguration.php
 .phpunit.result.cache
+composer.lock
