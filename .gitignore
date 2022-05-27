@@ -4,3 +4,4 @@ composer.phar
 /tests/WhatsAppCloudApiTestConfiguration.php
 .phpunit.result.cache
 composer.lock
+.php-cs-fixer.cache
