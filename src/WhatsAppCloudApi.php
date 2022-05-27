@@ -2,16 +2,21 @@
 
 namespace Netflie\WhatsAppCloudApi;
 
+use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
+use Netflie\WhatsAppCloudApi\Message\Document\Document;
+use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
+use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
+use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
+use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
-use Netflie\WhatsAppCloudApi\Response;
 
 class WhatsAppCloudApi
 {
     /**
      * @const string Default Graph API version.
      */
-    const DEFAULT_GRAPH_VERSION = 'v13.0';
+    public const DEFAULT_GRAPH_VERSION = 'v13.0';
 
     /**
      * @var WhatsAppCloudApiApp The WhatsAppCloudApiApp entity.
@@ -72,6 +77,29 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
+     * can put any public URL of some document uploaded on Internet.
+     *
+     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  Document $document   Document to send. See documents accepted in the Message/Document folder.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption): Response
+    {
+        $message = new DocumentMessage($to, $document_id, $name, $caption);
+        $request = new RequestDocumentMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendRequest($request);
+    }
+
+    /**
      * Returns the Facebook Whatsapp Access Token.
      *
      * @return string
@@ -90,5 +118,4 @@ class WhatsAppCloudApi
     {
         return $this->app->fromPhoneNumberId();
     }
-
 }

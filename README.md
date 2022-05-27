@@ -17,11 +17,15 @@ Minimum requirements – To run the SDK, your system will require **PHP >= 7.0**
 ```compose require netflie/whatsapp-cloud-api ```
 
 ## Quick Examples
+
+### Send a text message
 ```php
 <?php
+
 // Require the Composer autoloader.
 require 'vendor/autoload.php';
 
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 
 // Instantiate the WhatsAppCloudApi super class.
 $whatsapp_cloud_api = new WhatsAppCloudApi([
@@ -32,10 +36,33 @@ $whatsapp_cloud_api = new WhatsAppCloudApi([
 $whatsapp_cloud_api->sendTextMessage('34676104574', 'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es');
 ```
 
+### Send a document
+You can send documents in two ways: by uploading a file to the WhatsApp Cloud servers (where you will receive an identifier) or from a link to a document published on internet.
+
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
+
+$document_id = '341476474779872';
+$document_name = 'whatsapp-cloud-api-from-id.pdf';
+$document_caption = 'WhastApp API Cloud Guide';
+
+// With the Media Object ID of some document upload on the WhatsApp Cloud servers
+$media_id = new MediaObjectID($document_id);
+$whatsapp_cloud_api->sendDocument('34676104574', $media_id, $document_name, $document_caption);
+
+// Or
+$document_link = 'https://netflie.es/wp-content/uploads/2022/05/image.png';
+$link_id = new LinkID($document_link);
+$whatsapp_cloud_api->sendDocument('34676104574', $link_id, $document_name, $document_caption);
+```
+
 ## Features
 
-This SKD version only allows to send text message objects. All WhatsApp Cloud API objects will be supported in the coming weeks.
 - Send Text Messages
+- Send Documents
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
