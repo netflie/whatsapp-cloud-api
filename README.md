@@ -168,6 +168,17 @@ $whatsapp_cloud_api->sendSticker('<destination-phone-number>', $media_id);
 $whatsapp_cloud_api->sendLocation('<destination-phone-number>', $longitude, $latitude, $name, $address);
 ```
 
+### Send a contact message
+
+```php
+<?php
+
+$name = new ContactName('Adams', 'Smith');
+$phone = new Phone('34676204577', PhoneType::CELL());
+
+$whatsapp_cloud_api->sendContact('<destination-phone-number>', $name, $phone);
+```
+
 ## Features
 
 - Send Text Messages

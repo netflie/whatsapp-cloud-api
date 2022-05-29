@@ -2,6 +2,9 @@
 
 namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
+use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
+use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
+use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 use Netflie\WhatsAppCloudApi\Message\Document\DocumentId;
 use Netflie\WhatsAppCloudApi\Message\Document\DocumentLink;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
@@ -187,6 +190,20 @@ final class WhatsAppCloudApiTest extends TestCase
             $latitude,
             $name,
             $address
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_contact()
+    {
+        $contact_name = new ContactName('Adams', 'Smith');
+        $phone = new Phone('34676204577', PhoneType::CELL());
+        $response = $this->whatsapp_app_cloud_api->sendContact(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $contact_name,
+            $phone
         );
 
         $this->assertEquals(200, $response->httpStatusCode());

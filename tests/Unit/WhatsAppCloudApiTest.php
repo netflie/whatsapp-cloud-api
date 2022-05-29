@@ -5,6 +5,9 @@ namespace Netflie\WhatsAppCloudApi\Tests\Unit;
 use Netflie\WhatsAppCloudApi\Client;
 use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\RawResponse;
+use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
+use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
+use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 use Netflie\WhatsAppCloudApi\Message\Document\DocumentId;
 use Netflie\WhatsAppCloudApi\Message\Document\DocumentLink;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
@@ -636,6 +639,60 @@ final class WhatsAppCloudApiTest extends TestCase
             $latitude,
             $name,
             $address
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($body, $response->decodedBody());
+        $this->assertEquals($encoded_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_contact()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildRequestUri();
+        $first_name = $this->faker->firstName();
+        $last_name = $this->faker->lastName;
+        $phone = $this->faker->e164PhoneNumber;
+        $phone_type = PhoneType::CELL();
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'contacts',
+            'contacts' => [
+                [
+                    'name' => [
+                        'formatted_name' => "$first_name $last_name",
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                    ],
+                    'phones' => [
+                        [
+                            'phone' => $phone,
+                            'type' => $phone_type,
+                        ]
+                    ],
+                ],
+            ],
+        ];
+        $encoded_body = json_encode($body);
+        $headers = [
+            'Authorization' => 'Bearer ' . WhatsAppCloudApiTestConfiguration::$access_token,
+            'Content-Type' => 'application/json',
+        ];
+
+        $this->client_handler
+            ->send($url, $encoded_body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $encoded_body, 200));
+
+        $contact_name = new ContactName($first_name, $last_name);
+        $response = $this->whatsapp_app_cloud_api->sendContact(
+            $to,
+            $contact_name,
+            new Phone($phone, $phone_type)
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
