@@ -118,12 +118,26 @@ $link_id = new LinkID($audio_link);
 $whatsapp_cloud_api->sendAudio('34676104574', $link_id);
 ```
 
+### Send an image message
+```php
+<?php
+
+$link_id = new LinkID('http(s)://image-url');
+$whatsapp_cloud_api->sendImage('<destination-phone-number>', $link_id);
+
+//or
+
+$media_id = new MediaObjectID('<image-object-id>');
+$whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
+```
+
 ## Features
 
 - Send Text Messages
 - Send Documents
 - Send Templates with parameters
 - Send Audios
+- Send Images
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
