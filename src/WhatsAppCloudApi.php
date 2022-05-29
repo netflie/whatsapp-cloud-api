@@ -6,6 +6,7 @@ use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
 use Netflie\WhatsAppCloudApi\Message\Document\Document;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
+use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
@@ -90,6 +91,32 @@ class WhatsAppCloudApi
     {
         $message = new DocumentMessage($to, $document_id, $name, $caption);
         $request = new RequestDocumentMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendRequest($request);
+    }
+
+    /**
+     * Sends a message template.
+     *
+     * @param  string         $to              WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string         $template_name   Name of the template to send.
+     * @param  string         $language        Language code
+     * @param  Component|null $component       Component parameters of a template
+     *
+     * @link https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#supported-languages See language codes supported.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null): Response
+    {
+        $message = new TemplateMessage($to, $template_name, $language, $components);
+        $request = new RequestTemplateMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
