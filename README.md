@@ -109,12 +109,21 @@ $components = new Component($component_header, $component_body, $component_butto
 $whatsapp_cloud_api->sendTemplate('34676104574', 'sample_issue_resolution', 'en_US'); // Language is optional
 ```
 
+### Send an audio message
+```php
+<?php
+
+$audio_link = 'https://netflie.es/wp-content/uploads/2022/05/file_example_OOG_1MG.ogg';
+$link_id = new LinkID($audio_link);
+$whatsapp_cloud_api->sendAudio('34676104574', $link_id);
+```
 
 ## Features
 
 - Send Text Messages
 - Send Documents
 - Send Templates with parameters
+- Send Audios
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
