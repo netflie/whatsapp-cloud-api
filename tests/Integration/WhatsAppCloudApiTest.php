@@ -174,4 +174,22 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_send_location()
+    {
+        $longitude = 39.56939;
+        $latitude = 2.65024;
+        $name = 'The Paradise';
+        $address = 'Mallorca Rd., 07000, Illes Balears (Spain)';
+        $response = $this->whatsapp_app_cloud_api->sendLocation(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $longitude,
+            $latitude,
+            $name,
+            $address
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
 }

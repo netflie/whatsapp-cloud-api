@@ -160,6 +160,14 @@ $media_id = new MediaObjectID('<sticker-object-id>');
 $whatsapp_cloud_api->sendSticker('<destination-phone-number>', $media_id);
 ```
 
+### Send a location message
+
+```php
+<?php
+
+$whatsapp_cloud_api->sendLocation('<destination-phone-number>', $longitude, $latitude, $name, $address);
+```
+
 ## Features
 
 - Send Text Messages

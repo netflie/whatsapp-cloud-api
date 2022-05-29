@@ -598,6 +598,52 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_location()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildRequestUri();
+        $latitude = $this->faker->latitude;
+        $longitude = $this->faker->latitude;
+        $name = $this->faker->city;
+        $address = $this->faker->address;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'location',
+            'location' => [
+                'longitude' => $longitude,
+                'latitude' => $latitude,
+                'name' => $name,
+                'address' => $address,
+            ],
+        ];
+        $encoded_body = json_encode($body);
+        $headers = [
+            'Authorization' => 'Bearer ' . WhatsAppCloudApiTestConfiguration::$access_token,
+            'Content-Type' => 'application/json',
+        ];
+
+        $this->client_handler
+            ->send($url, $encoded_body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $encoded_body, 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendLocation(
+            $to,
+            $longitude,
+            $latitude,
+            $name,
+            $address
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($body, $response->decodedBody());
+        $this->assertEquals($encoded_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     private function buildRequestUri(): string
     {
         return Client::BASE_GRAPH_URL . '/' . WhatsAppCloudApiTestConfiguration::$graph_version . '/' . WhatsAppCloudApiTestConfiguration::$from_phone_number_id . '/messages';

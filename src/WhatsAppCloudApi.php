@@ -6,6 +6,7 @@ use Netflie\WhatsAppCloudApi\Message\AudioMessage;
 use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
 use Netflie\WhatsAppCloudApi\Message\Document\Document;
 use Netflie\WhatsAppCloudApi\Message\ImageMessage;
+use Netflie\WhatsAppCloudApi\Message\LocationMessage;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\StickerMessage;
 use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
@@ -15,6 +16,7 @@ use Netflie\WhatsAppCloudApi\Message\VideoMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestImageMessage;
+use Netflie\WhatsAppCloudApi\Request\RequestLocationMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestStickerMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
@@ -218,6 +220,32 @@ class WhatsAppCloudApi
     {
         $message = new StickerMessage($to, $link);
         $request = new RequestStickerMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendRequest($request);
+    }
+
+    /**
+     * Sends a location
+     *
+     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  float    $longitude  Longitude position.
+     * @param  float    $latitude   Latitude position.
+     * @param  string   $name       Name of location sent.
+     * @param  address  $address    Address of location sent.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendLocation(string $to, float $longitude, float $latitude, string $name = '', string $address = ''): Response
+    {
+        $message = new LocationMessage($to, $longitude, $latitude, $name, $address);
+        $request = new RequestLocationMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
