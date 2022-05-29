@@ -4,7 +4,6 @@ namespace Netflie\WhatsAppCloudApi\Message;
 
 use Netflie\WhatsAppCloudApi\Message\Error\InvalidMessage;
 
-
 class LocationMessage extends Message
 {
     /**
@@ -28,7 +27,6 @@ class LocationMessage extends Message
     */
     public function __construct(string $to, float $longitude, float $latitude, string $name = '', string $address = '')
     {
-
         if ($address && !$name) {
             throw new InvalidMessage('Name is required.');
         }

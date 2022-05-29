@@ -122,7 +122,7 @@ class Response
     /**
      * Returns true if Graph returned an error message.
      *
-     * @return boolean
+     * @return bool
      */
     public function isError()
     {

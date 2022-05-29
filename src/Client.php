@@ -4,14 +4,13 @@ namespace Netflie\WhatsAppCloudApi;
 
 use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\GuzzleClientHandler;
-use Netflie\WhatsAppCloudApi\Response;
 
 class Client
 {
     /**
      * @const string Production Graph API URL.
      */
-    const BASE_GRAPH_URL = 'https://graph.facebook.com';
+    public const BASE_GRAPH_URL = 'https://graph.facebook.com';
 
     /**
      * @var ClientHandler The HTTP client handler to send the request.

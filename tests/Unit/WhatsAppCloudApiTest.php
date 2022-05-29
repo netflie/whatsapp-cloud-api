@@ -8,8 +8,6 @@ use Netflie\WhatsAppCloudApi\Http\RawResponse;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
-use Netflie\WhatsAppCloudApi\Message\Document\DocumentId;
-use Netflie\WhatsAppCloudApi\Message\Document\DocumentLink;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
@@ -116,7 +114,8 @@ final class WhatsAppCloudApiTest extends TestCase
         $response = $this->whatsapp_app_cloud_api->sendDocument(
             $to,
             $media_id,
-            $filename, $caption
+            $filename,
+            $caption
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
@@ -159,7 +158,8 @@ final class WhatsAppCloudApiTest extends TestCase
         $response = $this->whatsapp_app_cloud_api->sendDocument(
             $to,
             $link_id,
-            $filename, $caption
+            $filename,
+            $caption
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
@@ -209,7 +209,6 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
-
     public function test_send_template_with_components()
     {
         $to = $this->faker->phoneNumber;
@@ -238,8 +237,8 @@ final class WhatsAppCloudApiTest extends TestCase
                     [
                         'type' => 'text',
                         'text' => 'Yes',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'type' => 'button',
@@ -249,9 +248,9 @@ final class WhatsAppCloudApiTest extends TestCase
                     [
                         'type' => 'text',
                         'text' => 'No',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         $components = new Component($component_header, $component_body, $component_buttons);
@@ -281,8 +280,8 @@ final class WhatsAppCloudApiTest extends TestCase
                             [
                                 'type' => 'text',
                                 'text' => 'Yes',
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     [
                         'type' => 'button',
@@ -292,8 +291,8 @@ final class WhatsAppCloudApiTest extends TestCase
                             [
                                 'type' => 'text',
                                 'text' => 'No',
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -672,7 +671,7 @@ final class WhatsAppCloudApiTest extends TestCase
                         [
                             'phone' => $phone,
                             'type' => $phone_type,
-                        ]
+                        ],
                     ],
                 ],
             ],
