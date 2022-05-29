@@ -478,6 +478,88 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_video_with_link()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildRequestUri();
+        $video_link = $this->faker->url;
+        $caption = $this->faker->text;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'video',
+            'video' => [
+                'link' => $video_link,
+                'caption' => $caption,
+            ],
+        ];
+        $encoded_body = json_encode($body);
+        $headers = [
+            'Authorization' => 'Bearer ' . WhatsAppCloudApiTestConfiguration::$access_token,
+            'Content-Type' => 'application/json',
+        ];
+
+        $this->client_handler
+            ->send($url, $encoded_body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $encoded_body, 200));
+
+        $link_id = new LinkID($video_link);
+        $response = $this->whatsapp_app_cloud_api->sendVideo(
+            $to,
+            $link_id,
+            $caption
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($body, $response->decodedBody());
+        $this->assertEquals($encoded_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_video_with_id()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildRequestUri();
+        $video_id = $this->faker->uuid;
+        $caption = $this->faker->text;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'video',
+            'video' => [
+                'id' => $video_id,
+                'caption' => $caption,
+            ],
+        ];
+        $encoded_body = json_encode($body);
+        $headers = [
+            'Authorization' => 'Bearer ' . WhatsAppCloudApiTestConfiguration::$access_token,
+            'Content-Type' => 'application/json',
+        ];
+
+        $this->client_handler
+            ->send($url, $encoded_body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $encoded_body, 200));
+
+        $media_id = new MediaObjectID($video_id);
+        $response = $this->whatsapp_app_cloud_api->sendVideo(
+            $to,
+            $media_id,
+            $caption
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($body, $response->decodedBody());
+        $this->assertEquals($encoded_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     private function buildRequestUri(): string
     {
         return Client::BASE_GRAPH_URL . '/' . WhatsAppCloudApiTestConfiguration::$graph_version . '/' . WhatsAppCloudApiTestConfiguration::$from_phone_number_id . '/messages';

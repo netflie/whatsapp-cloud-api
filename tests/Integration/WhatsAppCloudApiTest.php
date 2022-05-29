@@ -149,4 +149,17 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_send_video()
+    {
+        $link_id = new LinkID('https://filesamples.com/samples/video/mp4/sample_640x360.mp4');
+        $response = $this->whatsapp_app_cloud_api->sendVideo(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $link_id,
+            'A video sample.'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
 }

@@ -10,11 +10,13 @@ use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
+use Netflie\WhatsAppCloudApi\Message\VideoMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestImageMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
+use Netflie\WhatsAppCloudApi\Request\RequestVideoMessage;
 
 class WhatsAppCloudApi
 {
@@ -168,6 +170,29 @@ class WhatsAppCloudApi
     {
         $message = new ImageMessage($to, $document_id, $caption);
         $request = new RequestImageMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendRequest($request);
+    }
+
+    /**
+     * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
+     * can put any public URL of some document uploaded on Internet.
+     *
+     * @param  string   $to     WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  MediaId  $document_id WhatsApp Media ID or any Internet public link document.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendVideo(string $to, MediaID $link, string $caption = ''): Response
+    {
+        $message = new VideoMessage($to, $link, $caption);
+        $request = new RequestVideoMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
