@@ -3,6 +3,9 @@
 namespace Netflie\WhatsAppCloudApi;
 
 use Netflie\WhatsAppCloudApi\Message\AudioMessage;
+use Netflie\WhatsAppCloudApi\Message\ContactMessage;
+use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
+use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
 use Netflie\WhatsAppCloudApi\Message\Document\Document;
 use Netflie\WhatsAppCloudApi\Message\ImageMessage;
@@ -14,6 +17,7 @@ use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
 use Netflie\WhatsAppCloudApi\Message\VideoMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
+use Netflie\WhatsAppCloudApi\Request\RequestContactMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestImageMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestLocationMessage;
@@ -246,6 +250,30 @@ class WhatsAppCloudApi
     {
         $message = new LocationMessage($to, $longitude, $latitude, $name, $address);
         $request = new RequestLocationMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendRequest($request);
+    }
+
+    /**
+     * Sends a contact
+     *
+     * @param  string        $to    WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ContactName   $name  The contact name object.
+     * @param  Phone|null    $phone The contact phone number.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendContact(string $to, ContactName $name, Phone ...$phone): Response
+    {
+        $message = new ContactMessage($to, $name, ...$phone);
+        $request = new RequestContactMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
