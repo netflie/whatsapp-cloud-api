@@ -7,6 +7,7 @@ use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
 use Netflie\WhatsAppCloudApi\Message\Document\Document;
 use Netflie\WhatsAppCloudApi\Message\ImageMessage;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
+use Netflie\WhatsAppCloudApi\Message\StickerMessage;
 use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
@@ -14,6 +15,7 @@ use Netflie\WhatsAppCloudApi\Message\VideoMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestImageMessage;
+use Netflie\WhatsAppCloudApi\Request\RequestStickerMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestVideoMessage;
@@ -193,6 +195,29 @@ class WhatsAppCloudApi
     {
         $message = new VideoMessage($to, $link, $caption);
         $request = new RequestVideoMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendRequest($request);
+    }
+
+    /**
+     * Sends a sticker uploaded to the WhatsApp Cloud servers by it Media ID or you also
+     * can put any public URL of some document uploaded on Internet.
+     *
+     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  MediaId  $document_id    WhatsApp Media ID or any Internet public link document.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendSticker(string $to, MediaID $link): Response
+    {
+        $message = new StickerMessage($to, $link);
+        $request = new RequestStickerMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),

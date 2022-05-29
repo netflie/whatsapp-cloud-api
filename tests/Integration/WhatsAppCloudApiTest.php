@@ -162,4 +162,16 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_send_sticker()
+    {
+        $link_id = new LinkID('https://raw.githubusercontent.com/WhatsApp/stickers/main/Android/app/src/main/assets/1/01_Cuppy_smile.webp');
+        $response = $this->whatsapp_app_cloud_api->sendSticker(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $link_id
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
 }
