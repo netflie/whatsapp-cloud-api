@@ -121,4 +121,18 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_send_audio_with_url()
+    {
+        $link_id = new LinkID('https://netflie.es/wp-content/uploads/2022/05/sample3.aac');
+        $response = $this->whatsapp_app_cloud_api->sendAudio(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $link_id,
+            'whatsapp-cloud-api-from-link.ogg',
+            'WhastApp API Cloud Guide'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
 }
