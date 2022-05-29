@@ -6,12 +6,10 @@ This package makes it easy for developers to access [WhatsApp Cloud API](https:/
 
 The first **1,000 conversations** each month are free from WhatsApp Cloud API. A conversation.
 
-This package is in an **early stage** of development. New features will be added in the coming weeks. Be patient.
-
 ## Getting Started
 Please create and configure your Facebook WhatsApp application following the ["Get Stared"](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started) section of the official guide.
 
-Minimum requirements – To run the SDK, your system will require **PHP >= 7.0** with a recent version of **CURL >=7.19.4** compiled with OpenSSL and zlib.
+Minimum requirements – To run the SDK, your system will require **PHP >= 7.4** with a recent version of **CURL >=7.19.4** compiled with OpenSSL and zlib.
 
 ## Installation
 ```compose require netflie/whatsapp-cloud-api ```
@@ -106,7 +104,7 @@ $component_buttons = [
 ];
 
 $components = new Component($component_header, $component_body, $component_buttons);
-$whatsapp_cloud_api->sendTemplate('34676104574', 'sample_issue_resolution', 'en_US'); // Language is optional
+$whatsapp_cloud_api->sendTemplate('34676104574', 'sample_issue_resolution', 'en_US', $components); // Language is optional
 ```
 
 ### Send an audio message
@@ -188,6 +186,8 @@ $whatsapp_cloud_api->sendContact('<destination-phone-number>', $name, $phone);
 - Send Images
 - Send Videos
 - Send Stickers
+- Send Locations
+- Send Contacts
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
