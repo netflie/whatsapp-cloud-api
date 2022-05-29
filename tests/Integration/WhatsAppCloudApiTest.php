@@ -6,6 +6,7 @@ use Netflie\WhatsAppCloudApi\Message\Document\DocumentId;
 use Netflie\WhatsAppCloudApi\Message\Document\DocumentLink;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
+use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use PHPUnit\Framework\TestCase;
@@ -59,6 +60,62 @@ final class WhatsAppCloudApiTest extends TestCase
             $link_id,
             'whatsapp-cloud-api-from-link.png',
             'WhastApp API Cloud Guide'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_template_without_components()
+    {
+        $response = $this->whatsapp_app_cloud_api->sendTemplate(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'hello_world'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_template_with_components()
+    {
+        $component_body = [
+            [
+                'type' => 'text',
+                'text' => '*Mr Jones*',
+            ],
+        ];
+        $component_buttons = [
+            [
+                'type' => 'button',
+                'sub_type' => 'quick_reply',
+                'index' => 0,
+                'parameters' => [
+                    [
+                        'type' => 'text',
+                        'text' => 'Yes',
+                    ]
+                ]
+            ],
+            [
+                'type' => 'button',
+                'sub_type' => 'quick_reply',
+                'index' => 1,
+                'parameters' => [
+                    [
+                        'type' => 'text',
+                        'text' => 'No',
+                    ]
+                ]
+            ]
+        ];
+
+        $components = new Component([], $component_body, $component_buttons);
+        $response = $this->whatsapp_app_cloud_api->sendTemplate(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'sample_issue_resolution',
+            'en_US',
+            $components
         );
 
         $this->assertEquals(200, $response->httpStatusCode());

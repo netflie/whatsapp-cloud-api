@@ -59,10 +59,62 @@ $link_id = new LinkID($document_link);
 $whatsapp_cloud_api->sendDocument('34676104574', $link_id, $document_name, $document_caption);
 ```
 
+### Send a template message
+```php
+<?php
+
+$whatsapp_cloud_api->sendTemplate('34676104574', 'hello_world', 'en_US'); // Language is optional
+```
+
+You also can build templates with parameters:
+
+```php
+<?php
+
+$component_header = [];
+
+$component_body = [
+    [
+        'type' => 'text',
+        'text' => '*Mr Jones*',
+    ],
+];
+
+$component_buttons = [
+    [
+        'type' => 'button',
+        'sub_type' => 'quick_reply',
+        'index' => 0,
+        'parameters' => [
+            [
+                'type' => 'text',
+                'text' => 'Yes',
+            ]
+        ]
+    ],
+    [
+        'type' => 'button',
+        'sub_type' => 'quick_reply',
+        'index' => 1,
+        'parameters' => [
+            [
+                'type' => 'text',
+                'text' => 'No',
+            ]
+        ]
+    ]
+];
+
+$components = new Component($component_header, $component_body, $component_buttons);
+$whatsapp_cloud_api->sendTemplate('34676104574', 'sample_issue_resolution', 'en_US'); // Language is optional
+```
+
+
 ## Features
 
 - Send Text Messages
 - Send Documents
+- Send Templates with parameters
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
