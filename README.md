@@ -131,17 +131,33 @@ $media_id = new MediaObjectID('<image-object-id>');
 $whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
 ```
 
-### Send an video message
+### Send a video message
 ```php
 <?php
 
-$link_id = new LinkID('http(s)://image-url');
+$link_id = new LinkID('http(s)://video-url');
 $whatsapp_cloud_api->sendVideo('<destination-phone-number>', $link_id, '<video-caption>');
 
 //or
 
 $media_id = new MediaObjectID('<image-object-id>');
 $whatsapp_cloud_api->sendVideo('<destination-phone-number>', $media_id, '<video-caption>');
+```
+
+### Send a sticker message
+
+Stickers sample: https://github.com/WhatsApp/stickers
+
+```php
+<?php
+
+$link_id = new LinkID('http(s)://sticker-url');
+$whatsapp_cloud_api->sendSticker('<destination-phone-number>', $link_id);
+
+//or
+
+$media_id = new MediaObjectID('<sticker-object-id>');
+$whatsapp_cloud_api->sendSticker('<destination-phone-number>', $media_id);
 ```
 
 ## Features
@@ -152,6 +168,7 @@ $whatsapp_cloud_api->sendVideo('<destination-phone-number>', $media_id, '<video-
 - Send Audios
 - Send Images
 - Send Videos
+- Send Stickers
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
