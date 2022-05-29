@@ -5,8 +5,6 @@ namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
-use Netflie\WhatsAppCloudApi\Message\Document\DocumentId;
-use Netflie\WhatsAppCloudApi\Message\Document\DocumentLink;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
@@ -97,8 +95,8 @@ final class WhatsAppCloudApiTest extends TestCase
                     [
                         'type' => 'text',
                         'text' => 'Yes',
-                    ]
-                ]
+                    ],
+                ],
             ],
             [
                 'type' => 'button',
@@ -108,9 +106,9 @@ final class WhatsAppCloudApiTest extends TestCase
                     [
                         'type' => 'text',
                         'text' => 'No',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
 
         $components = new Component([], $component_body, $component_buttons);

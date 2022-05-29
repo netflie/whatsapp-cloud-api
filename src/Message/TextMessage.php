@@ -65,7 +65,6 @@ class TextMessage extends Message
     {
         if (strlen($text) > self::MAXIMUM_LENGTH) {
             throw new \LengthException('The maximun length for a message text is ' . self::MAXIMUM_LENGTH . ' characters');
-
         }
     }
 }

@@ -9,7 +9,7 @@ abstract class Request
     /**
      * @const int The timeout in seconds for a normal request.
      */
-    const DEFAULT_REQUEST_TIMEOUT = 60;
+    public const DEFAULT_REQUEST_TIMEOUT = 60;
 
     /**
      * @var Message WhatsApp Message to be sent.
@@ -132,7 +132,7 @@ abstract class Request
      *
      * @return array
      */
-    protected abstract function makeBody(): void;
+    abstract protected function makeBody(): void;
 
     /**
      * Encodes the raw body of the request.
@@ -144,4 +144,3 @@ abstract class Request
         $this->encoded_body = json_encode($this->body());
     }
 }
-

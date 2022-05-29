@@ -26,14 +26,14 @@ class RequestTemplateMessage extends Request
         if ($this->message->header()) {
             $this->body['template']['components'][] = [
                 'type' => 'header',
-                'parameters' => $this->message->header()
+                'parameters' => $this->message->header(),
             ];
         }
 
         if ($this->message->body()) {
             $this->body['template']['components'][] = [
                 'type' => 'body',
-                'parameters' => $this->message->body()
+                'parameters' => $this->message->body(),
             ];
         }
 

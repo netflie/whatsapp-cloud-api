@@ -3,17 +3,17 @@
 namespace Netflie\WhatsAppCloudApi;
 
 use Netflie\WhatsAppCloudApi\Message\AudioMessage;
-use Netflie\WhatsAppCloudApi\Message\ContactMessage;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
-use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
+use Netflie\WhatsAppCloudApi\Message\ContactMessage;
 use Netflie\WhatsAppCloudApi\Message\Document\Document;
+use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
 use Netflie\WhatsAppCloudApi\Message\ImageMessage;
 use Netflie\WhatsAppCloudApi\Message\LocationMessage;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\StickerMessage;
-use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
+use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
 use Netflie\WhatsAppCloudApi\Message\VideoMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
