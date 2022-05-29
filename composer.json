@@ -16,7 +16,8 @@
     "require": {
         "php": "^7.4",
         "guzzlehttp/guzzle": "^7.0",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+        "myclabs/php-enum": "^1.8"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0",
