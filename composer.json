@@ -14,7 +14,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.4",
+        "php": "^7.4 || ^8.0 || ^8.1",
         "guzzlehttp/guzzle": "^7.0",
         "vlucas/phpdotenv": "^5.4",
         "myclabs/php-enum": "^1.8"
@@ -23,7 +23,7 @@
         "phpunit/phpunit": "^9.0",
         "symfony/var-dumper": "^5.0",
         "phpspec/prophecy-phpunit": "^2.0",
-        "fzaninotto/faker": "^1.9"
+        "fakerphp/faker": "^1.19"
     },
     "autoload": {
         "psr-4": {
