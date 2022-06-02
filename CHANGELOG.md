@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.0 - 2022-06-02
+
+### What's Changed
+
+- Suuport for PHP 8.0 & 8.1 versions
+
 ## 1.1.0 - 2022-05-29
 
 ### What's Changed
