@@ -12,7 +12,7 @@ Please create and configure your Facebook WhatsApp application following the ["G
 Minimum requirements – To run the SDK, your system will require **PHP >= 7.4** with a recent version of **CURL >=7.19.4** compiled with OpenSSL and zlib.
 
 ## Installation
-```compose require netflie/whatsapp-cloud-api ```
+```composer require netflie/whatsapp-cloud-api ```
 
 ## Quick Examples
 
