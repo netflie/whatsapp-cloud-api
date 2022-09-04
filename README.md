@@ -207,7 +207,7 @@ composer integration-test
 ```
 ## Contributing
 
-Please see [CONTRIBUTING](https://github.com/netflie/.github/blob/main/CONTRIBUTING.md "CONTRIBUTING") for details.
+Please see [CONTRIBUTING](https://github.com/netflie/.github/blob/master/CONTRIBUTING.md "CONTRIBUTING") for details.
 
 ## License
 
