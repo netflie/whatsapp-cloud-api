@@ -7,8 +7,8 @@ use Netflie\WhatsAppCloudApi\Request;
 class RequestTemplateMessage extends Request
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected function makeBody(): void
     {
         $this->body = [

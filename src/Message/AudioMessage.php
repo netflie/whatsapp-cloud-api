@@ -7,20 +7,20 @@ use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 class AudioMessage extends Message
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'audio';
 
     /**
-    * Document identifier: WhatsApp Media ID or any Internet public link document.
-    *
-    * You can get a WhatsApp Media ID uploading the document to the WhatsApp Cloud servers.
-    */
+     * Document identifier: WhatsApp Media ID or any Internet public link document.
+     *
+     * You can get a WhatsApp Media ID uploading the document to the WhatsApp Cloud servers.
+     */
     protected MediaID $id;
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(string $to, MediaID $id)
     {
         $this->id = $id;

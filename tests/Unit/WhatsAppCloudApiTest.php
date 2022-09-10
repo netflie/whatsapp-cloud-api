@@ -11,7 +11,6 @@ use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
-use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -66,7 +65,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -108,7 +107,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -152,7 +151,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -195,7 +194,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -306,7 +305,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -346,7 +345,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -384,7 +383,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -424,7 +423,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -465,7 +464,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -506,7 +505,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -547,7 +546,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -586,7 +585,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -630,7 +629,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -685,7 +684,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $encoded_body = json_encode($body);
         $headers = [
-            'Authorization' => 'Bearer ' . $this->access_token,
+            'Authorization' => 'Bearer '.$this->access_token,
             'Content-Type' => 'application/json',
         ];
 
@@ -709,6 +708,6 @@ final class WhatsAppCloudApiTest extends TestCase
 
     private function buildRequestUri(): string
     {
-        return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/' . $this->from_phone_number_id . '/messages';
+        return Client::BASE_GRAPH_URL.'/'.static::TEST_GRAPH_VERSION.'/'.$this->from_phone_number_id.'/messages';
     }
 }

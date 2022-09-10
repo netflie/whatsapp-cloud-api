@@ -34,10 +34,10 @@ class Response
     /**
      * Creates a new Response entity.
      *
-     * @param Request $request
-     * @param string     $body
-     * @param int|null        $http_status_code
-     * @param array|null      $headers
+     * @param  Request  $request
+     * @param  string  $body
+     * @param  int|null  $http_status_code
+     * @param  array|null  $headers
      */
     public function __construct(Request $request, $body, $http_status_code = null, array $headers = [])
     {
@@ -161,7 +161,7 @@ class Response
             $this->decoded_body = ['id' => $this->decoded_body];
         }
 
-        if (!is_array($this->decoded_body)) {
+        if (! is_array($this->decoded_body)) {
             $this->decoded_body = [];
         }
 

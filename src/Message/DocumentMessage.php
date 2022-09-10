@@ -7,15 +7,15 @@ use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 class DocumentMessage extends Message
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'document';
 
     /**
-    * Document identifier: WhatsApp Media ID or any Internet public link document.
-    *
-    * You can get a WhatsApp Media ID uploading the document to the WhatsApp Cloud servers.
-    */
+     * Document identifier: WhatsApp Media ID or any Internet public link document.
+     *
+     * You can get a WhatsApp Media ID uploading the document to the WhatsApp Cloud servers.
+     */
     protected MediaID $id;
 
     /**
@@ -29,8 +29,8 @@ class DocumentMessage extends Message
     protected ?string $caption;
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(string $to, MediaID $id, string $name, ?string $caption)
     {
         $this->id = $id;

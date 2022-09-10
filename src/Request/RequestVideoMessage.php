@@ -8,7 +8,6 @@ class RequestVideoMessage extends Request
 {
     /**
      * Makes the raw body of the request.
-     *
      */
     protected function makeBody(): void
     {

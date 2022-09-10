@@ -50,8 +50,8 @@ abstract class Request
     /**
      * Creates a new Request entity.
      *
-     * @param Message               $message
-     * @param string                $access_token
+     * @param  Message  $message
+     * @param  string  $access_token
      */
     public function __construct(Message $message, string $access_token, string $from_phone_number_id, ?int $timeout = null)
     {

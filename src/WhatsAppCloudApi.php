@@ -51,8 +51,7 @@ class WhatsAppCloudApi
     /**
      * Instantiates a new WhatsAppCloudApi super-class object.
      *
-     * @param array $config
-     *
+     * @param  array  $config
      */
     public function __construct(array $config)
     {
@@ -95,8 +94,8 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  Document $document   Document to send. See documents accepted in the Message/Document folder.
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  Document  $document  Document to send. See documents accepted in the Message/Document folder.
      * @return Response
      *
      * @throws Response\ResponseException
@@ -117,12 +116,13 @@ class WhatsAppCloudApi
     /**
      * Sends a message template.
      *
-     * @param  string         $to              WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  string         $template_name   Name of the template to send.
-     * @param  string         $language        Language code
-     * @param  Component|null $component       Component parameters of a template
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string  $template_name  Name of the template to send.
+     * @param  string  $language  Language code
+     * @param  Component|null  $component  Component parameters of a template
      *
      * @link https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#supported-languages See language codes supported.
+     *
      * @return Response
      *
      * @throws Response\ResponseException
@@ -144,8 +144,8 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId $document_id WhatsApp Media ID or any Internet public link document.
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  MediaId  $document_id  WhatsApp Media ID or any Internet public link document.
      * @return Response
      *
      * @throws Response\ResponseException
@@ -167,9 +167,9 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to          WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  string   $caption     Description of the specified image file.
-     * @param  MediaId  $document_id WhatsApp Media ID or any Internet public link document.
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string  $caption  Description of the specified image file.
+     * @param  MediaId  $document_id  WhatsApp Media ID or any Internet public link document.
      * @return Response
      *
      * @throws Response\ResponseException
@@ -191,8 +191,8 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to     WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $document_id WhatsApp Media ID or any Internet public link document.
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  MediaId  $document_id  WhatsApp Media ID or any Internet public link document.
      * @return Response
      *
      * @throws Response\ResponseException
@@ -214,8 +214,8 @@ class WhatsAppCloudApi
      * Sends a sticker uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $document_id    WhatsApp Media ID or any Internet public link document.
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  MediaId  $document_id  WhatsApp Media ID or any Internet public link document.
      * @return Response
      *
      * @throws Response\ResponseException
@@ -234,14 +234,13 @@ class WhatsAppCloudApi
     }
 
     /**
-     * Sends a location
+     * Sends a location.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  float    $longitude  Longitude position.
-     * @param  float    $latitude   Latitude position.
-     * @param  string   $name       Name of location sent.
-     * @param  address  $address    Address of location sent.
-     *
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  float  $longitude  Longitude position.
+     * @param  float  $latitude  Latitude position.
+     * @param  string  $name  Name of location sent.
+     * @param  address  $address  Address of location sent.
      * @return Response
      *
      * @throws Response\ResponseException
@@ -260,12 +259,11 @@ class WhatsAppCloudApi
     }
 
     /**
-     * Sends a contact
+     * Sends a contact.
      *
-     * @param  string        $to    WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  ContactName   $name  The contact name object.
-     * @param  Phone|null    $phone The contact phone number.
-     *
+     * @param  string  $to  WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ContactName  $name  The contact name object.
+     * @param  Phone|null  $phone  The contact phone number.
      * @return Response
      *
      * @throws Response\ResponseException

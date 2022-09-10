@@ -22,14 +22,14 @@ class RawResponse
     /**
      * Creates a new GraphRawResponse entity.
      *
-     * @param string|array $headers          The headers as a raw string or array.
-     * @param string       $body             The raw response body.
-     * @param int          $http_status_code The HTTP response code (if sending headers as parsed array).
+     * @param  string|array  $headers  The headers as a raw string or array.
+     * @param  string  $body  The raw response body.
+     * @param  int  $http_status_code  The HTTP response code (if sending headers as parsed array).
      */
     public function __construct($headers, string $body, ?int $http_status_code = null)
     {
         if (is_numeric($http_status_code)) {
-            $this->http_response_code = (int)$http_status_code;
+            $this->http_response_code = (int) $http_status_code;
         }
 
         if (is_array($headers)) {
@@ -74,19 +74,19 @@ class RawResponse
     /**
      * Sets the HTTP response code from a raw header.
      *
-     * @param string $raw_response_headers
+     * @param  string  $raw_response_headers
      */
     public function setHttpResponseCodeFromHeader($raw_response_headers)
     {
         // https://tools.ietf.org/html/rfc7230#section-3.1.2
-        list($version, $status, $reason) = array_pad(explode(' ', $raw_response_headers, 3), 3, null);
+        [$version, $status, $reason] = array_pad(explode(' ', $raw_response_headers, 3), 3, null);
         $this->http_response_code = (int) $status;
     }
 
     /**
      * Parse the raw headers and set as an array.
      *
-     * @param string $raw_headers The raw headers from the response.
+     * @param  string  $raw_headers  The raw headers from the response.
      */
     protected function setHeadersFromString($raw_headers)
     {
@@ -104,7 +104,7 @@ class RawResponse
             if (strpos($line, ': ') === false) {
                 $this->setHttpResponseCodeFromHeader($line);
             } else {
-                list($key, $value) = explode(': ', $line, 2);
+                [$key, $value] = explode(': ', $line, 2);
                 $this->headers[$key] = $value;
             }
         }

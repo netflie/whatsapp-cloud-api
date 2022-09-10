@@ -5,7 +5,7 @@ namespace Netflie\WhatsAppCloudApi\Message\Media;
 class MediaObjectID extends MediaID
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'id';
 }

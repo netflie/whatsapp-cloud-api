@@ -25,8 +25,8 @@ class Client
     /**
      * Creates a new HTTP Client.
      *
-     * @param string                    $graph_version
-     * @param ClientHandler|null        $handler
+     * @param  string  $graph_version
+     * @param  ClientHandler|null  $handler
      */
     public function __construct(string $graph_version, ?ClientHandler $handler = null)
     {
@@ -72,11 +72,11 @@ class Client
 
     private function buildBaseUri(): string
     {
-        return self::BASE_GRAPH_URL . '/' . $this->graph_version;
+        return self::BASE_GRAPH_URL.'/'.$this->graph_version;
     }
 
     private function buildRequestUri(Request $request): string
     {
-        return $this->buildBaseUri() . '/' . $request->fromPhoneNumberId() . '/messages';
+        return $this->buildBaseUri().'/'.$request->fromPhoneNumberId().'/messages';
     }
 }

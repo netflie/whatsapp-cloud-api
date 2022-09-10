@@ -21,7 +21,6 @@ class GuzzleClientHandler implements ClientHandler
 
     /**
      * {@inheritDoc}
-     *
      */
     public function send(string $url, string $body, array $headers, int $timeout): RawResponse
     {
