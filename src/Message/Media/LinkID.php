@@ -7,8 +7,8 @@ use Netflie\WhatsAppCloudApi\Message\Error\InvalidMessage;
 class LinkID extends MediaID
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'link';
 
     /**

@@ -10,7 +10,7 @@ abstract class MediaID
     protected string $type;
 
     /**
-     * Value of the identifier
+     * Value of the identifier.
      */
     protected string $value;
 

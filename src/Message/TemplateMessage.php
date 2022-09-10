@@ -7,12 +7,13 @@ use Netflie\WhatsAppCloudApi\Message\Template\Component;
 class TemplateMessage extends Message
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'template';
 
     /**
-     * Name of the template
+     * Name of the template.
+     *
      * @link https://business.facebook.com/wa/manage/message-templates/ Dashboard to manage (create, edit and delete) templates.
      */
     protected string $name;
@@ -23,14 +24,15 @@ class TemplateMessage extends Message
     protected string $language;
 
     /**
-     * Templates header, body and buttons can be personalized
+     * Templates header, body and buttons can be personalized.
+     *
      * @link https://developers.facebook.com/docs/whatsapp/cloud-api/guides/send-message-templates See how you can personalized your templates.
      */
     protected ?Component $components;
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(string $to, string $name, string $language = 'en_US', ?Component $components = null)
     {
         $this->name = $name;

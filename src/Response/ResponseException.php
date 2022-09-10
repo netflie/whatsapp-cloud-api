@@ -19,7 +19,7 @@ class ResponseException extends \Exception
     /**
      * Creates a ResponseException.
      *
-     * @param Response      $response          The response that threw the exception.
+     * @param Response $response The response that threw the exception.
      */
     public function __construct(Response $response)
     {
@@ -28,7 +28,7 @@ class ResponseException extends \Exception
     }
 
     /**
-     * Returns the HTTP status code
+     * Returns the HTTP status code.
      *
      * @return int
      */

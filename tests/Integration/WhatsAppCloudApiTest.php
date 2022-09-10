@@ -23,7 +23,7 @@ final class WhatsAppCloudApiTest extends TestCase
     {
         $this->whatsapp_app_cloud_api = new WhatsAppCloudApi([
             'from_phone_number_id' => WhatsAppCloudApiTestConfiguration::$from_phone_number_id,
-            'access_token' => WhatsAppCloudApiTestConfiguration::$access_token,
+            'access_token'         => WhatsAppCloudApiTestConfiguration::$access_token,
         ]);
     }
 
@@ -88,9 +88,9 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $component_buttons = [
             [
-                'type' => 'button',
-                'sub_type' => 'quick_reply',
-                'index' => 0,
+                'type'       => 'button',
+                'sub_type'   => 'quick_reply',
+                'index'      => 0,
                 'parameters' => [
                     [
                         'type' => 'text',
@@ -99,9 +99,9 @@ final class WhatsAppCloudApiTest extends TestCase
                 ],
             ],
             [
-                'type' => 'button',
-                'sub_type' => 'quick_reply',
-                'index' => 1,
+                'type'       => 'button',
+                'sub_type'   => 'quick_reply',
+                'index'      => 1,
                 'parameters' => [
                     [
                         'type' => 'text',

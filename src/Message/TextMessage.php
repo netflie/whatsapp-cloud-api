@@ -27,9 +27,9 @@ class TextMessage extends Message
     /**
      * Creates a new message of type text.
      *
-     * @param string         $to
-     * @param string         $text
-     * @param bool           $preview_url
+     * @param string $to
+     * @param string $text
+     * @param bool   $preview_url
      */
     public function __construct(string $to, string $text, bool $preview_url = false)
     {
@@ -64,7 +64,7 @@ class TextMessage extends Message
     private function assertTextIsValid(string $text): void
     {
         if (strlen($text) > self::MAXIMUM_LENGTH) {
-            throw new \LengthException('The maximun length for a message text is ' . self::MAXIMUM_LENGTH . ' characters');
+            throw new \LengthException('The maximun length for a message text is '.self::MAXIMUM_LENGTH.' characters');
         }
     }
 }

@@ -29,7 +29,6 @@ class WhatsAppCloudApiApp
      *
      * @param string The Facebook Phone Number ID.
      * @param string The Facebook Whatsapp Access Token.
-     *
      */
     public function __construct(?string $from_phone_number_id = null, ?string $access_token = null)
     {

@@ -9,8 +9,8 @@ use Netflie\WhatsAppCloudApi\Message\Contact\Phones;
 class ContactMessage extends Message
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'contacts';
 
     protected ContactName $name;
@@ -18,8 +18,8 @@ class ContactMessage extends Message
     protected Phones $phones;
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(string $to, ContactName $name, Phone ...$phones)
     {
         $this->name = $name;

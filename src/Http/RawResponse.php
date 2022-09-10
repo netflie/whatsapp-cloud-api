@@ -29,7 +29,7 @@ class RawResponse
     public function __construct($headers, string $body, ?int $http_status_code = null)
     {
         if (is_numeric($http_status_code)) {
-            $this->http_response_code = (int)$http_status_code;
+            $this->http_response_code = (int) $http_status_code;
         }
 
         if (is_array($headers)) {

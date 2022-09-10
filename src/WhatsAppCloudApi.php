@@ -52,16 +52,15 @@ class WhatsAppCloudApi
      * Instantiates a new WhatsAppCloudApi super-class object.
      *
      * @param array $config
-     *
      */
     public function __construct(array $config)
     {
         $config = array_merge([
             'from_phone_number_id' => null,
-            'access_token' => '',
-            'graph_version' => static::DEFAULT_GRAPH_VERSION,
-            'client_handler' => null,
-            'timeout' => null,
+            'access_token'         => '',
+            'graph_version'        => static::DEFAULT_GRAPH_VERSION,
+            'client_handler'       => null,
+            'timeout'              => null,
         ], $config);
 
         $this->app = new WhatsAppCloudApiApp($config['from_phone_number_id'], $config['access_token']);
@@ -95,11 +94,12 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  Document $document   Document to send. See documents accepted in the Message/Document folder.
-     * @return Response
+     * @param string   $to       WhatsApp ID or phone number for the person you want to send a message to.
+     * @param Document $document Document to send. See documents accepted in the Message/Document folder.
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption): Response
     {
@@ -117,15 +117,16 @@ class WhatsAppCloudApi
     /**
      * Sends a message template.
      *
-     * @param  string         $to              WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  string         $template_name   Name of the template to send.
-     * @param  string         $language        Language code
-     * @param  Component|null $component       Component parameters of a template
+     * @param string         $to            WhatsApp ID or phone number for the person you want to send a message to.
+     * @param string         $template_name Name of the template to send.
+     * @param string         $language      Language code
+     * @param Component|null $component     Component parameters of a template
      *
      * @link https://developers.facebook.com/docs/whatsapp/api/messages/message-templates#supported-languages See language codes supported.
-     * @return Response
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null): Response
     {
@@ -144,11 +145,12 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId $document_id WhatsApp Media ID or any Internet public link document.
-     * @return Response
+     * @param string  $to          WhatsApp ID or phone number for the person you want to send a message to.
+     * @param MediaId $document_id WhatsApp Media ID or any Internet public link document.
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendAudio(string $to, MediaID $document_id): Response
     {
@@ -167,12 +169,13 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to          WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  string   $caption     Description of the specified image file.
-     * @param  MediaId  $document_id WhatsApp Media ID or any Internet public link document.
-     * @return Response
+     * @param string  $to          WhatsApp ID or phone number for the person you want to send a message to.
+     * @param string  $caption     Description of the specified image file.
+     * @param MediaId $document_id WhatsApp Media ID or any Internet public link document.
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendImage(string $to, MediaID $document_id, ?string $caption = ''): Response
     {
@@ -191,11 +194,12 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to     WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $document_id WhatsApp Media ID or any Internet public link document.
-     * @return Response
+     * @param string  $to          WhatsApp ID or phone number for the person you want to send a message to.
+     * @param MediaId $document_id WhatsApp Media ID or any Internet public link document.
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendVideo(string $to, MediaID $link, string $caption = ''): Response
     {
@@ -214,11 +218,12 @@ class WhatsAppCloudApi
      * Sends a sticker uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $document_id    WhatsApp Media ID or any Internet public link document.
-     * @return Response
+     * @param string  $to          WhatsApp ID or phone number for the person you want to send a message to.
+     * @param MediaId $document_id WhatsApp Media ID or any Internet public link document.
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendSticker(string $to, MediaID $link): Response
     {
@@ -234,17 +239,17 @@ class WhatsAppCloudApi
     }
 
     /**
-     * Sends a location
+     * Sends a location.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  float    $longitude  Longitude position.
-     * @param  float    $latitude   Latitude position.
-     * @param  string   $name       Name of location sent.
-     * @param  address  $address    Address of location sent.
-     *
-     * @return Response
+     * @param string  $to        WhatsApp ID or phone number for the person you want to send a message to.
+     * @param float   $longitude Longitude position.
+     * @param float   $latitude  Latitude position.
+     * @param string  $name      Name of location sent.
+     * @param address $address   Address of location sent.
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendLocation(string $to, float $longitude, float $latitude, string $name = '', string $address = ''): Response
     {
@@ -260,15 +265,15 @@ class WhatsAppCloudApi
     }
 
     /**
-     * Sends a contact
+     * Sends a contact.
      *
-     * @param  string        $to    WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  ContactName   $name  The contact name object.
-     * @param  Phone|null    $phone The contact phone number.
-     *
-     * @return Response
+     * @param string      $to    WhatsApp ID or phone number for the person you want to send a message to.
+     * @param ContactName $name  The contact name object.
+     * @param Phone|null  $phone The contact phone number.
      *
      * @throws Response\ResponseException
+     *
+     * @return Response
      */
     public function sendContact(string $to, ContactName $name, Phone ...$phone): Response
     {

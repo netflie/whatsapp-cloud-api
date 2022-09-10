@@ -8,7 +8,6 @@ class RequestContactMessage extends Request
 {
     /**
      * Makes the raw body of the request.
-     *
      */
     protected function makeBody(): void
     {
@@ -16,15 +15,15 @@ class RequestContactMessage extends Request
 
         $this->body = [
             'messaging_product' => $this->message->messagingProduct(),
-            'recipient_type' => $this->message->recipientType(),
-            'to' => $this->message->to(),
-            'type' => $this->message->type(),
-            $message_type => [
+            'recipient_type'    => $this->message->recipientType(),
+            'to'                => $this->message->to(),
+            'type'              => $this->message->type(),
+            $message_type       => [
                 [
                     'name' => [
                         'formatted_name' => $this->message->fullName(),
-                        'first_name' => $this->message->firstName(),
-                        'last_name' => $this->message->lastName(),
+                        'first_name'     => $this->message->firstName(),
+                        'last_name'      => $this->message->lastName(),
                     ],
                 ],
             ],
@@ -33,7 +32,7 @@ class RequestContactMessage extends Request
         foreach ($this->message->phones() as $phone) {
             $this->body[$message_type][0]['phones'][] = [
                 'phone' => $phone->number(),
-                'type' => $phone->type()->getValue(),
+                'type'  => $phone->type()->getValue(),
             ];
         }
     }

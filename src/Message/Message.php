@@ -27,7 +27,7 @@ abstract class Message
     /**
      * Creates a new Message class.
      *
-     * @param string         $to
+     * @param string $to
      */
     public function __construct(string $to)
     {

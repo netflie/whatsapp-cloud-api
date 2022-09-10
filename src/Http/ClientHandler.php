@@ -12,9 +12,9 @@ interface ClientHandler
      * @param array  $headers The request headers.
      * @param int    $timeout The timeout in seconds for the request.
      *
-     * @return RawResponse Response from the server.
-     *
      * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     *
+     * @return RawResponse Response from the server.
      */
     public function send(string $url, string $body, array $headers, int $timeout): RawResponse;
 }

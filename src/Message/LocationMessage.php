@@ -7,8 +7,8 @@ use Netflie\WhatsAppCloudApi\Message\Error\InvalidMessage;
 class LocationMessage extends Message
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'location';
 
     protected float $longitude;
@@ -16,15 +16,15 @@ class LocationMessage extends Message
     protected float $latitude;
 
     /**
-     * Name of the location
+     * Name of the location.
      */
     protected string $name;
 
     protected string $address;
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(string $to, float $longitude, float $latitude, string $name = '', string $address = '')
     {
         if ($address && !$name) {
