@@ -2,13 +2,13 @@
 
 namespace Netflie\WhatsAppCloudApi\Request;
 
-use Netflie\WhatsAppCloudApi\Message\ListMessage;
+use Netflie\WhatsAppCloudApi\Message\OptionsListMessage;
 use Netflie\WhatsAppCloudApi\Request;
 
 /**
- * @property ListMessage $message
+ * @property OptionsListMessage $message
  */
-class RequestListMessage extends Request
+class RequestOptionsListMessage extends Request
 {
     /**
     * {@inheritdoc}

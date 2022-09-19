@@ -9,10 +9,10 @@ use Netflie\WhatsAppCloudApi\Message\ContactMessage;
 use Netflie\WhatsAppCloudApi\Message\Document\Document;
 use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
 use Netflie\WhatsAppCloudApi\Message\ImageMessage;
-use Netflie\WhatsAppCloudApi\Message\ListMessage;
-use Netflie\WhatsAppCloudApi\Message\Lists\Action;
+use Netflie\WhatsAppCloudApi\Message\OptionsListMessage;
 use Netflie\WhatsAppCloudApi\Message\LocationMessage;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\StickerMessage;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
@@ -22,7 +22,7 @@ use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestContactMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestImageMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestListMessage;
+use Netflie\WhatsAppCloudApi\Request\RequestOptionsListMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestLocationMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestStickerMessage;
 use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
@@ -288,8 +288,8 @@ class WhatsAppCloudApi
 
 	public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
 	{
-		$message = new ListMessage($to, $header, $body, $footer, $action);
-		$request = new RequestListMessage(
+		$message = new OptionsListMessage($to, $header, $body, $footer, $action);
+		$request = new RequestOptionsListMessage(
 			$message,
 			$this->app->accessToken(),
 			$this->app->fromPhoneNumberId(),

@@ -2,9 +2,9 @@
 
 namespace Netflie\WhatsAppCloudApi\Message;
 
-use Netflie\WhatsAppCloudApi\Message\Lists\Action;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 
-class ListMessage extends Message
+class OptionsListMessage extends Message
 {
     /**
     * {@inheritdoc}

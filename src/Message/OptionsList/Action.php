@@ -1,6 +1,6 @@
 <?php
 
-namespace Netflie\WhatsAppCloudApi\Message\Lists;
+namespace Netflie\WhatsAppCloudApi\Message\OptionsList;
 
 class Action
 {

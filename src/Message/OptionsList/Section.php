@@ -1,6 +1,6 @@
 <?php
 
-namespace Netflie\WhatsAppCloudApi\Message\Lists;
+namespace Netflie\WhatsAppCloudApi\Message\OptionsList;
 
 class Section
 {
@@ -30,7 +30,7 @@ class Section
 		foreach ($this->rows as $row)
 		{
 			$result[] = [
-				'id' => $row->title(),
+				'id' => $row->id(),
 				'title' => $row->title(),
 				'description' => $row->description() ?: null,
 			];
