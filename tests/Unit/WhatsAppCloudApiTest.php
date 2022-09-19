@@ -8,13 +8,12 @@ use Netflie\WhatsAppCloudApi\Http\RawResponse;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
-use Netflie\WhatsAppCloudApi\Message\Lists\Action;
-use Netflie\WhatsAppCloudApi\Message\Lists\Row;
-use Netflie\WhatsAppCloudApi\Message\Lists\Section;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
-use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -719,11 +718,9 @@ final class WhatsAppCloudApiTest extends TestCase
 		$listBody = ['text' => $this->faker->text(1024)];
 		$listFooter = ['text' => $this->faker->text(60)];
 
-		$generateListRowId = fn () => strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', substr($this->faker->text(100), 0, -1))));
-
 		$listRows = [
-			['id' => $generateListRowId(), 'title' => $this->faker->text(24), 'description' => $this->faker->text(72)],
-			['id' => $generateListRowId(), 'title' => $this->faker->text(24), 'description' => $this->faker->text(72)],
+			['id' => $this->faker->uuid, 'title' => $this->faker->text(24), 'description' => $this->faker->text(72)],
+			['id' => $this->faker->uuid, 'title' => $this->faker->text(24), 'description' => $this->faker->text(72)],
 		];
 		$listSections = [['title' => $this->faker->text, 'rows' => $listRows]];
 		$listAction = ['button' => $this->faker->text, 'sections' => $listSections];
