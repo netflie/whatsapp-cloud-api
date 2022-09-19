@@ -7,6 +7,9 @@ use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
@@ -207,4 +210,28 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+	public function test_send_list()
+	{
+		$rows = [
+			new Row('1', '⭐️', "Experience wasn't good enough"),
+			new Row('2', '⭐⭐️', "Experience could be better"),
+			new Row('3', '⭐⭐⭐️', "Experience was ok"),
+			new Row('4', '⭐⭐️⭐⭐', "Experience was good"),
+			new Row('5', '⭐⭐️⭐⭐⭐️', "Experience was excellent"),
+		];
+		$sections = [new Section('Stars', $rows)];
+		$action = new Action('Submit', $sections);
+
+		$response = $this->whatsapp_app_cloud_api->sendList(
+			WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+			'Rate your experience',
+			'Please consider rating your shopping experience in our website',
+			'Thanks for your time',
+			$action
+		);
+
+		$this->assertEquals(200, $response->httpStatusCode());
+		$this->assertEquals(false, $response->isError());
+	}
 }
