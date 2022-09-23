@@ -6,17 +6,25 @@ class Phone
 {
     protected string $number;
 
+    protected string $wa_id;
+
     protected PhoneType $type;
 
-    public function __construct(string $number, PhoneType $type)
+    public function __construct(string $number, PhoneType $type, string $wa_id = null)
     {
         $this->number = $number;
+        $this->wa_id = $wa_id ?? $number;
         $this->type = $type;
     }
 
     public function number(): string
     {
         return $this->number;
+    }
+
+    public function wa_id(): string
+    {
+        return $this->wa_id;
     }
 
     public function type(): PhoneType

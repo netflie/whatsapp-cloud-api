@@ -13,4 +13,7 @@ class WhatsAppCloudApiTestConfiguration {
   public static $access_token = '';
   public static $graph_version = '';
 
+  public static $contact_phone_number = '';
+  public static $contact_waid = '';
+
 }

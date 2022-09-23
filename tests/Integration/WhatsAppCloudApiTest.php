@@ -207,4 +207,18 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_send_contact_with_waid()
+    {
+        $contact_name = new ContactName('Adams', 'Smith');
+        $phone = new Phone(WhatsAppCloudApiTestConfiguration::$contact_phone_number, PhoneType::CELL(), WhatsAppCloudApiTestConfiguration::$contact_waid);
+        $response = $this->whatsapp_app_cloud_api->sendContact(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $contact_name,
+            $phone
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
 }

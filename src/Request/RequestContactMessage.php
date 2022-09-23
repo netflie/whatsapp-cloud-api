@@ -34,6 +34,7 @@ class RequestContactMessage extends Request
             $this->body[$message_type][0]['phones'][] = [
                 'phone' => $phone->number(),
                 'type' => $phone->type()->getValue(),
+                'wa_id' => $phone->wa_id()
             ];
         }
     }
