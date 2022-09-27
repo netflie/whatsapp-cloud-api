@@ -31,10 +31,16 @@ class RequestContactMessage extends Request
         ];
 
         foreach ($this->message->phones() as $phone) {
-            $this->body[$message_type][0]['phones'][] = [
+            $phone_array = [
                 'phone' => $phone->number(),
                 'type' => $phone->type()->getValue(),
             ];
+
+            if (!empty($phone->waId())) {
+                $phone_array['wa_id'] = $phone->waId();
+            }
+
+            $this->body[$message_type][0]['phones'][] = $phone_array;
         }
     }
 }
