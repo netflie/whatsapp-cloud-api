@@ -707,6 +707,61 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_contact_with_wa_id()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildRequestUri();
+        $first_name = $this->faker->firstName();
+        $last_name = $this->faker->lastName;
+        $phone = $this->faker->e164PhoneNumber;
+        $phone_type = PhoneType::CELL();
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'contacts',
+            'contacts' => [
+                [
+                    'name' => [
+                        'formatted_name' => "$first_name $last_name",
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                    ],
+                    'phones' => [
+                        [
+                            'phone' => $phone,
+                            'type' => $phone_type,
+                            'wa_id' => $phone,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $encoded_body = json_encode($body);
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+            'Content-Type' => 'application/json',
+        ];
+
+        $this->client_handler
+            ->send($url, $encoded_body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $encoded_body, 200));
+
+        $contact_name = new ContactName($first_name, $last_name);
+        $response = $this->whatsapp_app_cloud_api->sendContact(
+            $to,
+            $contact_name,
+            new Phone($phone, $phone_type, $phone)
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($body, $response->decodedBody());
+        $this->assertEquals($encoded_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     private function buildRequestUri(): string
     {
         return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/' . $this->from_phone_number_id . '/messages';
