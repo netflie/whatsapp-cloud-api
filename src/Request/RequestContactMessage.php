@@ -37,7 +37,7 @@ class RequestContactMessage extends Request
                 'type' => $phone->type()->getValue(),
             ];
 
-            if(!empty($phone->waId())) {
+            if (!empty($phone->waId())) {
                 $phone_array['wa_id'] = $phone->waId();
             }
 
