@@ -31,7 +31,6 @@ class RequestContactMessage extends Request
         ];
 
         foreach ($this->message->phones() as $phone) {
-
             $phone_array = [
                 'phone' => $phone->number(),
                 'type' => $phone->type()->getValue(),
