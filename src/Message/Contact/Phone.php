@@ -22,7 +22,7 @@ class Phone
         return $this->number;
     }
 
-    public function wa_id(): string
+    public function waId(): string
     {
         return $this->wa_id;
     }
