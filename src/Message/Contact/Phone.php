@@ -13,7 +13,7 @@ class Phone
     public function __construct(string $number, PhoneType $type, string $wa_id = '')
     {
         $this->number = $number;
-        $this->wa_id = $wa_id ?? '';
+        $this->wa_id = $wa_id;
         $this->type = $type;
     }
 
