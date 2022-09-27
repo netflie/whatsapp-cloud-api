@@ -69,6 +69,8 @@ You also can build templates with parameters:
 ```php
 <?php
 
+use Netflie\WhatsAppCloudApi\Message\Template\Component;
+
 $component_header = [];
 
 $component_body = [
@@ -111,6 +113,8 @@ $whatsapp_cloud_api->sendTemplate('34676104574', 'sample_issue_resolution', 'en_
 ```php
 <?php
 
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+
 $audio_link = 'https://netflie.es/wp-content/uploads/2022/05/file_example_OOG_1MG.ogg';
 $link_id = new LinkID($audio_link);
 $whatsapp_cloud_api->sendAudio('34676104574', $link_id);
@@ -119,6 +123,9 @@ $whatsapp_cloud_api->sendAudio('34676104574', $link_id);
 ### Send an image message
 ```php
 <?php
+
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 
 $link_id = new LinkID('http(s)://image-url');
 $whatsapp_cloud_api->sendImage('<destination-phone-number>', $link_id);
@@ -132,6 +139,9 @@ $whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
 ### Send a video message
 ```php
 <?php
+
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 
 $link_id = new LinkID('http(s)://video-url');
 $whatsapp_cloud_api->sendVideo('<destination-phone-number>', $link_id, '<video-caption>');
@@ -148,6 +158,9 @@ Stickers sample: https://github.com/WhatsApp/stickers
 
 ```php
 <?php
+
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 
 $link_id = new LinkID('http(s)://sticker-url');
 $whatsapp_cloud_api->sendSticker('<destination-phone-number>', $link_id);
@@ -170,6 +183,10 @@ $whatsapp_cloud_api->sendLocation('<destination-phone-number>', $longitude, $lat
 
 ```php
 <?php
+
+use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
+use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
+use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 
 $name = new ContactName('Adams', 'Smith');
 $phone = new Phone('34676204577', PhoneType::CELL());
