@@ -164,9 +164,5 @@ class Response
         if (!is_array($this->decoded_body)) {
             $this->decoded_body = [];
         }
-
-        if ($this->isError()) {
-            $this->throwException();
-        }
     }
 }
