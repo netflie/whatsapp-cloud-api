@@ -2,7 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\Response;
 
-use Netflie\WhatsAppCloudApi\Message\Response;
+use Netflie\WhatsAppCloudApi\Response;
 
 class ResponseException extends \Exception
 {

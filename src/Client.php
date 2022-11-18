@@ -30,7 +30,7 @@ class Client
      */
     public function __construct(string $graph_version, ?ClientHandler $handler = null)
     {
-        $this->handler = $handler ?? $this->defaultHandler($graph_version);
+        $this->handler = $handler ?? $this->defaultHandler();
 
         $this->graph_version = $graph_version;
     }

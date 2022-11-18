@@ -11,7 +11,7 @@ use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
-use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
+use Netflie\WhatsAppCloudApi\Response\ResponseException;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -45,6 +45,43 @@ final class WhatsAppCloudApiTest extends TestCase
             'access_token' => $this->access_token,
             'client_handler' => $this->client_handler->reveal(),
         ]);
+    }
+
+    public function test_send_text_message_fails()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildRequestUri();
+        $text_message = $this->faker->text;
+        $preview_url = $this->faker->boolean;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'text',
+            'text' => [
+                'preview_url' => $preview_url,
+                'body' => $text_message,
+            ],
+        ];
+        $encoded_body = json_encode($body);
+        $encoded_response_body = '{"error":{"message":"Invalid OAuth access token - Cannot parse access token","type":"OAuthException","code":190,"fbtrace_id":"AbJuG-rMVv36mjw-r78mKwg"}}';
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+            'Content-Type' => 'application/json',
+        ];
+
+        $this->client_handler
+            ->send($url, $encoded_body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse([], $encoded_response_body, 401));
+
+        $this->expectException(ResponseException::class);
+        $response = $this->whatsapp_app_cloud_api->sendTextMessage(
+            $to,
+            $text_message,
+            $preview_url
+        );
     }
 
     public function test_send_text_message()
