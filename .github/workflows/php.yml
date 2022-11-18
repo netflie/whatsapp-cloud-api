@@ -37,3 +37,9 @@ jobs:
 
     - name: Run test suite
       run: composer unit-test
+
+    - name: PHPStan
+      uses: docker://oskarstark/phpstan-ga
+      with:
+        args: analyse src/ --level=1
+
