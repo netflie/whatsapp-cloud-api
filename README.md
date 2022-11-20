@@ -194,6 +194,34 @@ $phone = new Phone('34676204577', PhoneType::CELL());
 $whatsapp_cloud_api->sendContact('<destination-phone-number>', $name, $phone);
 ```
 
+### Send a list message
+
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
+use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
+
+$rows = [
+    new Row('1', '⭐️', "Experience wasn't good enough"),
+    new Row('2', '⭐⭐️', "Experience could be better"),
+    new Row('3', '⭐⭐⭐️', "Experience was ok"),
+    new Row('4', '⭐⭐️⭐⭐', "Experience was good"),
+    new Row('5', '⭐⭐️⭐⭐⭐️', "Experience was excellent"),
+];
+$sections = [new Section('Stars', $rows)];
+$action = new Action('Submit', $sections);
+
+$whatsapp_cloud_api->sendList(
+    '<destination-phone-number>',
+    'Rate your experience',
+    'Please consider rating your shopping experience in our website',
+    'Thanks for your time',
+    $action
+);
+```
+
 ## Features
 
 - Send Text Messages
@@ -205,6 +233,7 @@ $whatsapp_cloud_api->sendContact('<destination-phone-number>', $name, $phone);
 - Send Stickers
 - Send Locations
 - Send Contacts
+- Send Lists
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
