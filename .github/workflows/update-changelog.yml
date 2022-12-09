@@ -1,0 +1,15 @@
+name: Update changelog
+
+on:
+  release:
+    types: [released]
+
+permissions: {}
+
+jobs:
+  update:
+    permissions:
+      contents: write
+    uses: netflie/.github/.github/workflows/update-changelog.yml@master
+    secrets:
+      CHECKOUT_ACTION_TOKEN: ${{ secrets.UPDATE_CHANGELOG }}
