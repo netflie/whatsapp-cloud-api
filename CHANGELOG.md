@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.3.1 - 2022-11-18
+
+### What's Changed
+
+- Configured PHPStan github action
+- Fix some minor bugs reported by PHPStan analysis
+- Fix Response namespace in ResponseException class
+
 ## 1.3.0 - 2022-09-30
 
 ### What's Changed
