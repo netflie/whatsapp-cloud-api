@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.4.0 - 2022-12-09
+
+### 1.4.0 - 2022-12-23
+
+#### What's Changed
+
+- Support Interactive Lists by @robertripoll in https://github.com/netflie/whatsapp-cloud-api/pull/58
+- Execute workflow for PHP 7.4, 8.0 & 8.1 versions
+
 ## 1.3.1 - 2022-11-18
 
 ### What's Changed
