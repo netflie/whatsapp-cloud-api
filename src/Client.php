@@ -42,11 +42,11 @@ class Client
      *
      * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
      */
-    public function sendRequest(Request $request): Response
+    public function sendMessage(Request\MessageRequest $request): Response
     {
-        $raw_response = $this->handler->send(
-            $this->buildRequestUri($request),
-            $request->encodedBody(),
+        $raw_response = $this->handler->postJsonData(
+            $this->buildRequestUri($request->nodePath()),
+            $request->body(),
             $request->headers(),
             $request->timeout()
         );
@@ -75,8 +75,8 @@ class Client
         return self::BASE_GRAPH_URL . '/' . $this->graph_version;
     }
 
-    private function buildRequestUri(Request $request): string
+    private function buildRequestUri(string $node_path): string
     {
-        return $this->buildBaseUri() . '/' . $request->fromPhoneNumberId() . '/messages';
+        return $this->buildBaseUri() . '/' . $node_path;
     }
 }

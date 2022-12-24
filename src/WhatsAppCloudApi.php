@@ -18,16 +18,7 @@ use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
 use Netflie\WhatsAppCloudApi\Message\VideoMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestContactMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestImageMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestLocationMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestOptionsListMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestStickerMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestVideoMessage;
+use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
 class WhatsAppCloudApi
 {
@@ -84,14 +75,14 @@ class WhatsAppCloudApi
     public function sendTextMessage(string $to, string $text, bool $preview_url = false): Response
     {
         $message = new TextMessage($to, $text, $preview_url);
-        $request = new RequestTextMessage(
+        $request = new MessageRequest\RequestTextMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -107,14 +98,14 @@ class WhatsAppCloudApi
     public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption): Response
     {
         $message = new DocumentMessage($to, $document_id, $name, $caption);
-        $request = new RequestDocumentMessage(
+        $request = new MessageRequest\RequestDocumentMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -133,14 +124,14 @@ class WhatsAppCloudApi
     public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null): Response
     {
         $message = new TemplateMessage($to, $template_name, $language, $components);
-        $request = new RequestTemplateMessage(
+        $request = new MessageRequest\RequestTemplateMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -156,14 +147,14 @@ class WhatsAppCloudApi
     public function sendAudio(string $to, MediaID $document_id): Response
     {
         $message = new AudioMessage($to, $document_id);
-        $request = new RequestAudioMessage(
+        $request = new MessageRequest\RequestAudioMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -180,14 +171,14 @@ class WhatsAppCloudApi
     public function sendImage(string $to, MediaID $document_id, ?string $caption = ''): Response
     {
         $message = new ImageMessage($to, $document_id, $caption);
-        $request = new RequestImageMessage(
+        $request = new MessageRequest\RequestImageMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -203,14 +194,14 @@ class WhatsAppCloudApi
     public function sendVideo(string $to, MediaID $link, string $caption = ''): Response
     {
         $message = new VideoMessage($to, $link, $caption);
-        $request = new RequestVideoMessage(
+        $request = new MessageRequest\RequestVideoMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -226,14 +217,14 @@ class WhatsAppCloudApi
     public function sendSticker(string $to, MediaID $link): Response
     {
         $message = new StickerMessage($to, $link);
-        $request = new RequestStickerMessage(
+        $request = new MessageRequest\RequestStickerMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -252,14 +243,14 @@ class WhatsAppCloudApi
     public function sendLocation(string $to, float $longitude, float $latitude, string $name = '', string $address = ''): Response
     {
         $message = new LocationMessage($to, $longitude, $latitude, $name, $address);
-        $request = new RequestLocationMessage(
+        $request = new MessageRequest\RequestLocationMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -276,27 +267,27 @@ class WhatsAppCloudApi
     public function sendContact(string $to, ContactName $name, Phone ...$phone): Response
     {
         $message = new ContactMessage($to, $name, ...$phone);
-        $request = new RequestContactMessage(
+        $request = new MessageRequest\RequestContactMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
     {
         $message = new OptionsListMessage($to, $header, $body, $footer, $action);
-        $request = new RequestOptionsListMessage(
+        $request = new MessageRequest\RequestOptionsListMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**

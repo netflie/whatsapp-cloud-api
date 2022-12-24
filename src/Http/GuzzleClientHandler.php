@@ -23,10 +23,10 @@ class GuzzleClientHandler implements ClientHandler
      * {@inheritDoc}
      *
      */
-    public function send(string $url, string $body, array $headers, int $timeout): RawResponse
+    public function postJsonData(string $url, array $body, array $headers, int $timeout): RawResponse
     {
         $raw_handler_response = $this->guzzle_client->post($url, [
-            'body' => $body,
+            'json' => $body,
             'headers' => $headers,
             'timeout' => $timeout,
         ]);

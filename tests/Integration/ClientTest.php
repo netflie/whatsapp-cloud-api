@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
 use Netflie\WhatsAppCloudApi\Client;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
+use Netflie\WhatsAppCloudApi\Request\MessageRequest\RequestTextMessage;
 use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +34,7 @@ final class ClientTest extends TestCase
             WhatsAppCloudApiTestConfiguration::$from_phone_number_id
         );
 
-        $response = $this->client->sendRequest($request);
+        $response = $this->client->sendMessage($request);
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals($request, $response->request());

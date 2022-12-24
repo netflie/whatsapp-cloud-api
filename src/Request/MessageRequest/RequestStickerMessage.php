@@ -1,24 +1,22 @@
 <?php
 
-namespace Netflie\WhatsAppCloudApi\Request;
+namespace Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-use Netflie\WhatsAppCloudApi\Request;
+use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-class RequestImageMessage extends Request
+class RequestStickerMessage extends MessageRequest
 {
     /**
-     * Makes the raw body of the request.
-     *
+     * {@inheritdoc}
      */
-    protected function makeBody(): void
+    public function body(): array
     {
-        $this->body = [
+        return [
             'messaging_product' => $this->message->messagingProduct(),
             'recipient_type' => $this->message->recipientType(),
             'to' => $this->message->to(),
             'type' => $this->message->type(),
-            'image' => [
-                'caption' => $this->message->caption(),
+            $this->message->type() => [
                 $this->message->identifierType() => $this->message->identifierValue(),
             ],
         ];
