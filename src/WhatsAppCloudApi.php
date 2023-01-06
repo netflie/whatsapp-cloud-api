@@ -311,6 +311,26 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Download a media file (image, audio, video...) from Facebook servers.
+     *
+     * @param  string        $media_id Id of the media uploaded with the `uploadMedia` method
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function downloadMedia(string $media_id): Response
+    {
+        $request = new Request\MediaRequest\DownloadMediaRequest(
+            $media_id,
+            $this->app->accessToken(),
+            $this->timeout
+        );
+
+        return $this->client->downloadMedia($request);
+    }
+
+    /**
      * Returns the Facebook Whatsapp Access Token.
      *
      * @return string

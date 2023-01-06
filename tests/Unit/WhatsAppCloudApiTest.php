@@ -871,14 +871,46 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_download_media()
+    {
+        $media_id = (string) $this->faker->randomNumber;
+        $url = $this->buildBaseUri() . $media_id;
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+        $media_url_response_body = '{"url": "<MEDIA_URL>"}';
+        $binary_media_response_body = $this->faker->text;
+
+        $this->client_handler
+            ->get($url, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $media_url_response_body, 200));
+        $this->client_handler
+            ->get('<MEDIA_URL>', $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $binary_media_response_body, 200));
+
+        $response = $this->whatsapp_app_cloud_api->downloadMedia($media_id);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals([], $response->decodedBody());
+        $this->assertEquals($binary_media_response_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    private function buildBaseUri(): string
+    {
+        return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/';
+    }
+
     private function buildMessageRequestUri(): string
     {
-        return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/' . $this->from_phone_number_id . '/messages';
+        return $this->buildBaseUri() . $this->from_phone_number_id . '/messages';
     }
 
     private function buildMediaRequestUri(): string
     {
-        return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/' . $this->from_phone_number_id . '/media';
+        return $this->buildBaseUri() . $this->from_phone_number_id . '/media';
     }
 
     private function successfulMessageNodeResponse(): string

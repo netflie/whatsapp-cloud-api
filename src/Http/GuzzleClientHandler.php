@@ -42,6 +42,20 @@ class GuzzleClientHandler implements ClientHandler
         return $this->buildResponse($raw_handler_response);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     */
+    public function get(string $url, array $headers, int $timeout): RawResponse
+    {
+        $raw_handler_response = $this->guzzle_client->get($url, [
+            'headers' => $headers,
+            'timeout' => $timeout,
+        ]);
+
+        return $this->buildResponse($raw_handler_response);
+    }
+
     protected function post(string $url, array $data, string $data_type, array $headers, int $timeout): ResponseInterface
     {
         return $this->guzzle_client->post($url, [

@@ -55,5 +55,24 @@ final class ClientTest extends TestCase
         $this->assertEquals($request, $response->request());
         $this->assertEquals(false, $response->isError());
         $this->assertArrayHasKey('id', $response->decodedBody());
+
+        return $response->decodedBody()['id'];
+    }
+
+    /**
+     * @depends test_upload_media
+     */
+    public function test_download_media(string $media_id)
+    {
+        $request = new Request\MediaRequest\DownloadMediaRequest(
+            $media_id,
+            WhatsAppCloudApiTestConfiguration::$access_token
+        );
+
+        $response = $this->client->downloadMedia($request);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($request, $response->request());
+        $this->assertEquals(false, $response->isError());
     }
 }

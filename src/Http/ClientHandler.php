@@ -31,4 +31,17 @@ interface ClientHandler
      * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
      */
     public function postFormData(string $url, array $form, array $headers, int $timeout): RawResponse;
+
+    /**
+     * Sends a GET request to the server and returns the raw response.
+     *
+     * @param string $url     The endpoint to send the request to.
+     * @param array  $headers The request headers.
+     * @param int    $timeout The timeout in seconds for the request.
+     *
+     * @return RawResponse Response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function get(string $url, array $headers, int $timeout): RawResponse;
 }

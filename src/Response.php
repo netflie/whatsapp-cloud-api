@@ -2,6 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi;
 
+use Netflie\WhatsAppCloudApi\Http\RawResponse;
 use Netflie\WhatsAppCloudApi\Response\ResponseException;
 
 class Response
@@ -47,6 +48,16 @@ class Response
         $this->headers = $headers;
 
         $this->decodeBody();
+    }
+
+    public static function fromClientResponse(Request $request, RawResponse $response): static
+    {
+        return new static(
+            $request,
+            $response->body(),
+            $response->httpResponseCode(),
+            $response->headers()
+        );
     }
 
     /**
@@ -141,28 +152,9 @@ class Response
 
     /**
      * Convert the raw response into an array if possible.
-     *
-     * Graph will return 2 types of responses:
-     * - JSON(P)
-     *    Most responses from Graph are JSON(P)
-     * - application/x-www-form-urlencoded key/value pairs
-     *    Happens on the `/oauth/access_token` endpoint when exchanging
-     *    a short-lived access token for a long-lived access token
-     * - And sometimes nothing :/ but that'd be a bug.
      */
     public function decodeBody(): void
     {
-        $this->decoded_body = json_decode($this->body, true);
-
-        if ($this->decoded_body === null) {
-            $this->decoded_body = [];
-            parse_str($this->body, $this->decoded_body);
-        } elseif (is_numeric($this->decoded_body)) {
-            $this->decoded_body = ['id' => $this->decoded_body];
-        }
-
-        if (!is_array($this->decoded_body)) {
-            $this->decoded_body = [];
-        }
+        $this->decoded_body = json_decode($this->body, true) ?? [];
     }
 }

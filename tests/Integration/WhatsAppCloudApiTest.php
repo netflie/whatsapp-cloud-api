@@ -259,5 +259,18 @@ final class WhatsAppCloudApiTest extends TestCase
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
+
+        return $response->decodedBody()['id'];
+    }
+
+    /**
+     * @depends test_upload_media
+     */
+    public function test_download_media(string $media_id)
+    {
+        $response = $this->whatsapp_app_cloud_api->downloadMedia($media_id);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
     }
 }

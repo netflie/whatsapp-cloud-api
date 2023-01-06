@@ -95,6 +95,39 @@ class Client
         return $return_response;
     }
 
+    /**
+     * Download a media file from Facebook servers.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function downloadMedia(Request\MediaRequest\DownloadMediaRequest $request): Response
+    {
+        $raw_response = $this->handler->get(
+            $this->buildRequestUri($request->nodePath()),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $response = Response::fromClientResponse($request, $raw_response);
+        $media_url = $response->decodedBody()['url'];
+
+        $raw_response = $this->handler->get(
+            $media_url,
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = Response::fromClientResponse($request, $raw_response);
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
     private function defaultHandler(): ClientHandler
     {
         return new GuzzleClientHandler();
