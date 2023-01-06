@@ -36,7 +36,7 @@ class Client
     }
 
     /**
-     * Return the original request that returned this response.
+     * Send a message request to.
      *
      * @return Response Raw response from the server.
      *
@@ -47,6 +47,36 @@ class Client
         $raw_response = $this->handler->postJsonData(
             $this->buildRequestUri($request->nodePath()),
             $request->body(),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = new Response(
+            $request,
+            $raw_response->body(),
+            $raw_response->httpResponseCode(),
+            $raw_response->headers()
+        );
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
+    /**
+     * Upload a media file to Facebook servers.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function uploadMedia(Request\MediaRequest\UploadMediaRequest $request): Response
+    {
+        $raw_response = $this->handler->postFormData(
+            $this->buildRequestUri($request->nodePath()),
+            $request->form(),
             $request->headers(),
             $request->timeout()
         );

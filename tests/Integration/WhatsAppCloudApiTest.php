@@ -252,4 +252,12 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_upload_media()
+    {
+        $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/netflie.png');
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
 }

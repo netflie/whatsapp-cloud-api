@@ -2,6 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\Tests\Unit;
 
+use GuzzleHttp\Psr7;
 use Netflie\WhatsAppCloudApi\Client;
 use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\RawResponse;
@@ -53,7 +54,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_text_message_fails()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $text_message = $this->faker->text;
         $preview_url = $this->faker->boolean;
 
@@ -87,7 +88,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_text_message()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $text_message = $this->faker->text;
         $preview_url = $this->faker->boolean;
 
@@ -125,7 +126,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_document_id()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $caption = $this->faker->text;
         $filename = $this->faker->text;
         $document_id = $this->faker->uuid;
@@ -167,7 +168,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_document_link()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $caption = $this->faker->text;
         $filename = $this->faker->text;
         $document_link = $this->faker->url;
@@ -209,7 +210,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_template_without_components()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $template_name = $this->faker->name;
         $language = $this->faker->locale;
 
@@ -248,7 +249,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_template_with_components()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $template_name = $this->faker->name;
         $language = $this->faker->locale;
 
@@ -359,7 +360,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_audio_id()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $document_id = $this->faker->uuid;
 
         $body = [
@@ -395,7 +396,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_audio_link()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $document_link = $this->faker->url;
 
         $body = [
@@ -431,7 +432,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_image_id()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $caption = $this->faker->text;
         $document_id = $this->faker->uuid;
 
@@ -470,7 +471,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_image_link()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $caption = $this->faker->text;
         $document_link = $this->faker->url;
 
@@ -509,7 +510,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_video_with_link()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $video_link = $this->faker->url;
         $caption = $this->faker->text;
 
@@ -548,7 +549,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_video_with_id()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $video_id = $this->faker->uuid;
         $caption = $this->faker->text;
 
@@ -587,7 +588,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_sticker()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $sticker_link = $this->faker->url;
 
         $body = [
@@ -623,7 +624,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_location()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $latitude = $this->faker->latitude;
         $longitude = $this->faker->latitude;
         $name = $this->faker->city;
@@ -667,7 +668,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_contact()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $first_name = $this->faker->firstName();
         $last_name = $this->faker->lastName;
         $phone = $this->faker->e164PhoneNumber;
@@ -719,7 +720,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_contact_with_wa_id()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
         $first_name = $this->faker->firstName();
         $last_name = $this->faker->lastName;
         $phone = $this->faker->e164PhoneNumber;
@@ -772,7 +773,7 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_send_list()
     {
         $to = $this->faker->phoneNumber;
-        $url = $this->buildRequestUri();
+        $url = $this->buildMessageRequestUri();
 
         $listHeader = ['type' => 'text', 'text' => $this->faker->text(60)];
         $listBody = ['text' => $this->faker->text(1024)];
@@ -833,9 +834,51 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
-    private function buildRequestUri(): string
+    public function test_upload_media()
+    {
+        $url = $this->buildMediaRequestUri();
+        $form = [
+            [
+                'name' => 'file',
+                'contents' => Psr7\Utils::tryFopen('tests/Support/netflie.png', 'r'),
+            ],
+            [
+                'name' => 'type',
+                'contents' => 'image/png',
+            ],
+            [
+                'name' => 'messaging_product',
+                'contents' => 'whatsapp',
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+        $response_body = '{"id":"<MEDIA_ID>"}';
+
+        $this->client_handler
+            ->postFormData($url, Argument::that(function ($arg) use ($form) {
+                return json_encode($arg) == json_encode($form);
+            }), $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $response_body, 200));
+
+        $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/netflie.png');
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($response_body, true), $response->decodedBody());
+        $this->assertEquals($response_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    private function buildMessageRequestUri(): string
     {
         return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/' . $this->from_phone_number_id . '/messages';
+    }
+
+    private function buildMediaRequestUri(): string
+    {
+        return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/' . $this->from_phone_number_id . '/media';
     }
 
     private function successfulMessageNodeResponse(): string
