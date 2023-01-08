@@ -2,6 +2,8 @@
 
 namespace Netflie\WhatsAppCloudApi;
 
+use Netflie\WhatsAppCloudApi\WebHook\Notification;
+use Netflie\WhatsAppCloudApi\WebHook\NotificationFactory;
 use Netflie\WhatsAppCloudApi\WebHook\VerificationRequest;
 
 class WebHook
@@ -16,5 +18,17 @@ class WebHook
     {
         return (new VerificationRequest($verify_token))
             ->validate($payload);
+    }
+
+    /**
+     * Get a notification from incoming webhook messages.
+     *
+     * @param  array  $payload Payload received in your endpoint URL.
+     * @return Notification    A PHP representation of WhatsApp webhook notifications
+     */
+    public function read(array $payload): ?Notification
+    {
+        return (new NotificationFactory())
+            ->buildFromPayload($payload);
     }
 }

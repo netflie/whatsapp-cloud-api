@@ -2,7 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\WebHook;
 
-class VerificationRequest
+final class VerificationRequest
 {
     /**
      * Verify Token field configured in your app's App Dashboard.
