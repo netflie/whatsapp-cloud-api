@@ -83,6 +83,10 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_template_with_components()
     {
+        $this->markTestIncomplete(
+            'Meta deleted the sample_issue_resolution template.'
+        );
+
         $component_body = [
             [
                 'type' => 'text',
