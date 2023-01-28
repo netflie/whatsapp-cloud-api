@@ -50,7 +50,7 @@ class Response
         $this->decodeBody();
     }
 
-    public static function fromClientResponse(Request $request, RawResponse $response): static
+    public static function fromClientResponse(Request $request, RawResponse $response): self
     {
         return new static(
             $request,
