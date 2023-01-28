@@ -222,6 +222,21 @@ $whatsapp_cloud_api->sendList(
 );
 ```
 
+## Message Response
+WhatsAppCloudApi instance returns a Response class or a ClientException if WhatsApp servers return an error.
+
+```php
+try {
+    $response = $this->whatsapp_app_cloud_api->sendTextMessage(
+        '<destination-phone-number>,
+        'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es',
+        true
+    );
+} catch (\Netflie\WhatsAppCloudApi\Response\ResponseException $e) {
+    print_r($e->response()); // You can still check the Response returned from Meta servers
+}
+```
+
 ## Features
 
 - Send Text Messages

@@ -51,6 +51,7 @@ class GuzzleClientHandler implements ClientHandler
         $raw_handler_response = $this->guzzle_client->get($url, [
             'headers' => $headers,
             'timeout' => $timeout,
+            'http_errors' => false,
         ]);
 
         return $this->buildResponse($raw_handler_response);
@@ -62,6 +63,7 @@ class GuzzleClientHandler implements ClientHandler
             $data_type => $data,
             'headers' => $headers,
             'timeout' => $timeout,
+            'http_errors' => false,
         ]);
     }
 
