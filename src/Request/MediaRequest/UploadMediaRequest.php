@@ -5,17 +5,17 @@ namespace Netflie\WhatsAppCloudApi\Request\MediaRequest;
 use GuzzleHttp\Psr7;
 use Netflie\WhatsAppCloudApi\Request;
 
-class UploadMediaRequest extends Request
+final class UploadMediaRequest extends Request
 {
     /**
      * @var string File path of file will sent.
      */
-    protected string $file_path;
+    private string $file_path;
 
     /**
     * @var string WhatsApp Number Id from messages will sent.
     */
-    protected string $phone_number_id;
+    private string $phone_number_id;
 
     /**
      * Creates a new Media Request instance.

@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
 use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-class RequestImageMessage extends MessageRequest
+final class RequestImageMessage extends MessageRequest
 {
     /**
     * {@inheritdoc}

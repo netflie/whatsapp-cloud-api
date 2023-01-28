@@ -2,7 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\Contact;
 
-class Phones implements \Countable, \IteratorAggregate
+final class Phones implements \Countable, \IteratorAggregate
 {
     private array $phones;
 

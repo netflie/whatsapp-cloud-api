@@ -4,17 +4,17 @@ namespace Netflie\WhatsAppCloudApi\Response;
 
 use Netflie\WhatsAppCloudApi\Response;
 
-class ResponseException extends \Exception
+final class ResponseException extends \Exception
 {
     /**
      * @var Response The response that threw the exception.
      */
-    protected $response;
+    private $response;
 
     /**
      * @var array Decoded response.
      */
-    protected $response_data;
+    private $response_data;
 
     /**
      * Creates a ResponseException.

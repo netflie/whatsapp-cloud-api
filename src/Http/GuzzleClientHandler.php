@@ -5,12 +5,12 @@ namespace Netflie\WhatsAppCloudApi\Http;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 
-class GuzzleClientHandler implements ClientHandler
+final class GuzzleClientHandler implements ClientHandler
 {
     /**
      * @var \GuzzleHttp\Client The Guzzle client.
      */
-    protected $guzzle_client;
+    private $guzzle_client;
 
     /**
      * @param \GuzzleHttp\Client|null The Guzzle client.

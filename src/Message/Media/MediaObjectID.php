@@ -2,7 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\Media;
 
-class MediaObjectID extends MediaID
+final class MediaObjectID extends MediaID
 {
     /**
     * {@inheritdoc}

@@ -2,27 +2,27 @@
 
 namespace Netflie\WhatsAppCloudApi\Message;
 
-class TextMessage extends Message
+final class TextMessage extends Message
 {
     /**
      * @const int Maximum length for body message.
      */
-    protected const MAXIMUM_LENGTH = 4096;
+    private const MAXIMUM_LENGTH = 4096;
 
     /**
-     * @var string Type of message object.
-     */
+    * {@inheritdoc}
+    */
     protected string $type = 'text';
 
     /**
      * @var string The body of the text message.
      */
-    protected string $text;
+    private string $text;
 
     /**
      * @var bool Determines if show a preview box for URLs contained in the text message.
      */
-    protected bool $preview_url;
+    private bool $preview_url;
 
     /**
      * Creates a new message of type text.

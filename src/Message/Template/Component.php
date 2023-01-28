@@ -2,22 +2,22 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\Template;
 
-class Component
+final class Component
 {
     /**
      * Parameters of a header template.
      */
-    protected array $header;
+    private array $header;
 
     /**
      * Parameters of a body template.
      */
-    protected array $body;
+    private array $body;
 
     /**
      * Buttons to attach to a template.
      */
-    protected array $buttons;
+    private array $buttons;
 
     public function __construct(array $header = [], array $body = [], array $buttons = [])
     {

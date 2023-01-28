@@ -7,17 +7,17 @@ abstract class Message
     /**
      * @var string Currently only "whatsapp" value is supported.
      */
-    protected string $messaging_product = 'whatsapp';
+    private string $messaging_product = 'whatsapp';
 
     /**
      * @var string Currently only "individual" value is supported.
      */
-    protected string $recipient_type = 'individual';
+    private string $recipient_type = 'individual';
 
     /**
      * @var string WhatsApp ID or phone number for the person you want to send a message to.
      */
-    protected string $to;
+    private string $to;
 
     /**
      * @var string Type of message object.

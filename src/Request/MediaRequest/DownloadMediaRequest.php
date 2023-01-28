@@ -4,12 +4,12 @@ namespace Netflie\WhatsAppCloudApi\Request\MediaRequest;
 
 use Netflie\WhatsAppCloudApi\Request;
 
-class DownloadMediaRequest extends Request
+final class DownloadMediaRequest extends Request
 {
     /**
      * @var string Id of the media uploaded to the Facebook servers.
      */
-    protected string $media_id;
+    private string $media_id;
 
     /**
      * Creates a new Media Request instance.

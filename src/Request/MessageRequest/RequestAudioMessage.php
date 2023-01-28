@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
 use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-class RequestAudioMessage extends MessageRequest
+final class RequestAudioMessage extends MessageRequest
 {
     /**
     * {@inheritdoc}

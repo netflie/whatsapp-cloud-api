@@ -15,7 +15,7 @@ abstract class MessageRequest extends Request
     /**
      * @var string WhatsApp Number Id from messages will sent.
      */
-    protected string $from_phone_number_id;
+    private string $from_phone_number_id;
 
     public function __construct(Message $message, string $access_token, string $from_phone_number_id, ?int $timeout = null)
     {

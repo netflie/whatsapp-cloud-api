@@ -4,20 +4,20 @@ namespace Netflie\WhatsAppCloudApi\Message;
 
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 
-class OptionsListMessage extends Message
+final class OptionsListMessage extends Message
 {
     /**
     * {@inheritdoc}
     */
     protected string $type = 'list';
 
-    protected string $header;
+    private string $header;
 
-    protected string $body;
+    private string $body;
 
-    protected string $footer;
+    private string $footer;
 
-    protected Action $action;
+    private Action $action;
 
     /**
     * {@inheritdoc}

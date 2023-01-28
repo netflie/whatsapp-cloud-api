@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Message;
 
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 
-class DocumentMessage extends Message
+final class DocumentMessage extends Message
 {
     /**
     * {@inheritdoc}
@@ -16,17 +16,17 @@ class DocumentMessage extends Message
     *
     * You can get a WhatsApp Media ID uploading the document to the WhatsApp Cloud servers.
     */
-    protected MediaID $id;
+    private MediaID $id;
 
     /**
      * Describes the filename for the specific document: eg. my-document.pdf.
      */
-    protected string $name;
+    private string $name;
 
     /**
      * Describes the specified document.
      */
-    protected ?string $caption;
+    private ?string $caption;
 
     /**
     * {@inheritdoc}
