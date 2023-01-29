@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.1 - 2023-01-29
+
+### What's Changed
+
+New features supported:
+
+- Fix wrong documented conversation type value when a user initiated a conversation
+
 ## 2.0.0 - 2023-01-29
 
 ### What's Changed
