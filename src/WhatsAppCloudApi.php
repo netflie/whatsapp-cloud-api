@@ -331,6 +331,27 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Mark a message as read
+     *
+     * @param  string    $message_id WhatsApp Message Id will be marked as read.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function markMessageAsRead(string $message_id): Response
+    {
+        $request = new Request\MessageReadRequest(
+            $message_id,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
      * Returns the Facebook Whatsapp Access Token.
      *
      * @return string

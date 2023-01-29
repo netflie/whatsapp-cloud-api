@@ -898,6 +898,35 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_mark_a_message_as_read()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $text_message = $this->faker->text;
+        $preview_url = $this->faker->boolean;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'status' => 'read',
+            'message_id' => '<message-id>',
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->markMessageAsRead('<message-id>');
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     private function buildBaseUri(): string
     {
         return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/';

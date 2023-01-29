@@ -42,7 +42,7 @@ class Client
      *
      * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
      */
-    public function sendMessage(Request\MessageRequest $request): Response
+    public function sendMessage(Request\RequestWithBody $request): Response
     {
         $raw_response = $this->handler->postJsonData(
             $this->buildRequestUri($request->nodePath()),

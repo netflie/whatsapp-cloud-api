@@ -259,6 +259,47 @@ try {
 }
 ```
 
+## Webhooks
+
+### Webhook verification
+Add your webhook in your Meta App dashboard. You need to verify your webhook:
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Netflie\WhatsAppCloudApi\WebHook;
+
+// Instantiate the WhatsAppCloudApi super class.
+$webhook = new WebHook();
+
+return $webhook->verify($_GET, "<the-verify-token-defined-in-your-app-dashboard>");
+```
+
+### Webhook notifications
+Webhook is now verified, you will start receiving notifications every time your customers send messages.
+
+
+```php
+<?php
+require 'vendor/autoload.php';
+define('STDOUT', fopen('php://stdout', 'w'));
+
+use Netflie\WhatsAppCloudApi\WebHook;
+
+
+$payload = file_get_contents('php://input');
+fwrite(STDOUT, print_r($payload, true) . "\n");
+
+// Instantiate the Webhook super class.
+$webhook = new WebHook();
+
+
+fwrite(STDOUT, print_r($webhook->read(json_decode($payload, true)), true) . "\n");
+```
+
+The `Webhook::read` function will return a `Notification` instance. Please, [explore](https://github.com/netflie/whatsapp-cloud-api/tree/main/src/WebHook/Notification "explore") the different notifications availables.
+
 ## Features
 
 - Send Text Messages
