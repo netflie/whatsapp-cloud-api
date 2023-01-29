@@ -782,7 +782,7 @@ final class NotificationFactoryTest extends TestCase
                 "id": "CONVERSATION_ID",
                 "expiration_timestamp": 1669233778,
                 "origin": {
-                  "type": "customer_initiated"
+                  "type": "user_initiated"
                   }
                 }
               }]
@@ -829,7 +829,7 @@ final class NotificationFactoryTest extends TestCase
               "conversation": {
                 "id": "CONVERSATION_ID",
                 "origin": {
-                  "type": "customer_initiated"
+                  "type": "user_initiated"
                   }
                 }
               }]
