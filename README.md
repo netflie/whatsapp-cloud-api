@@ -312,6 +312,11 @@ The `Webhook::read` function will return a `Notification` instance. Please, [exp
 - Send Locations
 - Send Contacts
 - Send Lists
+- Upload media resources to WhatsApp servers
+- Download media resources from WhatsApp servers
+- Mark messages as read
+- Webhook verification
+- Webhook notifications
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
