@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.1 - 2023-01-28
+
+### What's Changed
+
+- API Graph v15.0 as default
+
 ## 1.4.0 - 2022-12-09
 
 ### 1.4.0 - 2022-12-23
