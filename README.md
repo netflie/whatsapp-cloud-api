@@ -273,7 +273,7 @@ use Netflie\WhatsAppCloudApi\WebHook;
 // Instantiate the WhatsAppCloudApi super class.
 $webhook = new WebHook();
 
-return $webhook->verify($_GET, "<the-verify-token-defined-in-your-app-dashboard>");
+echo $webhook->verify($_GET, "<the-verify-token-defined-in-your-app-dashboard>");
 ```
 
 ### Webhook notifications
@@ -293,7 +293,6 @@ fwrite(STDOUT, print_r($payload, true) . "\n");
 
 // Instantiate the Webhook super class.
 $webhook = new WebHook();
-
 
 fwrite(STDOUT, print_r($webhook->read(json_decode($payload, true)), true) . "\n");
 ```
