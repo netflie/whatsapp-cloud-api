@@ -222,8 +222,30 @@ $whatsapp_cloud_api->sendList(
 );
 ```
 
+## Media messages
+### Upload media resources
+Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
+
+You can also upload your media resources to WhatsApp servers and you will receive a resource identifier:
+
+```php
+$response = $whatsapp_cloud_api->uploadMedia('my-image.png');
+
+$media_id = new MediaObjectID($response->decodedBody()['id']);
+$whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
+
+```
+
+### Upload media resources
+To download a media resource:
+
+```php
+$response = $whatsapp_cloud_api->downloadMedia('<media-id>');
+```
+
+
 ## Message Response
-WhatsAppCloudApi instance returns a Response class or a ClientException if WhatsApp servers return an error.
+WhatsAppCloudApi instance returns a Response class or a ResponseException if WhatsApp servers return an error.
 
 ```php
 try {
