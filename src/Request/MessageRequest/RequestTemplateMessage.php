@@ -1,17 +1,17 @@
 <?php
 
-namespace Netflie\WhatsAppCloudApi\Request;
+namespace Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-use Netflie\WhatsAppCloudApi\Request;
+use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-class RequestTemplateMessage extends Request
+final class RequestTemplateMessage extends MessageRequest
 {
     /**
     * {@inheritdoc}
     */
-    protected function makeBody(): void
+    public function body(): array
     {
-        $this->body = [
+        $body = [
             'messaging_product' => $this->message->messagingProduct(),
             'recipient_type' => $this->message->recipientType(),
             'to' => $this->message->to(),
@@ -24,21 +24,23 @@ class RequestTemplateMessage extends Request
         ];
 
         if ($this->message->header()) {
-            $this->body['template']['components'][] = [
+            $body['template']['components'][] = [
                 'type' => 'header',
                 'parameters' => $this->message->header(),
             ];
         }
 
         if ($this->message->body()) {
-            $this->body['template']['components'][] = [
+            $body['template']['components'][] = [
                 'type' => 'body',
                 'parameters' => $this->message->body(),
             ];
         }
 
         foreach ($this->message->buttons() as $button) {
-            $this->body['template']['components'][] = $button;
+            $body['template']['components'][] = $button;
         }
+
+        return $body;
     }
 }

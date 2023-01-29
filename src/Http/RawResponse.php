@@ -2,22 +2,22 @@
 
 namespace Netflie\WhatsAppCloudApi\Http;
 
-class RawResponse
+final class RawResponse
 {
     /**
      * @var array The response headers in the form of an associative array.
      */
-    protected array $headers;
+    private array $headers;
 
     /**
      * @var string The raw response body.
      */
-    protected string $body;
+    private string $body;
 
     /**
      * @var int The HTTP status response code.
      */
-    protected $http_response_code;
+    private $http_response_code;
 
     /**
      * Creates a new GraphRawResponse entity.

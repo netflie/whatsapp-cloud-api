@@ -222,6 +222,84 @@ $whatsapp_cloud_api->sendList(
 );
 ```
 
+## Media messages
+### Upload media resources
+Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
+
+You can also upload your media resources to WhatsApp servers and you will receive a resource identifier:
+
+```php
+$response = $whatsapp_cloud_api->uploadMedia('my-image.png');
+
+$media_id = new MediaObjectID($response->decodedBody()['id']);
+$whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
+
+```
+
+### Upload media resources
+To download a media resource:
+
+```php
+$response = $whatsapp_cloud_api->downloadMedia('<media-id>');
+```
+
+
+## Message Response
+WhatsAppCloudApi instance returns a Response class or a ResponseException if WhatsApp servers return an error.
+
+```php
+try {
+    $response = $this->whatsapp_app_cloud_api->sendTextMessage(
+        '<destination-phone-number>,
+        'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es',
+        true
+    );
+} catch (\Netflie\WhatsAppCloudApi\Response\ResponseException $e) {
+    print_r($e->response()); // You can still check the Response returned from Meta servers
+}
+```
+
+## Webhooks
+
+### Webhook verification
+Add your webhook in your Meta App dashboard. You need to verify your webhook:
+
+```php
+<?php
+require 'vendor/autoload.php';
+
+use Netflie\WhatsAppCloudApi\WebHook;
+
+// Instantiate the WhatsAppCloudApi super class.
+$webhook = new WebHook();
+
+return $webhook->verify($_GET, "<the-verify-token-defined-in-your-app-dashboard>");
+```
+
+### Webhook notifications
+Webhook is now verified, you will start receiving notifications every time your customers send messages.
+
+
+```php
+<?php
+require 'vendor/autoload.php';
+define('STDOUT', fopen('php://stdout', 'w'));
+
+use Netflie\WhatsAppCloudApi\WebHook;
+
+
+$payload = file_get_contents('php://input');
+fwrite(STDOUT, print_r($payload, true) . "\n");
+
+// Instantiate the Webhook super class.
+$webhook = new WebHook();
+
+
+fwrite(STDOUT, print_r($webhook->read(json_decode($payload, true)), true) . "\n");
+```
+
+The `Webhook::read` function will return a `Notification` instance. Please, [explore](https://github.com/netflie/whatsapp-cloud-api/tree/main/src/WebHook/Notification "explore") the different notifications availables.
+
 ## Features
 
 - Send Text Messages
@@ -234,10 +312,19 @@ $whatsapp_cloud_api->sendList(
 - Send Locations
 - Send Contacts
 - Send Lists
+- Upload media resources to WhatsApp servers
+- Download media resources from WhatsApp servers
+- Mark messages as read
+- Webhook verification
+- Webhook notifications
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
 - To report bugs, please [open an issue](https://github.com/netflie/whatsapp-cloud-api/issues/new/choose "open an issue")
+
+## Migration to v2
+
+Please see [UPGRADE](https://github.com/netflie/whatsapp-cloud-api/blob/main/UPGRADE.md "UPGRADE") for more information on how to upgrade to v2.
 
 ## Changelog
 

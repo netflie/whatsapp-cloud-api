@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
 use Netflie\WhatsAppCloudApi\Client;
 use Netflie\WhatsAppCloudApi\Message\TextMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
+use Netflie\WhatsAppCloudApi\Request;
 use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use PHPUnit\Framework\TestCase;
@@ -28,13 +28,48 @@ final class ClientTest extends TestCase
             'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es',
             true
         );
-        $request = new RequestTextMessage(
+        $request = new Request\MessageRequest\RequestTextMessage(
             $message,
             WhatsAppCloudApiTestConfiguration::$access_token,
             WhatsAppCloudApiTestConfiguration::$from_phone_number_id
         );
 
-        $response = $this->client->sendRequest($request);
+        $response = $this->client->sendMessage($request);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($request, $response->request());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_upload_media()
+    {
+        $request = new Request\MediaRequest\UploadMediaRequest(
+            'tests/Support/netflie.png',
+            WhatsAppCloudApiTestConfiguration::$from_phone_number_id,
+            WhatsAppCloudApiTestConfiguration::$access_token
+        );
+
+        $response = $this->client->uploadMedia($request);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($request, $response->request());
+        $this->assertEquals(false, $response->isError());
+        $this->assertArrayHasKey('id', $response->decodedBody());
+
+        return $response->decodedBody()['id'];
+    }
+
+    /**
+     * @depends test_upload_media
+     */
+    public function test_download_media(string $media_id)
+    {
+        $request = new Request\MediaRequest\DownloadMediaRequest(
+            $media_id,
+            WhatsAppCloudApiTestConfiguration::$access_token
+        );
+
+        $response = $this->client->downloadMedia($request);
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals($request, $response->request());

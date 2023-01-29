@@ -2,32 +2,11 @@
 
 namespace Netflie\WhatsAppCloudApi;
 
-use Netflie\WhatsAppCloudApi\Message\AudioMessage;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
-use Netflie\WhatsAppCloudApi\Message\ContactMessage;
-use Netflie\WhatsAppCloudApi\Message\Document\Document;
-use Netflie\WhatsAppCloudApi\Message\DocumentMessage;
-use Netflie\WhatsAppCloudApi\Message\ImageMessage;
-use Netflie\WhatsAppCloudApi\Message\LocationMessage;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
-use Netflie\WhatsAppCloudApi\Message\OptionsListMessage;
-use Netflie\WhatsAppCloudApi\Message\StickerMessage;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
-use Netflie\WhatsAppCloudApi\Message\TemplateMessage;
-use Netflie\WhatsAppCloudApi\Message\TextMessage;
-use Netflie\WhatsAppCloudApi\Message\VideoMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestAudioMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestContactMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestDocumentMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestImageMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestLocationMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestOptionsListMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestStickerMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestTemplateMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestTextMessage;
-use Netflie\WhatsAppCloudApi\Request\RequestVideoMessage;
 
 class WhatsAppCloudApi
 {
@@ -83,15 +62,15 @@ class WhatsAppCloudApi
      */
     public function sendTextMessage(string $to, string $text, bool $preview_url = false): Response
     {
-        $message = new TextMessage($to, $text, $preview_url);
-        $request = new RequestTextMessage(
+        $message = new Message\TextMessage($to, $text, $preview_url);
+        $request = new Request\MessageRequest\RequestTextMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -99,22 +78,22 @@ class WhatsAppCloudApi
      * can put any public URL of some document uploaded on Internet.
      *
      * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  Document $document   Document to send. See documents accepted in the Message/Document folder.
+     * @param  MediaID $document_id WhatsApp Media ID or any Internet public document link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
     public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption): Response
     {
-        $message = new DocumentMessage($to, $document_id, $name, $caption);
-        $request = new RequestDocumentMessage(
+        $message = new Message\DocumentMessage($to, $document_id, $name, $caption);
+        $request = new Request\MessageRequest\RequestDocumentMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -132,108 +111,108 @@ class WhatsAppCloudApi
      */
     public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null): Response
     {
-        $message = new TemplateMessage($to, $template_name, $language, $components);
-        $request = new RequestTemplateMessage(
+        $message = new Message\TemplateMessage($to, $template_name, $language, $components);
+        $request = new Request\MessageRequest\RequestTemplateMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
-     * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
-     * can put any public URL of some document uploaded on Internet.
+     * Sends an audio uploaded to the WhatsApp Cloud servers by it Media ID or you also
+     * can put any public URL of some audio uploaded on Internet.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId $document_id WhatsApp Media ID or any Internet public link document.
+     * @param  string  $to         WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  MediaId $audio_id   WhatsApp Media ID or any Internet public audio link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendAudio(string $to, MediaID $document_id): Response
+    public function sendAudio(string $to, MediaID $audio_id): Response
     {
-        $message = new AudioMessage($to, $document_id);
-        $request = new RequestAudioMessage(
+        $message = new Message\AudioMessage($to, $audio_id);
+        $request = new Request\MessageRequest\RequestAudioMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
-     * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
-     * can put any public URL of some document uploaded on Internet.
+     * Sends an image uploaded to the WhatsApp Cloud servers by it Media ID or you also
+     * can put any public URL of some image uploaded on Internet.
      *
      * @param  string   $to          WhatsApp ID or phone number for the person you want to send a message to.
      * @param  string   $caption     Description of the specified image file.
-     * @param  MediaId  $document_id WhatsApp Media ID or any Internet public link document.
+     * @param  MediaId  $image_id    WhatsApp Media ID or any Internet public image link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendImage(string $to, MediaID $document_id, ?string $caption = ''): Response
+    public function sendImage(string $to, MediaID $image_id, ?string $caption = ''): Response
     {
-        $message = new ImageMessage($to, $document_id, $caption);
-        $request = new RequestImageMessage(
+        $message = new Message\ImageMessage($to, $image_id, $caption);
+        $request = new Request\MessageRequest\RequestImageMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
-     * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
-     * can put any public URL of some document uploaded on Internet.
+     * Sends a video uploaded to the WhatsApp Cloud servers by it Media ID or you also
+     * can put any public URL of some video uploaded on Internet.
      *
-     * @param  string   $to     WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $document_id WhatsApp Media ID or any Internet public link document.
+     * @param  string   $to       WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  MediaId  $video_id WhatsApp Media ID or any Internet public video link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendVideo(string $to, MediaID $link, string $caption = ''): Response
+    public function sendVideo(string $to, MediaID $video_id, string $caption = ''): Response
     {
-        $message = new VideoMessage($to, $link, $caption);
-        $request = new RequestVideoMessage(
+        $message = new Message\VideoMessage($to, $video_id, $caption);
+        $request = new Request\MessageRequest\RequestVideoMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
      * Sends a sticker uploaded to the WhatsApp Cloud servers by it Media ID or you also
-     * can put any public URL of some document uploaded on Internet.
+     * can put any public URL of some sticker uploaded on Internet.
      *
      * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $document_id    WhatsApp Media ID or any Internet public link document.
+     * @param  MediaId  $sticker_id    WhatsApp Media ID or any Internet public sticker link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendSticker(string $to, MediaID $link): Response
+    public function sendSticker(string $to, MediaID $sticker_id): Response
     {
-        $message = new StickerMessage($to, $link);
-        $request = new RequestStickerMessage(
+        $message = new Message\StickerMessage($to, $sticker_id);
+        $request = new Request\MessageRequest\RequestStickerMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -251,15 +230,15 @@ class WhatsAppCloudApi
      */
     public function sendLocation(string $to, float $longitude, float $latitude, string $name = '', string $address = ''): Response
     {
-        $message = new LocationMessage($to, $longitude, $latitude, $name, $address);
-        $request = new RequestLocationMessage(
+        $message = new Message\LocationMessage($to, $longitude, $latitude, $name, $address);
+        $request = new Request\MessageRequest\RequestLocationMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     /**
@@ -275,28 +254,90 @@ class WhatsAppCloudApi
      */
     public function sendContact(string $to, ContactName $name, Phone ...$phone): Response
     {
-        $message = new ContactMessage($to, $name, ...$phone);
-        $request = new RequestContactMessage(
+        $message = new Message\ContactMessage($to, $name, ...$phone);
+        $request = new Request\MessageRequest\RequestContactMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
     }
 
     public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
     {
-        $message = new OptionsListMessage($to, $header, $body, $footer, $action);
-        $request = new RequestOptionsListMessage(
+        $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action);
+        $request = new Request\MessageRequest\RequestOptionsListMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
         );
 
-        return $this->client->sendRequest($request);
+        return $this->client->sendMessage($request);
+    }
+
+    /**
+     * Upload a media file (image, audio, video...) to Facebook servers.
+     *
+     * @param  string        $file_path Path of the media file to upload.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function uploadMedia(string $file_path): Response
+    {
+        $request = new Request\MediaRequest\UploadMediaRequest(
+            $file_path,
+            $this->app->fromPhoneNumberId(),
+            $this->app->accessToken(),
+            $this->timeout
+        );
+
+        return $this->client->uploadMedia($request);
+    }
+
+    /**
+     * Download a media file (image, audio, video...) from Facebook servers.
+     *
+     * @param  string        $media_id Id of the media uploaded with the `uploadMedia` method
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function downloadMedia(string $media_id): Response
+    {
+        $request = new Request\MediaRequest\DownloadMediaRequest(
+            $media_id,
+            $this->app->accessToken(),
+            $this->timeout
+        );
+
+        return $this->client->downloadMedia($request);
+    }
+
+    /**
+     * Mark a message as read
+     *
+     * @param  string    $message_id WhatsApp Message Id will be marked as read.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function markMessageAsRead(string $message_id): Response
+    {
+        $request = new Request\MessageReadRequest(
+            $message_id,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
     }
 
     /**

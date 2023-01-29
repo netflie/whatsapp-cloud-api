@@ -12,7 +12,7 @@ abstract class MediaID
     /**
      * Value of the identifier
      */
-    protected string $value;
+    private string $value;
 
     public function __construct(string $id)
     {

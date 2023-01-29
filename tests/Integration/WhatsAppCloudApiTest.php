@@ -44,6 +44,10 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_document_with_id()
     {
+        $this->markTestIncomplete(
+            'This test should send a real media ID.'
+        );
+
         $media_id = new MediaObjectID('341476474779872');
         $response = $this->whatsapp_app_cloud_api->sendDocument(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
@@ -248,6 +252,27 @@ final class WhatsAppCloudApiTest extends TestCase
             'Thanks for your time',
             $action
         );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_upload_media()
+    {
+        $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/netflie.png');
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+
+        return $response->decodedBody()['id'];
+    }
+
+    /**
+     * @depends test_upload_media
+     */
+    public function test_download_media(string $media_id)
+    {
+        $response = $this->whatsapp_app_cloud_api->downloadMedia($media_id);
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());

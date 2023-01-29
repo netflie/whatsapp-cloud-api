@@ -6,16 +6,16 @@ use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phones;
 
-class ContactMessage extends Message
+final class ContactMessage extends Message
 {
     /**
     * {@inheritdoc}
     */
     protected string $type = 'contacts';
 
-    protected ContactName $name;
+    private ContactName $name;
 
-    protected Phones $phones;
+    private Phones $phones;
 
     /**
     * {@inheritdoc}

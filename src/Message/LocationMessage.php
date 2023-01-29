@@ -4,23 +4,23 @@ namespace Netflie\WhatsAppCloudApi\Message;
 
 use Netflie\WhatsAppCloudApi\Message\Error\InvalidMessage;
 
-class LocationMessage extends Message
+final class LocationMessage extends Message
 {
     /**
     * {@inheritdoc}
     */
     protected string $type = 'location';
 
-    protected float $longitude;
+    private float $longitude;
 
-    protected float $latitude;
+    private float $latitude;
 
     /**
      * Name of the location
      */
-    protected string $name;
+    private string $name;
 
-    protected string $address;
+    private string $address;
 
     /**
     * {@inheritdoc}

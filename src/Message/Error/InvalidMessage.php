@@ -2,6 +2,6 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\Error;
 
-class InvalidMessage extends \Exception
+final class InvalidMessage extends \Exception
 {
 }

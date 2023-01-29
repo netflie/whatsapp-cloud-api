@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Message\Contact;
 
 use MyCLabs\Enum\Enum;
 
-class PhoneType extends Enum
+final class PhoneType extends Enum
 {
     private const CELL = 'cell';
     private const MAIN = 'main';

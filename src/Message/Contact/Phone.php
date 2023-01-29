@@ -2,13 +2,13 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\Contact;
 
-class Phone
+final class Phone
 {
-    protected string $number;
+    private string $number;
 
-    protected string $wa_id;
+    private string $wa_id;
 
-    protected PhoneType $type;
+    private PhoneType $type;
 
     public function __construct(string $number, PhoneType $type, string $wa_id = '')
     {

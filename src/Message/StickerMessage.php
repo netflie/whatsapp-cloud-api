@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Message;
 
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 
-class StickerMessage extends Message
+final class StickerMessage extends Message
 {
     /**
     * {@inheritdoc}
@@ -16,7 +16,7 @@ class StickerMessage extends Message
     *
     * You can get a WhatsApp Media ID uploading the document to the WhatsApp Cloud servers.
     */
-    protected MediaID $id;
+    private MediaID $id;
 
     /**
     * {@inheritdoc}

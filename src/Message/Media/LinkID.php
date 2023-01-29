@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Message\Media;
 
 use Netflie\WhatsAppCloudApi\Message\Error\InvalidMessage;
 
-class LinkID extends MediaID
+final class LinkID extends MediaID
 {
     /**
     * {@inheritdoc}

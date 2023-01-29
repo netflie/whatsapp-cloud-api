@@ -2,11 +2,11 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\Contact;
 
-class ContactName
+final class ContactName
 {
-    protected string $first_name;
+    private string $first_name;
 
-    protected string $last_name;
+    private string $last_name;
 
     public function __construct(string $first_name, string $last_name = '')
     {
