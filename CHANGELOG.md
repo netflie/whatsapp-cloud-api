@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.0 - 2023-01-29
+
+### What's Changed
+
+New features supported:
+
+- Upload media resources to WhatsApp servers
+- Download media resources from WhatsApp servers
+- Mark messages as read
+- Webhook verification
+- Webhook notifications
+
 ## 1.4.1 - 2023-01-28
 
 ### What's Changed
