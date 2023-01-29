@@ -24,7 +24,8 @@
         "symfony/var-dumper": "^5.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "fakerphp/faker": "^1.19",
-        "friendsofphp/php-cs-fixer": "^3.13"
+        "friendsofphp/php-cs-fixer": "^3.13",
+        "phpstan/phpstan": "^1.9"
     },
     "autoload": {
         "psr-4": {
