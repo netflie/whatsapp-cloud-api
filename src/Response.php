@@ -52,7 +52,7 @@ class Response
 
     public static function fromClientResponse(Request $request, RawResponse $response): self
     {
-        return new static(
+        return new self(
             $request,
             $response->body(),
             $response->httpResponseCode(),
