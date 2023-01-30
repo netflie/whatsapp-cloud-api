@@ -299,6 +299,17 @@ fwrite(STDOUT, print_r($webhook->read(json_decode($payload, true)), true) . "\n"
 
 The `Webhook::read` function will return a `Notification` instance. Please, [explore](https://github.com/netflie/whatsapp-cloud-api/tree/main/src/WebHook/Notification "explore") the different notifications availables.
 
+### Mark a message as read
+When you receive an incoming message from Webhooks, you can mark the message as read by changing its status to read. Messages marked as read display two blue check marks alongside their timestamp.
+
+Marking a message as read will also mark earlier messages in the conversation as read.
+
+```php
+<?php
+
+$whatsapp_cloud_api->markMessageAsRead('<message-id>');
+```
+
 ## Features
 
 - Send Text Messages
