@@ -88,7 +88,7 @@ class MessageNotificationFactory
                     $message['id'],
                     new Support\Business($metadata['phone_number_id'], $metadata['display_phone_number']),
                     $message['order']['catalog_id'],
-                    $message['order']['text'],
+                    $message['order']['text'] ?? '',
                     new Support\Products($message['order']['product_items']),
                     $message['timestamp']
                 );
