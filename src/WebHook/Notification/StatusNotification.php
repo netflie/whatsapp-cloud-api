@@ -100,6 +100,15 @@ final class StatusNotification extends Notification
         return $this->conversation->isReferralInitiated();
     }
 
+    public function isUserInitiatedConversation(): ?bool
+    {
+        if (!$this->conversation) {
+            return null;
+        }
+
+        return $this->conversation->isUserInitiated();
+    }
+
     public function status(): string
     {
         return (string) $this->status;

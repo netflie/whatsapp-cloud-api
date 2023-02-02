@@ -800,7 +800,8 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('CONVERSATION_ID', $notification->conversationId());
         $this->assertEquals('1669233778', $notification->conversationExpiresAt()->getTimestamp());
         $this->assertFalse($notification->isBusinessInitiatedConversation());
-        $this->assertTrue($notification->isCustomerInitiatedConversation());
+        $this->assertFalse($notification->isCustomerInitiatedConversation());
+        $this->assertTrue($notification->isUserInitiatedConversation());
         $this->assertFalse($notification->isReferralInitiatedConversation());
         $this->assertEquals('read', $notification->status());
         $this->assertTrue($notification->isMessageRead());

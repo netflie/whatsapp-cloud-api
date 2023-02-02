@@ -46,4 +46,9 @@ final class Conversation
     {
         return $this->type->equals(ConversationType::REFERRAL_INITIATED());
     }
+
+    public function isUserInitiated(): bool
+    {
+        return $this->type->equals(ConversationType::USER_INITIATED());
+    }
 }
