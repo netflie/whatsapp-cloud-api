@@ -26,6 +26,7 @@ final class Order extends MessageNotification
     }
 
     public function catalogId(): string
+    {
         return $this->catalog_id;
     }
 
