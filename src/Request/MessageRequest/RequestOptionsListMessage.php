@@ -11,7 +11,7 @@ final class RequestOptionsListMessage extends MessageRequest
     */
     public function body(): array
     {
-        return [
+        $request = [
             'messaging_product' => $this->message->messagingProduct(),
             'recipient_type' => $this->message->recipientType(),
             'to' => $this->message->to(),
@@ -23,9 +23,14 @@ final class RequestOptionsListMessage extends MessageRequest
                     'text' => $this->message->header(),
                 ],
                 'body' => ['text' => $this->message->body()],
-                'footer' => ['text' => $this->message->footer()],
                 'action' => $this->message->action(),
             ],
         ];
+
+        if ($this->message->footer()) {
+            $request['interactive']['footer'] = ['text' => $this->message->footer()];
+        }
+
+        return $request;
     }
 }
