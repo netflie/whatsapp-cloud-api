@@ -129,7 +129,7 @@ class MessageNotificationFactory
             }
 
             $notification->withContext(new Support\Context(
-                $message['context']['id'],
+                $message['context']['id'] ?? null,
                 $message['context']['forwarded'] ?? false,
                 $referred_product ?? null
             ));
