@@ -26,4 +26,15 @@ class ReplyButton
     {
         return $this->title;
     }
+
+    public function button(): array
+    {
+        return [
+            'type' => 'reply',
+            'reply' => [
+                'id' => $this->id,
+                'title' => $this->title
+            ]
+        ];
+    }
 }

@@ -14,7 +14,7 @@ final class ReplyButtonsMessage extends Message
     /**
     * {@inheritdoc}
     */
-    protected string $type = 'interactive';
+    protected string $type = 'button';
 
     /**
      * @var string The body of the text message.
@@ -52,9 +52,14 @@ final class ReplyButtonsMessage extends Message
     }
 
 
-    public function buttons(): array
+    public function action(): array
     {
-        return $this->buttons;
+        $output = [];
+        foreach ($this->buttons as $button){
+            $output[] = $button->button();
+        }
+
+        return ['buttons' => $output];
     }
 
 
