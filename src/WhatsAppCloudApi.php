@@ -59,7 +59,7 @@ class WhatsAppCloudApi
      * @param $messageId
      * @return $this
      */
-    public function asReplyTo($messageId): WhatsAppCloudApi
+    public function asReplyTo(string $messageId): WhatsAppCloudApi
     {
         $this->contextMessageId = $messageId;
 
