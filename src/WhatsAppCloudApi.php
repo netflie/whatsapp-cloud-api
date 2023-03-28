@@ -59,8 +59,10 @@ class WhatsAppCloudApi
      * @param $messageId
      * @return $this
      */
-    public function asReplyTo($messageId){
+    public function asReplyTo($messageId): WhatsAppCloudApi
+    {
         $this->contextMessageId = $messageId;
+
         return $this;
     }
 
@@ -386,7 +388,8 @@ class WhatsAppCloudApi
         return $this->app->fromPhoneNumberId();
     }
 
-    protected function getMsgRequestExtraData(){
+    protected function getMsgRequestExtraData(): array
+    {
         $output = [];
 
         if($this->contextMessageId){
