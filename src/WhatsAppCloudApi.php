@@ -51,6 +51,19 @@ class WhatsAppCloudApi
         $this->client = new Client($config['graph_version'], $config['client_handler']);
     }
 
+    protected ?string $contextMessageId;
+
+    /**
+     * Send the next message as a reply to the supplied message id
+     *
+     * @param $messageId
+     * @return $this
+     */
+    public function asReplyTo($messageId){
+        $this->contextMessageId = $messageId;
+        return $this;
+    }
+
     /**
      * Sends a Whatsapp text message.
      *
@@ -70,7 +83,7 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        return $this->client->sendMessage($request);
+        return $this->client->sendMessage($request, $this->getMsgRequestExtraData());
     }
 
     /**
@@ -212,7 +225,7 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        return $this->client->sendMessage($request);
+        return $this->client->sendMessage($request, $this->getMsgRequestExtraData());
     }
 
     /**
@@ -238,7 +251,7 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        return $this->client->sendMessage($request);
+        return $this->client->sendMessage($request, $this->getMsgRequestExtraData());
     }
 
     /**
@@ -262,7 +275,7 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        return $this->client->sendMessage($request);
+        return $this->client->sendMessage($request, $this->getMsgRequestExtraData());
     }
 
     public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
@@ -275,7 +288,7 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        return $this->client->sendMessage($request);
+        return $this->client->sendMessage($request, $this->getMsgRequestExtraData());
     }
 
     public function sendReplyButtons(string $to,string $body, array $replyButtons): Response
@@ -288,7 +301,7 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        return $this->client->sendMessage($request);
+        return $this->client->sendMessage($request, $this->getMsgRequestExtraData());
     }
 
     /**
@@ -373,5 +386,14 @@ class WhatsAppCloudApi
         return $this->app->fromPhoneNumberId();
     }
 
+    protected function getMsgRequestExtraData(){
+        $output = [];
+
+        if($this->contextMessageId){
+            $output['context'] = ['message_id'=>$this->contextMessageId];
+        }
+
+        return $output;
+    }
 
 }
