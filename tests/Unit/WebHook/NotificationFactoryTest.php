@@ -892,6 +892,53 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('ERROR_TITLE', $notification->errorTitle());
     }
 
+    public function test_build_from_payload_can_build_a_forwarded_notification()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [{
+              "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+              "changes": [{
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                          "display_phone_number": "PHONE_NUMBER",
+                          "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [{
+                          "profile": {
+                            "name": "NAME"
+                          },
+                          "wa_id": "WHATSAPP_ID"
+                        }],
+                      "messages": [{
+                          "context": {
+                            "forwarded": true
+                          },
+                          "from": "16315551234",
+                          "id": "wamid.ID",
+                          "timestamp": 1669233778,
+                          "type": "text",
+                          "text": {
+                            "body": "MESSAGE_BODY"
+                          }
+                        }]
+                  },
+                  "field": "messages"
+                }]
+            }]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertNull($notification->replyingToMessageId());
+        $this->assertEquals('PHONE_NUMBER_ID', $notification->businessPhoneNumberId());
+        $this->assertEquals('PHONE_NUMBER', $notification->businessPhoneNumber());
+        $this->assertTrue($notification->isForwarded());
+        $this->assertEquals('WHATSAPP_ID', $notification->customer()->id());
+        $this->assertEquals('NAME', $notification->customer()->name());
+    }
+
     public function test_build_from_payload_return_null_when_payload_is_empty()
     {
         $notification = $this->notification_factory->buildFromPayload([]);
