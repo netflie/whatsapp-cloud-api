@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.3 - 2023-03-29
+
+### What's Changed
+
+- Fix forwaded messages without ID in the message context. Issue https://github.com/netflie/whatsapp-cloud-api/issues/94
+
 ## 2.0.2 - 2023-02-06
 
 ### What's Changed
