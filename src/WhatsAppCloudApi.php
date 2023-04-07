@@ -51,7 +51,7 @@ class WhatsAppCloudApi
         $this->client = new Client($config['graph_version'], $config['client_handler']);
     }
 
-    protected ?string $contextMessageId;
+    protected ?string $contextMessageId = null;
 
     /**
      * Send the next message as a reply to the supplied message id
