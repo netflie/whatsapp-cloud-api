@@ -25,6 +25,7 @@ final class ResponseException extends \Exception
     {
         $this->response = $response;
         $this->response_data = $response->decodedBody();
+        parent::__construct($response->body());
     }
 
     /**
