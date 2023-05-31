@@ -12,6 +12,16 @@ final class ReplyButtonsMessage extends Message
     private const MAXIMUM_LENGTH = 4096;
 
     /**
+     * @const int Minimum number of buttons.
+     */
+    private const MINIMUM_NUMBER_BUTTONS = 1;
+
+    /**
+     * @const int Maximum number of buttons.
+     */
+    private const MAXIMUM_NUMBER_BUTTONS = 3;
+
+    /**
     * {@inheritdoc}
     */
     protected string $type = 'button';
@@ -34,6 +44,7 @@ final class ReplyButtonsMessage extends Message
     public function __construct(string $to, string $text, array $buttons)
     {
         $this->assertTextIsValid($text);
+        $this->assertButtonsIsValid($buttons);
 
         $this->text = $text;
         $this->buttons = $buttons;
@@ -68,6 +79,18 @@ final class ReplyButtonsMessage extends Message
     {
         if (strlen($text) > self::MAXIMUM_LENGTH) {
             throw new \LengthException('The maximun length for a message text is ' . self::MAXIMUM_LENGTH . ' characters');
+        }
+    }
+
+    private function assertButtonsIsValid(array $buttons): void
+    {
+        $count = count($buttons);
+        if ($count > self::MAXIMUM_NUMBER_BUTTONS) {
+            throw new \LengthException('The max allowed buttons is ' . self::MAXIMUM_NUMBER_BUTTONS);
+        }
+
+        if ($count < self::MINIMUM_NUMBER_BUTTONS) {
+            throw new \LengthException('The min allowed buttons is ' . self::MINIMUM_NUMBER_BUTTONS);
         }
     }
 }
