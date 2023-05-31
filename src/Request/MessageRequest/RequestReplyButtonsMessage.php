@@ -22,7 +22,7 @@ final class RequestReplyButtonsMessage extends MessageRequest
             'interactive' => [
                 'type' => $this->message->type(),
                 'body' => ['text' => $this->message->text()],
-                'action' => [$this->message->action()],
+                'action' => $this->message->action(),
             ],
         ];
 
