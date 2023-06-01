@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.0.4 - 2023-06-01
+
+### What's Changed
+
+- Fix Webhook error with new base pricing category conversations
+
 ## 2.0.3 - 2023-03-29
 
 ### What's Changed
