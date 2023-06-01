@@ -57,6 +57,18 @@ $link_id = new LinkID($document_link);
 $whatsapp_cloud_api->sendDocument('34676104574', $link_id, $document_name, $document_caption);
 ```
 
+### Send a button message
+```php
+use Netflie\WhatsAppCloudApi\Message\ReplyButtons\ReplyButton;
+
+$buttons = [
+    new ReplyButton('id_01', 'Option 1'),
+    new ReplyButton('id_02', 'Option 2')
+];
+
+$whatsapp_cloud_api->sendReplyButtons('34676104574', 'Select the options:', $buttons);
+```
+
 ### Send a template message
 ```php
 <?php
