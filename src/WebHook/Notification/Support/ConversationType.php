@@ -14,4 +14,12 @@ final class ConversationType extends \MyCLabs\Enum\Enum
     private const CUSTOMER_INITIATED = 'user_initiated';
 
     private const REFERRAL_INITIATED = 'referral_conversion';
+
+    private const AUTHENTICATION = 'authentication';
+
+    private const MARKETING = 'marketing';
+
+    private const UTILITY = 'utility';
+
+    private const SERVICE = 'service';
 }
