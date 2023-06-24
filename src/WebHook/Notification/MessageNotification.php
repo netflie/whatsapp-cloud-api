@@ -6,11 +6,11 @@ use Netflie\WhatsAppCloudApi\WebHook\Notification;
 
 abstract class MessageNotification extends Notification
 {
-    protected ?Support\Context $context;
+    protected ?Support\Context $context = null;
 
-    protected ?Support\Customer $customer;
+    protected ?Support\Customer $customer = null;
 
-    protected ?Support\Referral $referral;
+    protected ?Support\Referral $referral = null;
 
     public function customer(): ?Support\Customer
     {
