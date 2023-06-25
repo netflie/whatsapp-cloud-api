@@ -278,6 +278,19 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
+    public function sendReplyButtons(string $to,string $body, array $replyButtons): Response
+    {
+        $message = new Message\ReplyButtonsMessage($to,$body,$replyButtons);
+        $request = new Request\MessageRequest\RequestReplyButtonsMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
     /**
      * Upload a media file (image, audio, video...) to Facebook servers.
      *
@@ -359,4 +372,6 @@ class WhatsAppCloudApi
     {
         return $this->app->fromPhoneNumberId();
     }
+
+
 }
