@@ -4,14 +4,14 @@ namespace Netflie\WhatsAppCloudApi\WebHook\Notification\Support;
 
 final class Context
 {
-    private string $replying_to_message_id;
+    private ?string $replying_to_message_id;
 
     private bool $forwarded;
 
     private ?ReferredProduct $referred_product;
 
     public function __construct(
-        string $replying_to_message_id,
+        string $replying_to_message_id = null,
         bool $forwarded = false,
         ReferredProduct $referred_product = null
     ) {
@@ -20,7 +20,7 @@ final class Context
         $this->referred_product = $referred_product;
     }
 
-    public function replyingToMessageId(): string
+    public function replyingToMessageId(): ?string
     {
         return $this->replying_to_message_id;
     }
