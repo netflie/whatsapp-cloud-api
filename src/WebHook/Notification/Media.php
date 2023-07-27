@@ -8,6 +8,8 @@ final class Media extends MessageNotification
 
     private string $mime_type;
 
+    private string $sha256;
+
     private string $filename;
 
     private string $caption;
@@ -17,6 +19,7 @@ final class Media extends MessageNotification
         Support\Business $business,
         string $image_id,
         string $mime_type,
+        string $sha256,
         string $filename,
         string $caption,
         string $received_at_timestamp
@@ -25,6 +28,7 @@ final class Media extends MessageNotification
 
         $this->image_id = $image_id;
         $this->mime_type = $mime_type;
+        $this->sha256 = $sha256;
         $this->filename = $filename;
         $this->caption = $caption;
     }
@@ -37,6 +41,11 @@ final class Media extends MessageNotification
     public function mimeType(): string
     {
         return $this->mime_type;
+    }
+
+    public function sha256(): string
+    {
+        return $this->sha256;
     }
 
     public function filename(): string
