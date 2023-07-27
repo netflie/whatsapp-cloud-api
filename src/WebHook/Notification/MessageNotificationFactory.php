@@ -40,6 +40,7 @@ class MessageNotificationFactory
                     new Support\Business($metadata['phone_number_id'], $metadata['display_phone_number']),
                     $message[$message['type']]['id'],
                     $message[$message['type']]['mime_type'],
+                    $message[$message['type']]['filename'] ?? '',
                     $message[$message['type']]['caption'] ?? '',
                     $message['timestamp']
                 );
