@@ -8,6 +8,8 @@ final class StatusNotification extends Notification
 {
     private ?Support\Conversation $conversation = null;
 
+    private ?Support\Pricing $pricing = null;
+
     private string $customer_id;
 
     private Support\Status $status;
@@ -30,6 +32,13 @@ final class StatusNotification extends Notification
     public function withConversation(Support\Conversation $conversation): self
     {
         $this->conversation = $conversation;
+
+        return $this;
+    }
+
+    public function withPricing(Support\Pricing $pricing): self
+    {
+        $this->pricing = $pricing;
 
         return $this;
     }
@@ -98,6 +107,33 @@ final class StatusNotification extends Notification
         }
 
         return $this->conversation->isReferralInitiated();
+    }
+
+    public function pricingCategory(): ?string
+    {
+        if (!$this->pricing) {
+            return null;
+        }
+
+        return (string) $this->pricing->category();
+    }
+
+    public function pricingModel(): ?string
+    {
+        if (!$this->pricing) {
+            return null;
+        }
+
+        return (string) $this->pricing->model();
+    }
+
+    public function isBillable(): ?bool
+    {
+        if (!$this->pricing) {
+            return null;
+        }
+
+        return $this->pricing->isBillable();
     }
 
     public function status(): string

@@ -22,6 +22,14 @@ class StatusNotificationFactory
             ));
         }
 
+        if (isset($status['pricing'])) {
+            $notification->withPricing(new Support\Pricing(
+                $status['pricing']['category'],
+                $status['pricing']['pricing_model'],
+                $status['pricing']['billable'],
+            ));
+        }
+
         if (isset($status['errors'])) {
             $notification->withError(new Support\Error(
                 $status['errors'][0]['code'],
