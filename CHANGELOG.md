@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.1.0 - 2023-08-12
+
+### What's Changed
+
+- Media filename and sha256 are now available on Webhook notification Media object. See PR #126
+
 ## 2.0.5 - 2023-06-24
 
 ### What's Changed
