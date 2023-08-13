@@ -58,12 +58,12 @@ final class Contact extends MessageNotification
 
     public function lastName(): string
     {
-        return $this->name['last_name'];
+        return $this->name['last_name'] ?? '';
     }
 
     public function middleName(): string
     {
-        return $this->name['middle_name'];
+        return $this->name['middle_name'] ?? '';
     }
 
     public function addresses(): array
@@ -88,17 +88,17 @@ final class Contact extends MessageNotification
 
     public function companyName(): string
     {
-        return $this->company['company'];
+        return $this->company['company'] ?? '';
     }
 
     public function companyDepartment(): string
     {
-        return $this->company['department'];
+        return $this->company['department'] ?? '';
     }
 
     public function companyTitle(): string
     {
-        return $this->company['title'];
+        return $this->company['title'] ?? '';
     }
 
     public function phones(): array
