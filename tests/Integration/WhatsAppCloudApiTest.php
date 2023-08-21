@@ -2,6 +2,8 @@
 
 namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
@@ -252,6 +254,29 @@ final class WhatsAppCloudApiTest extends TestCase
             'Please consider rating your shopping experience in our website',
             'Thanks for your time',
             $action
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Yes'),
+            new Button('button-2', 'No'),
+            new Button('button-3', 'Not Now'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+        $header = 'RATE US';
+        $footer = 'Please choose an option';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'Would you like to rate us?',
+            $buttonAction,
+            $header,
+            $footer
         );
 
         $this->assertEquals(200, $response->httpStatusCode());

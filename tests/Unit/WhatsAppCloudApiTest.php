@@ -6,6 +6,8 @@ use GuzzleHttp\Psr7;
 use Netflie\WhatsAppCloudApi\Client;
 use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\RawResponse;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
@@ -890,6 +892,71 @@ final class WhatsAppCloudApiTest extends TestCase
                 $listFooter['text'],
                 new Action($listAction['button'], $actionSections),
             );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(10)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(10)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(10)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $message = $this->faker->text(50);
+        $header = $this->faker->text(50);
+        $footer = $this->faker->text(50);
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => ['type' => 'text', 'text' => $header],
+                'footer' => ['text' => $footer],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons),
+            $header,
+            $footer
+        );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());

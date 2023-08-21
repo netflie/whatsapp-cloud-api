@@ -2,22 +2,24 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\ButtonReply;
 
-class Button {
+class Button
+{
+    private $id;
+    private $title;
 
-  private $id;
-  private $title;
+    public function __construct(string $id, string $title)
+    {
+        $this->id = $id;
+        $this->title = $title;
+    }
 
-  public function __construct(string $id, string $title) {
-    $this->id = $id;
-    $this->title = $title;
-  }
+    public function id(): string
+    {
+        return $this->id;
+    }
 
-  public function id(): string {
-    return $this->id;
-  }
-
-  public function title(): string {  
-    return $this->title;
-  }
-
+    public function title(): string
+    {
+        return $this->title;
+    }
 }
