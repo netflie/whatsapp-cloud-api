@@ -31,14 +31,12 @@ final class NotificationFactory
 
         $notifications = [];
 
-        foreach($payload['entry'] as $entry) {
-
-            if(!is_array($entry['changes'])) {
+        foreach ($payload['entry'] as $entry) {
+            if (!is_array($entry['changes'])) {
                 continue;
             }
 
-            foreach($entry['changes'] as $change) {
-
+            foreach ($entry['changes'] as $change) {
                 $message = $change['value']['messages'][0] ?? [];
                 $status = $change['value']['statuses'][0] ?? [];
                 $contact = $change['value']['contacts'][0] ?? [];
