@@ -6,6 +6,7 @@ use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
+use Netflie\WhatsAppCloudApi\Message\Button\Action as ActionButton;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 
 class WhatsAppCloudApi
@@ -268,6 +269,19 @@ class WhatsAppCloudApi
     public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
     {
         $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action);
+        $request = new Request\MessageRequest\RequestOptionsListMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendButton(string $to, string $header, string $body, string $footer, ActionButton $action): Response
+    {
+        $message = new Message\ButtonMessage($to, $header, $body, $footer, $action);
         $request = new Request\MessageRequest\RequestOptionsListMessage(
             $message,
             $this->app->accessToken(),
