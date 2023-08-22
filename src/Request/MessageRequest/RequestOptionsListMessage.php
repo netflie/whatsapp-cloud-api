@@ -18,14 +18,17 @@ final class RequestOptionsListMessage extends MessageRequest
             'type' => 'interactive',
             'interactive' => [
                 'type' => $this->message->type(),
-                'header' => [
-                    'type' => 'text',
-                    'text' => $this->message->header(),
-                ],
                 'body' => ['text' => $this->message->body()],
                 'action' => $this->message->action(),
             ],
         ];
+
+        if ($this->message->header()) {
+            $request['interactive']['header'] = [
+                'type' => 'text',
+                'text' => $this->message->header()
+            ];
+        }
 
         if ($this->message->footer()) {
             $request['interactive']['footer'] = ['text' => $this->message->footer()];
