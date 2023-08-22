@@ -31,4 +31,16 @@ class WebHook
         return (new NotificationFactory())
             ->buildFromPayload($payload);
     }
+
+    /**
+     * Get all notifications from incoming webhook messages.
+     *
+     * @param  array  $payload Payload received in your endpoint URL.
+     * @return Notification[]    A PHP representation of WhatsApp webhook notifications
+     */
+    public function readAll(array $payload): array
+    {
+        return (new NotificationFactory())
+            ->buildAllFromPayload($payload);
+    }
 }
