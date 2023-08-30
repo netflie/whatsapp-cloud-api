@@ -11,6 +11,6 @@ final class RequestBusinessManagementAccount extends BusinessManagmentAccountReq
      */
     public function body(): array
     {
-        return [];
+        return $this->business->data();
     }
 }

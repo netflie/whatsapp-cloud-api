@@ -63,4 +63,24 @@ class WhatsAppBusinessManagementApi
 
         return $this->client->get($request);
     }
+
+    /**
+     * Create business account details.
+     *
+     * @param string $path
+     * @param array $data
+     * @return Response
+     */
+    public function postBusinessManagementAccount(string $path = '', array $data = []): Response
+    {
+        $business = new Business\BusinessManagementAccount($path, $data);
+        $request = new Request\BusinessRequest\RequestBusinessManagementAccount(
+            $business,
+            $this->app->accessToken(),
+            $this->app->whatsappBusinessAccountId(),
+            $this->timeout
+        );
+
+        return $this->client->post($request);
+    }
 }

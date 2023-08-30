@@ -27,7 +27,7 @@ class WhatsAppBusinessManagementApiApp
     protected string $whatsapp_business_account_id;
 
     /**
-     * Sends a Whatsapp text message.
+     * Creates a new WhatsApp Business Management Api App class.
      *
      * @param string|null $whatsapp_business_account_id The Facebook Whatsapp Business Account ID.
      * @param string|null $access_token The Facebook Whatsapp Access Token.

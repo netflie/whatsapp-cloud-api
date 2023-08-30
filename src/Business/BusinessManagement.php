@@ -11,13 +11,21 @@ abstract class BusinessManagement
     private string $path;
 
     /**
+     * Data to be sent in the request
+     * @var array data
+     */
+    private array $data;
+
+    /**
      * Creates a new Business class.
      *
      * @param string $path
+     * @param array $data
      */
-    public function __construct(string $path = '')
+    public function __construct(string $path = '', array $data = [])
     {
         $this->path = $path;
+        $this->data = $data;
     }
 
     /**
@@ -28,5 +36,15 @@ abstract class BusinessManagement
     public function path(): string
     {
         return $this->path;
+    }
+
+    /**
+     * Return the set data.
+     *
+     * @return array
+     */
+    public function data(): array
+    {
+        return $this->data;
     }
 }
