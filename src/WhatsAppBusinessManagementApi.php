@@ -83,4 +83,23 @@ class WhatsAppBusinessManagementApi
 
         return $this->client->post($request);
     }
+
+    /**
+     * Delete business account details.
+     *
+     * @param string $path
+     * @return Response
+     */
+    public function deleteBusinessManagementAccount(string $path = ''): Response
+    {
+        $business = new Business\BusinessManagementAccount($path);
+        $request = new Request\BusinessRequest\RequestBusinessManagementAccount(
+            $business,
+            $this->app->accessToken(),
+            $this->app->whatsappBusinessAccountId(),
+            $this->timeout
+        );
+
+        return $this->client->delete($request);
+    }
 }

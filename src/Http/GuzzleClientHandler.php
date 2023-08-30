@@ -67,6 +67,21 @@ final class GuzzleClientHandler implements ClientHandler
         ]);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     */
+    public function delete(string $url, array $headers, int $timeout): RawResponse
+    {
+        $raw_handler_response = $this->guzzle_client->delete($url, [
+            'headers' => $headers,
+            'timeout' => $timeout,
+            'http_errors' => false,
+        ]);
+
+        return $this->buildResponse($raw_handler_response);
+    }
+
     protected function buildResponse(ResponseInterface $handler_response): RawResponse
     {
         return new RawResponse(

@@ -188,6 +188,36 @@ class Client
         return $return_response;
     }
 
+    /**
+     * delete Request.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function delete(Request\RequestWithBody $request): Response
+    {
+
+        $raw_response = $this->handler->delete(
+            $this->buildRequestUri($request->nodePath()),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = new Response(
+            $request,
+            $raw_response->body(),
+            $raw_response->httpResponseCode(),
+            $raw_response->headers()
+        );
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
     private function defaultHandler(): ClientHandler
     {
         return new GuzzleClientHandler();
