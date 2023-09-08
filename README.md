@@ -294,7 +294,11 @@ fwrite(STDOUT, print_r($payload, true) . "\n");
 // Instantiate the Webhook super class.
 $webhook = new WebHook();
 
+// Read the first message
 fwrite(STDOUT, print_r($webhook->read(json_decode($payload, true)), true) . "\n");
+
+//Read all messages in case Meta decided to batch them
+fwrite(STDOUT, print_r($webhook->readAll(json_decode($payload, true)), true) . "\n");
 ```
 
 The `Webhook::read` function will return a `Notification` instance. Please, [explore](https://github.com/netflie/whatsapp-cloud-api/tree/main/src/WebHook/Notification "explore") the different notifications availables.
