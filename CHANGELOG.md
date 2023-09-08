@@ -1,5 +1,11 @@
 # Changelog
 
+## XXX
+
+### What's Changed
+
+- Added readAll() method to get all notifications of a webhook call. See PR #132
+
 ## 2.1.0 - 2023-08-12
 
 ### What's Changed
