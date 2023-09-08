@@ -1,7 +1,7 @@
 {
     "name": "netflie/whatsapp-cloud-api",
     "description": "The first PHP SDK to send and receive messages using a cloud-hosted version of the WhatsApp Business Platform",
-    "type": "libray",
+    "type": "library",
     "authors": [
         {
             "name": "Álex Albarca",
