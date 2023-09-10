@@ -310,6 +310,15 @@ Marking a message as read will also mark earlier messages in the conversation as
 $whatsapp_cloud_api->markMessageAsRead('<message-id>');
 ```
 
+### Get Business Profile
+```php
+<?php
+
+$whatsapp_cloud_api->businessProfile('<fields>');
+```
+
+Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/business-profiles
+
 ## Features
 
 - Send Text Messages
@@ -325,6 +334,7 @@ $whatsapp_cloud_api->markMessageAsRead('<message-id>');
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
+- Get Business Profile
 - Webhook verification
 - Webhook notifications
 

@@ -341,6 +341,27 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Get Business Profile
+     *
+     * @param  string    $fields WhatsApp profile fields.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function businessProfile(string $fields): Response
+    {
+        $request = new Request\BusinessProfileRequest\BusinessProfileRequest(
+            $fields,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->businessProfile($request);
+    }
+
+    /**
      * Returns the Facebook Whatsapp Access Token.
      *
      * @return string
