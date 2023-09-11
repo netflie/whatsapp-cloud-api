@@ -321,7 +321,8 @@ $whatsapp_cloud_api->businessProfile('<fields>');
 ```php
 <?php
 
-$whatsapp_cloud_api->updateBusinessProfile('<about>', [
+$whatsapp_cloud_api->updateBusinessProfile([
+    'about' => '<about_text>',
     'email' => '<email>'
 ]);
 ```
