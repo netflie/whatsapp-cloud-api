@@ -317,6 +317,15 @@ $whatsapp_cloud_api->markMessageAsRead('<message-id>');
 $whatsapp_cloud_api->businessProfile('<fields>');
 ```
 
+### Update Business Profile
+```php
+<?php
+
+$whatsapp_cloud_api->updateBusinessProfile('<about>', [
+    'email' => '<email>'
+]);
+```
+
 Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/business-profiles
 
 ## Features
@@ -334,7 +343,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
-- Get Business Profile
+- Get/Update Business Profile
 - Webhook verification
 - Webhook notifications
 
