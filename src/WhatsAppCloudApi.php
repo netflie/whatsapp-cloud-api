@@ -41,12 +41,17 @@ class WhatsAppCloudApi
         $config = array_merge([
             'from_phone_number_id' => null,
             'access_token' => '',
+            'business_id' => null,
             'graph_version' => static::DEFAULT_GRAPH_VERSION,
             'client_handler' => null,
             'timeout' => null,
         ], $config);
 
-        $this->app = new WhatsAppCloudApiApp($config['from_phone_number_id'], $config['access_token']);
+        $this->app = new WhatsAppCloudApiApp(
+            $config['from_phone_number_id'],
+            $config['access_token'],
+            $config['business_id']
+        );
         $this->timeout = $config['timeout'];
         $this->client = new Client($config['graph_version'], $config['client_handler']);
     }
