@@ -364,17 +364,15 @@ class WhatsAppCloudApi
     /**
      * Update Business Profile
      *
-     * @param  string    $about WhatsApp profile name.
-     * @param  array    $information Aditional profile information.
+     * @param  array    $information Whatsapp profile information.
      *
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function updateBusinessProfile(string $about, array $information = []): Response
+    public function updateBusinessProfile(array $information): Response
     {
         $request = new Request\BusinessProfileRequest\UpdateBusinessProfileRequest(
-            $about,
             $information,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),

@@ -7,12 +7,7 @@ use Netflie\WhatsAppCloudApi\Request;
 final class UpdateBusinessProfileRequest extends Request
 {
     /**
-     * @var string About (Profile Name).
-     */
-    private string $about;
-
-    /**
-     * @var array Aditional information.
+     * @var array Whatsapp profile information.
      */
     private array $information;
 
@@ -21,9 +16,8 @@ final class UpdateBusinessProfileRequest extends Request
      */
     private string $from_phone_number_id;
 
-    public function __construct(string $about, array $information, string $access_token, string $from_phone_number_id, ?int $timeout = null)
+    public function __construct(array $information, string $access_token, string $from_phone_number_id, ?int $timeout = null)
     {
-        $this->about = $about;
         $this->information = $information;
         $this->from_phone_number_id = $from_phone_number_id;
 
@@ -39,7 +33,6 @@ final class UpdateBusinessProfileRequest extends Request
     {
         return array_merge(
             [
-                'about' => $this->about,
                 'messaging_product' => 'whatsapp'
             ],
             $this->information

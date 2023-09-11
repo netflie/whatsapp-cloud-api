@@ -94,8 +94,10 @@ final class ClientTest extends TestCase
     public function test_update_business_profile()
     {
         $request = new Request\BusinessProfileRequest\UpdateBusinessProfileRequest(
-            'My Name',
-            ['email' => 'my-email@email.com'],
+            [
+                'about' => 'About text',
+                'email' => 'my-email@email.com'
+            ],
             WhatsAppCloudApiTestConfiguration::$access_token,
             WhatsAppCloudApiTestConfiguration::$from_phone_number_id
         );
