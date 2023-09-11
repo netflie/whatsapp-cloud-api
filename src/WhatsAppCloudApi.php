@@ -362,6 +362,29 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Update Business Profile
+     *
+     * @param  string    $about WhatsApp profile name.
+     * @param  array    $information Aditional profile information.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function updateBusinessProfile(string $about, array $information = []): Response
+    {
+        $request = new Request\BusinessProfileRequest\UpdateBusinessProfileRequest(
+            $about,
+            $information,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->updateBusinessProfile($request);
+    }
+
+    /**
      * Returns the Facebook Whatsapp Access Token.
      *
      * @return string

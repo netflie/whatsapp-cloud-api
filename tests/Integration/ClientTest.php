@@ -90,4 +90,20 @@ final class ClientTest extends TestCase
         $this->assertEquals($request, $response->request());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_update_business_profile()
+    {
+        $request = new Request\BusinessProfileRequest\UpdateBusinessProfileRequest(
+            'My Name',
+            ['email' => 'my-email@email.com'],
+            WhatsAppCloudApiTestConfiguration::$access_token,
+            WhatsAppCloudApiTestConfiguration::$from_phone_number_id
+        );
+
+        $response = $this->client->updateBusinessProfile($request);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($request, $response->request());
+        $this->assertEquals(false, $response->isError());
+    }
 }
