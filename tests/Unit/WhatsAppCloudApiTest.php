@@ -938,7 +938,8 @@ final class WhatsAppCloudApiTest extends TestCase
             ->willReturn(new RawResponse($headers, $response_body, 200));
 
         $response = $this->whatsapp_app_cloud_api->updateBusinessProfile(
-            'My Name', ['email' => 'my-email@email.com']
+            'My Name',
+            ['email' => 'my-email@email.com']
         );
 
         $this->assertEquals(200, $response->httpStatusCode());

@@ -176,7 +176,7 @@ class Client
 
         return $return_response;
     }
-    
+
     private function defaultHandler(): ClientHandler
     {
         return new GuzzleClientHandler();
