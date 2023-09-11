@@ -8,7 +8,6 @@ class RequestButtonReplyMessage extends MessageRequest
 {
     public function body(): array
     {
-
         $body = [
             'messaging_product' => $this->message->messagingProduct(),
             'recipient_type' => $this->message->recipientType(),
@@ -35,6 +34,5 @@ class RequestButtonReplyMessage extends MessageRequest
         }
 
         return $body;
-
     }
 }

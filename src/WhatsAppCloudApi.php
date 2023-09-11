@@ -2,12 +2,11 @@
 
 namespace Netflie\WhatsAppCloudApi;
 
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 
 class WhatsAppCloudApi
@@ -290,21 +289,25 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
-    public function sendButton(string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null): Response 
-      {
+    public function sendButton(string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null): Response
+    {
         $message = new Message\ButtonReplyMessage(
-          $to, $body, $action, $header, $footer
+            $to,
+            $body,
+            $action,
+            $header,
+            $footer
         );
-      
+
         $request = new Request\MessageRequest\RequestButtonReplyMessage(
-          $message, 
-          $this->app->accessToken(),
-          $this->app->fromPhoneNumberId(),
-          $this->timeout
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
         );
-      
+
         return $this->client->sendMessage($request);
-      }
+    }
 
     /**
      * Upload a media file (image, audio, video...) to Facebook servers.

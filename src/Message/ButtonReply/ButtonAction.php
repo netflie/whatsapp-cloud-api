@@ -2,30 +2,29 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\ButtonReply;
 
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
+class ButtonAction
+{
+    private $buttons;
 
-class ButtonAction {
-
-  private $buttons;
-
-  public function __construct(array $buttons) {
-    $this->buttons = $buttons;
-  }
-  
-  public function buttons(): array {
-    $buttonActions = [];
-
-    foreach ($this->buttons as $button) {
-        $buttonActions[] = [
-            "type" => "reply",
-            "reply" => [
-                "id" => $button->id(),
-                "title" => $button->title()
-            ]
-        ];
+    public function __construct(array $buttons)
+    {
+        $this->buttons = $buttons;
     }
 
-    return $buttonActions;
-  }
-  
+    public function buttons(): array
+    {
+        $buttonActions = [];
+
+        foreach ($this->buttons as $button) {
+            $buttonActions[] = [
+                "type" => "reply",
+                "reply" => [
+                    "id" => $button->id(),
+                    "title" => $button->title(),
+                ],
+            ];
+        }
+
+        return $buttonActions;
+    }
 }
