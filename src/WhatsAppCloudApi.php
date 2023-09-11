@@ -41,7 +41,7 @@ class WhatsAppCloudApi
         $config = array_merge([
             'from_phone_number_id' => null,
             'access_token' => '',
-            'business_id' => null,
+            'business_id' => '',
             'graph_version' => static::DEFAULT_GRAPH_VERSION,
             'client_handler' => null,
             'timeout' => null,

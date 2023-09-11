@@ -48,7 +48,7 @@ class WhatsAppCloudApiApp
 
         $this->from_phone_number_id = $from_phone_number_id ?: $_ENV[static::APP_FROM_PHONE_NUMBER_ENV_NAME] ?? null;
         $this->access_token = $access_token ?: $_ENV[static::APP_TOKEN_ENV_NAME] ?? null;
-        $this->business_id = $business_id ?: $_ENV[static::APP_BUSINESS_ID_ENV_NAME] ?? null;
+        $this->business_id = $business_id ?: $_ENV[static::APP_BUSINESS_ID_ENV_NAME] ?? '';
 
         $this->validate($this->from_phone_number_id, $this->access_token, $this->business_id);
     }
