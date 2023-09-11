@@ -236,7 +236,7 @@ $whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
 
 ```
 
-### Upload media resources
+### Download media resources
 To download a media resource:
 
 ```php
