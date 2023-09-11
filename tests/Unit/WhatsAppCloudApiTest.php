@@ -848,7 +848,7 @@ final class WhatsAppCloudApiTest extends TestCase
         ];
         $buttonAction = ['buttons' => []];
 
-        foreach($buttonRows as $button) {
+        foreach ($buttonRows as $button) {
             $buttonAction['buttons'][] = [
                 'type' => 'reply',
                 'reply' => $button,
