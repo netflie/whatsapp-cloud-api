@@ -28,7 +28,7 @@ final class WhatsAppCloudApiTest extends TestCase
 {
     use ProphecyTrait;
 
-    private const TEST_GRAPH_VERSION = 'v15.0';
+    private const TEST_GRAPH_VERSION = 'v17.0';
 
     private $whatsapp_app_cloud_api;
     private $client_handler;
@@ -898,13 +898,30 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_business_profile()
+    {
+        $fields = 'about';
+        $url = $this->buildBusinessProfileRequestUri() . '?fields=' . $fields;
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+        $response_body = '{"data":[{"about":"<ABOUT>","messaging_product":"whatsapp"}]}';
+
+        $this->client_handler
+            ->get($url, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $response_body, 200));
+
+        $response = $this->whatsapp_app_cloud_api->businessProfile($fields);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($response_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_mark_a_message_as_read()
     {
-        $to = $this->faker->phoneNumber;
         $url = $this->buildMessageRequestUri();
-        $text_message = $this->faker->text;
-        $preview_url = $this->faker->boolean;
-
         $body = [
             'messaging_product' => 'whatsapp',
             'status' => 'read',
@@ -940,6 +957,11 @@ final class WhatsAppCloudApiTest extends TestCase
     private function buildMediaRequestUri(): string
     {
         return $this->buildBaseUri() . $this->from_phone_number_id . '/media';
+    }
+
+    private function buildBusinessProfileRequestUri(): string
+    {
+        return $this->buildBaseUri() . $this->from_phone_number_id . '/whatsapp_business_profile';
     }
 
     private function successfulMessageNodeResponse(): string
