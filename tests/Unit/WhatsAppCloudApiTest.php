@@ -35,6 +35,7 @@ final class WhatsAppCloudApiTest extends TestCase
     private $faker;
     private $access_token;
     private $from_phone_number_id;
+    private $business_id;
 
     public function setUp(): void
     {
@@ -43,10 +44,12 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->client_handler = $this->prophesize(ClientHandler::class);
         $this->access_token = $this->faker->uuid;
         $this->from_phone_number_id = $this->faker->uuid;
+        $this->business_id = $this->faker->uuid;
 
         $this->whatsapp_app_cloud_api = new WhatsAppCloudApi([
             'from_phone_number_id' => $this->from_phone_number_id,
             'access_token' => $this->access_token,
+            'business_id' => $this->business_id,
             'client_handler' => $this->client_handler->reveal(),
         ]);
     }

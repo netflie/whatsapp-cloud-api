@@ -27,6 +27,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->whatsapp_app_cloud_api = new WhatsAppCloudApi([
             'from_phone_number_id' => WhatsAppCloudApiTestConfiguration::$from_phone_number_id,
             'access_token' => WhatsAppCloudApiTestConfiguration::$access_token,
+            'business_id' => WhatsAppCloudApiTestConfiguration::$business_id,
         ]);
     }
 
