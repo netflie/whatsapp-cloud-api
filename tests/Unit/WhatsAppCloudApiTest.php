@@ -35,6 +35,7 @@ final class WhatsAppCloudApiTest extends TestCase
     private $faker;
     private $access_token;
     private $from_phone_number_id;
+    private $business_id;
 
     public function setUp(): void
     {
@@ -43,10 +44,12 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->client_handler = $this->prophesize(ClientHandler::class);
         $this->access_token = $this->faker->uuid;
         $this->from_phone_number_id = $this->faker->uuid;
+        $this->business_id = $this->faker->uuid;
 
         $this->whatsapp_app_cloud_api = new WhatsAppCloudApi([
             'from_phone_number_id' => $this->from_phone_number_id,
             'access_token' => $this->access_token,
+            'business_id' => $this->business_id,
             'client_handler' => $this->client_handler->reveal(),
         ]);
     }
@@ -898,13 +901,58 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_business_profile()
+    {
+        $fields = 'about';
+        $url = $this->buildBusinessProfileRequestUri() . '?fields=' . $fields;
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+        $response_body = '{"data":[{"about":"<ABOUT>","messaging_product":"whatsapp"}]}';
+
+        $this->client_handler
+            ->get($url, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $response_body, 200));
+
+        $response = $this->whatsapp_app_cloud_api->businessProfile($fields);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($response_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_update_business_profile()
+    {
+        $url = $this->buildBusinessProfileRequestUri();
+        $body = [
+            'about' => 'About text',
+            'email' => 'my-email@email.com',
+            'messaging_product' => 'whatsapp'
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+        $response_body = '{"success":true}';
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $response_body, 200));
+
+        $response = $this->whatsapp_app_cloud_api->updateBusinessProfile([
+            'about' => 'About text',
+            'email' => 'my-email@email.com'
+        ]);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($response_body, $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_mark_a_message_as_read()
     {
-        $to = $this->faker->phoneNumber;
         $url = $this->buildMessageRequestUri();
-        $text_message = $this->faker->text;
-        $preview_url = $this->faker->boolean;
-
         $body = [
             'messaging_product' => 'whatsapp',
             'status' => 'read',
@@ -940,6 +988,11 @@ final class WhatsAppCloudApiTest extends TestCase
     private function buildMediaRequestUri(): string
     {
         return $this->buildBaseUri() . $this->from_phone_number_id . '/media';
+    }
+
+    private function buildBusinessProfileRequestUri(): string
+    {
+        return $this->buildBaseUri() . $this->from_phone_number_id . '/whatsapp_business_profile';
     }
 
     private function successfulMessageNodeResponse(): string
