@@ -42,6 +42,10 @@ final class RequestContactMessage extends MessageRequest
             $body[$message_type][0]['phones'][] = $phone_array;
         }
 
+        if ($this->message->replyTo()) {
+            $body['context']['message_id'] = $this->message->replyTo();
+        }
+
         return $body;
     }
 }

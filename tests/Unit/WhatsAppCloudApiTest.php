@@ -94,6 +94,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $url = $this->buildMessageRequestUri();
         $text_message = $this->faker->text;
         $preview_url = $this->faker->boolean;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -103,6 +104,9 @@ final class WhatsAppCloudApiTest extends TestCase
             'text' => [
                 'preview_url' => $preview_url,
                 'body' => $text_message,
+            ],
+            'context' => [
+                'message_id' => $reply_to,
             ],
         ];
         $headers = [
@@ -114,11 +118,13 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $response = $this->whatsapp_app_cloud_api->sendTextMessage(
-            $to,
-            $text_message,
-            $preview_url
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendTextMessage(
+                $to,
+                $text_message,
+                $preview_url
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -133,6 +139,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $caption = $this->faker->text;
         $filename = $this->faker->text;
         $document_id = $this->faker->uuid;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -143,6 +150,9 @@ final class WhatsAppCloudApiTest extends TestCase
                 'caption' => $caption,
                 'filename' => $filename,
                 'id' => $document_id,
+            ],
+            'context' => [
+                'message_id' => $reply_to,
             ],
         ];
         $headers = [
@@ -155,12 +165,14 @@ final class WhatsAppCloudApiTest extends TestCase
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
         $media_id = new MediaObjectID($document_id);
-        $response = $this->whatsapp_app_cloud_api->sendDocument(
-            $to,
-            $media_id,
-            $filename,
-            $caption
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendDocument(
+                $to,
+                $media_id,
+                $filename,
+                $caption
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -216,6 +228,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $url = $this->buildMessageRequestUri();
         $template_name = $this->faker->name;
         $language = $this->faker->locale;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -227,6 +240,9 @@ final class WhatsAppCloudApiTest extends TestCase
                 'language' => ['code' => $language],
                 'components' => [],
             ],
+            'context' => [
+                'message_id' => $reply_to,
+            ],
         ];
         $headers = [
             'Authorization' => 'Bearer ' . $this->access_token,
@@ -237,11 +253,13 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $response = $this->whatsapp_app_cloud_api->sendTemplate(
-            $to,
-            $template_name,
-            $language
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendTemplate(
+                $to,
+                $template_name,
+                $language
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -365,6 +383,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $to = $this->faker->phoneNumber;
         $url = $this->buildMessageRequestUri();
         $document_id = $this->faker->uuid;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -373,6 +392,9 @@ final class WhatsAppCloudApiTest extends TestCase
             'type' => 'audio',
             'audio' => [
                 'id' => $document_id,
+            ],
+            'context' => [
+                'message_id' => $reply_to,
             ],
         ];
         $headers = [
@@ -385,10 +407,12 @@ final class WhatsAppCloudApiTest extends TestCase
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
         $media_id = new MediaObjectID($document_id);
-        $response = $this->whatsapp_app_cloud_api->sendAudio(
-            $to,
-            $media_id
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendAudio(
+                $to,
+                $media_id
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -438,6 +462,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $url = $this->buildMessageRequestUri();
         $caption = $this->faker->text;
         $document_id = $this->faker->uuid;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -447,6 +472,9 @@ final class WhatsAppCloudApiTest extends TestCase
             'image' => [
                 'caption' => $caption,
                 'id' => $document_id,
+            ],
+            'context' => [
+                'message_id' => $reply_to,
             ],
         ];
         $headers = [
@@ -459,11 +487,13 @@ final class WhatsAppCloudApiTest extends TestCase
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
         $media_id = new MediaObjectID($document_id);
-        $response = $this->whatsapp_app_cloud_api->sendImage(
-            $to,
-            $media_id,
-            $caption
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendImage(
+                $to,
+                $media_id,
+                $caption
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -516,6 +546,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $url = $this->buildMessageRequestUri();
         $video_link = $this->faker->url;
         $caption = $this->faker->text;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -525,6 +556,9 @@ final class WhatsAppCloudApiTest extends TestCase
             'video' => [
                 'link' => $video_link,
                 'caption' => $caption,
+            ],
+            'context' => [
+                'message_id' => $reply_to,
             ],
         ];
         $headers = [
@@ -537,11 +571,13 @@ final class WhatsAppCloudApiTest extends TestCase
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
         $link_id = new LinkID($video_link);
-        $response = $this->whatsapp_app_cloud_api->sendVideo(
-            $to,
-            $link_id,
-            $caption
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendVideo(
+                $to,
+                $link_id,
+                $caption
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -593,6 +629,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $to = $this->faker->phoneNumber;
         $url = $this->buildMessageRequestUri();
         $sticker_link = $this->faker->url;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -601,6 +638,9 @@ final class WhatsAppCloudApiTest extends TestCase
             'type' => 'sticker',
             'sticker' => [
                 'link' => $sticker_link,
+            ],
+            'context' => [
+                'message_id' => $reply_to,
             ],
         ];
         $headers = [
@@ -613,10 +653,12 @@ final class WhatsAppCloudApiTest extends TestCase
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
         $media_id = new LinkID($sticker_link);
-        $response = $this->whatsapp_app_cloud_api->sendSticker(
-            $to,
-            $media_id
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendSticker(
+                $to,
+                $media_id
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -632,6 +674,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $longitude = $this->faker->latitude;
         $name = $this->faker->city;
         $address = $this->faker->address;
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -644,6 +687,9 @@ final class WhatsAppCloudApiTest extends TestCase
                 'name' => $name,
                 'address' => $address,
             ],
+            'context' => [
+                'message_id' => $reply_to,
+            ],
         ];
         $headers = [
             'Authorization' => 'Bearer ' . $this->access_token,
@@ -654,13 +700,15 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $response = $this->whatsapp_app_cloud_api->sendLocation(
-            $to,
-            $longitude,
-            $latitude,
-            $name,
-            $address
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendLocation(
+                $to,
+                $longitude,
+                $latitude,
+                $name,
+                $address
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -676,6 +724,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $last_name = $this->faker->lastName;
         $phone = $this->faker->e164PhoneNumber;
         $phone_type = PhoneType::CELL();
+        $reply_to = $this->faker->uuid;
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -697,6 +746,9 @@ final class WhatsAppCloudApiTest extends TestCase
                     ],
                 ],
             ],
+            'context' => [
+                'message_id' => $reply_to,
+            ],
         ];
         $headers = [
             'Authorization' => 'Bearer ' . $this->access_token,
@@ -708,11 +760,13 @@ final class WhatsAppCloudApiTest extends TestCase
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
         $contact_name = new ContactName($first_name, $last_name);
-        $response = $this->whatsapp_app_cloud_api->sendContact(
-            $to,
-            $contact_name,
-            new Phone($phone, $phone_type)
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendContact(
+                $to,
+                $contact_name,
+                new Phone($phone, $phone_type)
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -777,6 +831,7 @@ final class WhatsAppCloudApiTest extends TestCase
     {
         $to = $this->faker->phoneNumber;
         $url = $this->buildMessageRequestUri();
+        $reply_to = $this->faker->uuid;
 
         $listHeader = ['type' => 'text', 'text' => $this->faker->text(60)];
         $listBody = ['text' => $this->faker->text(1024)];
@@ -801,6 +856,9 @@ final class WhatsAppCloudApiTest extends TestCase
                 'footer' => $listFooter,
                 'action' => $listAction,
             ],
+            'context' => [
+                'message_id' => $reply_to,
+            ],
         ];
         $headers = [
             'Authorization' => 'Bearer ' . $this->access_token,
@@ -823,13 +881,15 @@ final class WhatsAppCloudApiTest extends TestCase
             $actionSections[] = new Section($section['title'], $sectionRows);
         }
 
-        $response = $this->whatsapp_app_cloud_api->sendList(
-            $to,
-            $listHeader['text'],
-            $listBody['text'],
-            $listFooter['text'],
-            new Action($listAction['button'], $actionSections),
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendList(
+                $to,
+                $listHeader['text'],
+                $listBody['text'],
+                $listFooter['text'],
+                new Action($listAction['button'], $actionSections),
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
@@ -928,7 +988,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $body = [
             'about' => 'About text',
             'email' => 'my-email@email.com',
-            'messaging_product' => 'whatsapp'
+            'messaging_product' => 'whatsapp',
         ];
         $headers = [
             'Authorization' => 'Bearer ' . $this->access_token,
@@ -942,7 +1002,7 @@ final class WhatsAppCloudApiTest extends TestCase
 
         $response = $this->whatsapp_app_cloud_api->updateBusinessProfile([
             'about' => 'About text',
-            'email' => 'my-email@email.com'
+            'email' => 'my-email@email.com',
         ]);
 
         $this->assertEquals(200, $response->httpStatusCode());

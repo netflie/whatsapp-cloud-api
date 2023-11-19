@@ -25,7 +25,7 @@ final class LocationMessage extends Message
     /**
     * {@inheritdoc}
     */
-    public function __construct(string $to, float $longitude, float $latitude, string $name = '', string $address = '')
+    public function __construct(string $to, float $longitude, float $latitude, string $name = '', string $address = '', ?string $reply_to = null)
     {
         if ($address && !$name) {
             throw new InvalidMessage('Name is required.');
@@ -36,7 +36,7 @@ final class LocationMessage extends Message
         $this->name = $name;
         $this->address = $address;
 
-        parent::__construct($to);
+        parent::__construct($to, $reply_to);
     }
 
     public function longitude(): float

@@ -41,6 +41,10 @@ final class RequestTemplateMessage extends MessageRequest
             $body['template']['components'][] = $button;
         }
 
+        if ($this->message->replyTo()) {
+            $body['context']['message_id'] = $this->message->replyTo();
+        }
+
         return $body;
     }
 }
