@@ -33,6 +33,10 @@ class RequestButtonReplyMessage extends MessageRequest
             ];
         }
 
+        if ($this->message->replyTo()) {
+            $body['context']['message_id'] = $this->message->replyTo();
+        }
+
         return $body;
     }
 }

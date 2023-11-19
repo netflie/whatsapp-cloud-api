@@ -903,6 +903,7 @@ final class WhatsAppCloudApiTest extends TestCase
     {
         $to = $this->faker->phoneNumber;
         $url = $this->buildMessageRequestUri();
+        $reply_to = $this->faker->uuid;
 
         $buttonRows = [
             ['id' => $this->faker->uuid, 'title' => $this->faker->text(10)],
@@ -934,6 +935,9 @@ final class WhatsAppCloudApiTest extends TestCase
                 'header' => ['type' => 'text', 'text' => $header],
                 'footer' => ['text' => $footer],
             ],
+            'context' => [
+                'message_id' => $reply_to,
+            ],
         ];
         $headers = [
             'Authorization' => 'Bearer ' . $this->access_token,
@@ -950,13 +954,15 @@ final class WhatsAppCloudApiTest extends TestCase
             $actionButtons[] = new Button($button['id'], $button['title']);
         }
 
-        $response = $this->whatsapp_app_cloud_api->sendButton(
-            $to,
-            $message,
-            new ButtonAction($actionButtons),
-            $header,
-            $footer
-        );
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendButton(
+                $to,
+                $message,
+                new ButtonAction($actionButtons),
+                $header,
+                $footer
+            );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());

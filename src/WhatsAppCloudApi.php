@@ -296,7 +296,8 @@ class WhatsAppCloudApi
             $body,
             $action,
             $header,
-            $footer
+            $footer,
+            $this->reply_to
         );
 
         $request = new Request\MessageRequest\RequestButtonReplyMessage(
