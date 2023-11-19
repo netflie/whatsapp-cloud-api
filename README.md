@@ -252,6 +252,21 @@ $whatsapp_cloud_api->sendButton(
 );
 ```
 
+### Replying messages
+
+You can reply a previous sent message:
+
+```php
+<?php
+
+$whatsapp_cloud_api
+    ->replyTo('<whatsapp-message-id-to-reply>')
+    ->sendTextMessage(
+        '34676104574',
+        'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es'
+    );
+```
+
 ## Media messages
 ### Upload media resources
 Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
