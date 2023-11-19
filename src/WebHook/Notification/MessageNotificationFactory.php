@@ -26,7 +26,7 @@ class MessageNotificationFactory
                     $message['id'],
                     new Support\Business($metadata['phone_number_id'], $metadata['display_phone_number']),
                     $message['reaction']['message_id'],
-                    $message['reaction']['emoji'],
+                    $message['reaction']['emoji'] ?? '',
                     $message['timestamp']
                 );
             case 'sticker':
