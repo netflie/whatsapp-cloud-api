@@ -222,6 +222,36 @@ $whatsapp_cloud_api->sendList(
 );
 ```
 
+### Send a button reply message
+
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+
+$whatsapp_cloud_api = new WhatsAppCloudApi([
+  'from_phone_number_id' => 'your-configured-from-phone-number-id',
+  'access_token' => 'your-facebook-whatsapp-application-token' 
+]);
+
+$rows = [
+    new Button('button-1', 'Yes'),
+    new Button('button-2', 'No'),
+    new Button('button-3', 'Not Now'),
+];
+$action = new ButtonAction($rows);
+
+$whatsapp_cloud_api->sendButton(
+    '<destination-phone-number>',
+    'Would you like to rate us on Trustpilot?',
+    $action,
+    'RATE US', // Optional: Specify a header (type "text")
+    'Please choose an option' // Optional: Specify a footer 
+);
+```
+
 ## Media messages
 ### Upload media resources
 Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
@@ -345,6 +375,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send Locations
 - Send Contacts
 - Send Lists
+- Send Buttons
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read

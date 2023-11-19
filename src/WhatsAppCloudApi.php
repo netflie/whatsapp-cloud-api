@@ -2,6 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi;
 
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
@@ -279,6 +280,27 @@ class WhatsAppCloudApi
     {
         $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action, $this->reply_to);
         $request = new Request\MessageRequest\RequestOptionsListMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendButton(string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null): Response
+    {
+        $message = new Message\ButtonReplyMessage(
+            $to,
+            $body,
+            $action,
+            $header,
+            $footer,
+            $this->reply_to
+        );
+
+        $request = new Request\MessageRequest\RequestButtonReplyMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
