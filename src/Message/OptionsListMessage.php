@@ -22,14 +22,14 @@ final class OptionsListMessage extends Message
     /**
     * {@inheritdoc}
     */
-    public function __construct(string $to, string $header, string $body, string $footer, Action $action)
+    public function __construct(string $to, string $header, string $body, string $footer, Action $action, ?string $reply_to)
     {
         $this->header = $header;
         $this->body = $body;
         $this->footer = $footer;
         $this->action = $action;
 
-        parent::__construct($to);
+        parent::__construct($to, $reply_to);
     }
 
     public function header(): string

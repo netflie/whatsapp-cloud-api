@@ -31,13 +31,13 @@ final class DocumentMessage extends Message
     /**
     * {@inheritdoc}
     */
-    public function __construct(string $to, MediaID $id, string $name, ?string $caption)
+    public function __construct(string $to, MediaID $id, string $name, ?string $caption, ?string $reply_to)
     {
         $this->id = $id;
         $this->name = $name;
         $this->caption = $caption;
 
-        parent::__construct($to);
+        parent::__construct($to, $reply_to);
     }
 
     /**

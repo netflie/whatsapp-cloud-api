@@ -31,6 +31,11 @@ class WhatsAppCloudApi
     protected ?int $timeout;
 
     /**
+     * The WhatsApp Message ID to reply to.
+     */
+    private ?string $reply_to = null;
+
+    /**
      * Instantiates a new WhatsAppCloudApi super-class object.
      *
      * @param array $config
@@ -67,7 +72,7 @@ class WhatsAppCloudApi
      */
     public function sendTextMessage(string $to, string $text, bool $preview_url = false): Response
     {
-        $message = new Message\TextMessage($to, $text, $preview_url);
+        $message = new Message\TextMessage($to, $text, $preview_url, $this->reply_to);
         $request = new Request\MessageRequest\RequestTextMessage(
             $message,
             $this->app->accessToken(),
@@ -90,7 +95,7 @@ class WhatsAppCloudApi
      */
     public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption): Response
     {
-        $message = new Message\DocumentMessage($to, $document_id, $name, $caption);
+        $message = new Message\DocumentMessage($to, $document_id, $name, $caption, $this->reply_to);
         $request = new Request\MessageRequest\RequestDocumentMessage(
             $message,
             $this->app->accessToken(),
@@ -116,7 +121,7 @@ class WhatsAppCloudApi
      */
     public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null): Response
     {
-        $message = new Message\TemplateMessage($to, $template_name, $language, $components);
+        $message = new Message\TemplateMessage($to, $template_name, $language, $components, $this->reply_to);
         $request = new Request\MessageRequest\RequestTemplateMessage(
             $message,
             $this->app->accessToken(),
@@ -139,7 +144,7 @@ class WhatsAppCloudApi
      */
     public function sendAudio(string $to, MediaID $audio_id): Response
     {
-        $message = new Message\AudioMessage($to, $audio_id);
+        $message = new Message\AudioMessage($to, $audio_id, $this->reply_to);
         $request = new Request\MessageRequest\RequestAudioMessage(
             $message,
             $this->app->accessToken(),
@@ -163,7 +168,7 @@ class WhatsAppCloudApi
      */
     public function sendImage(string $to, MediaID $image_id, ?string $caption = ''): Response
     {
-        $message = new Message\ImageMessage($to, $image_id, $caption);
+        $message = new Message\ImageMessage($to, $image_id, $caption, $this->reply_to);
         $request = new Request\MessageRequest\RequestImageMessage(
             $message,
             $this->app->accessToken(),
@@ -186,7 +191,7 @@ class WhatsAppCloudApi
      */
     public function sendVideo(string $to, MediaID $video_id, string $caption = ''): Response
     {
-        $message = new Message\VideoMessage($to, $video_id, $caption);
+        $message = new Message\VideoMessage($to, $video_id, $caption, $this->reply_to);
         $request = new Request\MessageRequest\RequestVideoMessage(
             $message,
             $this->app->accessToken(),
@@ -209,7 +214,7 @@ class WhatsAppCloudApi
      */
     public function sendSticker(string $to, MediaID $sticker_id): Response
     {
-        $message = new Message\StickerMessage($to, $sticker_id);
+        $message = new Message\StickerMessage($to, $sticker_id, $this->reply_to);
         $request = new Request\MessageRequest\RequestStickerMessage(
             $message,
             $this->app->accessToken(),
@@ -235,7 +240,7 @@ class WhatsAppCloudApi
      */
     public function sendLocation(string $to, float $longitude, float $latitude, string $name = '', string $address = ''): Response
     {
-        $message = new Message\LocationMessage($to, $longitude, $latitude, $name, $address);
+        $message = new Message\LocationMessage($to, $longitude, $latitude, $name, $address, $this->reply_to);
         $request = new Request\MessageRequest\RequestLocationMessage(
             $message,
             $this->app->accessToken(),
@@ -259,7 +264,7 @@ class WhatsAppCloudApi
      */
     public function sendContact(string $to, ContactName $name, Phone ...$phone): Response
     {
-        $message = new Message\ContactMessage($to, $name, ...$phone);
+        $message = new Message\ContactMessage($to, $name, $this->reply_to, ...$phone);
         $request = new Request\MessageRequest\RequestContactMessage(
             $message,
             $this->app->accessToken(),
@@ -272,7 +277,7 @@ class WhatsAppCloudApi
 
     public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
     {
-        $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action);
+        $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action, $this->reply_to);
         $request = new Request\MessageRequest\RequestOptionsListMessage(
             $message,
             $this->app->accessToken(),
@@ -405,5 +410,15 @@ class WhatsAppCloudApi
     public function fromPhoneNumberId(): string
     {
         return $this->app->fromPhoneNumberId();
+    }
+
+    /**
+     * @param string $message_id    The WhatsApp Message ID to reply to.
+     */
+    public function replyTo(string $message_id): self
+    {
+        $this->reply_to = $message_id;
+
+        return $this;
     }
 }

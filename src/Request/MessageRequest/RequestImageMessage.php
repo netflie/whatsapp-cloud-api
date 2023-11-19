@@ -11,7 +11,7 @@ final class RequestImageMessage extends MessageRequest
     */
     public function body(): array
     {
-        return [
+        $body = [
             'messaging_product' => $this->message->messagingProduct(),
             'recipient_type' => $this->message->recipientType(),
             'to' => $this->message->to(),
@@ -21,5 +21,11 @@ final class RequestImageMessage extends MessageRequest
                 $this->message->identifierType() => $this->message->identifierValue(),
             ],
         ];
+
+        if ($this->message->replyTo()) {
+            $body['context']['message_id'] = $this->message->replyTo();
+        }
+
+        return $body;
     }
 }

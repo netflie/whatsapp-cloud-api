@@ -5,6 +5,11 @@ namespace Netflie\WhatsAppCloudApi\Message;
 abstract class Message
 {
     /**
+     * @var string Type of message object.
+     */
+    protected string $type;
+
+    /**
      * @var string Currently only "whatsapp" value is supported.
      */
     private string $messaging_product = 'whatsapp';
@@ -20,18 +25,17 @@ abstract class Message
     private string $to;
 
     /**
-     * @var string Type of message object.
+     * The WhatsApp Message ID to reply to.
      */
-    protected string $type;
+    private ?string $reply_to = null;
 
     /**
      * Creates a new Message class.
-     *
-     * @param string         $to
      */
-    public function __construct(string $to)
+    public function __construct(string $to, ?string $reply_to)
     {
         $this->to = $to;
+        $this->reply_to = $reply_to;
     }
 
     /**
@@ -72,5 +76,13 @@ abstract class Message
     public function recipientType(): string
     {
         return $this->recipient_type;
+    }
+
+    /**
+     * Return the WhatsApp Message ID to reply to.
+     */
+    public function replyTo(): ?string
+    {
+        return $this->reply_to;
     }
 }
