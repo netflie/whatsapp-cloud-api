@@ -15,24 +15,43 @@ final class NotificationFactory
 
     public function buildFromPayload(array $payload): ?Notification
     {
+        $notifications = $this->buildAllFromPayload($payload);
+
+        return $notifications[0] ?? null;
+    }
+
+    /**
+     * @return Notification[]
+     */
+    public function buildAllFromPayload(array $payload): array
+    {
         if (!is_array($payload['entry'] ?? null)) {
-            return null;
+            return [];
         }
 
-        $entry = $payload['entry'][0] ?? [];
-        $message = $entry['changes'][0]['value']['messages'][0] ?? [];
-        $status = $entry['changes'][0]['value']['statuses'][0] ?? [];
-        $contact = $entry['changes'][0]['value']['contacts'][0] ?? [];
-        $metadata = $entry['changes'][0]['value']['metadata'] ?? [];
+        $notifications = [];
 
-        if ($message) {
-            return $this->message_notification_factory->buildFromPayload($metadata, $message, $contact);
+        foreach ($payload['entry'] as $entry) {
+            if (!is_array($entry['changes'])) {
+                continue;
+            }
+
+            foreach ($entry['changes'] as $change) {
+                $message = $change['value']['messages'][0] ?? [];
+                $status = $change['value']['statuses'][0] ?? [];
+                $contact = $change['value']['contacts'][0] ?? [];
+                $metadata = $change['value']['metadata'] ?? [];
+
+                if ($message) {
+                    $notifications[] = $this->message_notification_factory->buildFromPayload($metadata, $message, $contact);
+                }
+
+                if ($status) {
+                    $notifications[] = $this->status_notification_factory->buildFromPayload($metadata, $status);
+                }
+            }
         }
 
-        if ($status) {
-            return $this->status_notification_factory->buildFromPayload($metadata, $status);
-        }
-
-        return null;
+        return $notifications;
     }
 }
