@@ -30,7 +30,7 @@ final class WhatsAppCloudApiTest extends TestCase
 {
     use ProphecyTrait;
 
-    private const TEST_GRAPH_VERSION = 'v17.0';
+    private const TEST_GRAPH_VERSION = 'v18.0';
 
     private $whatsapp_app_cloud_api;
     private $client_handler;
