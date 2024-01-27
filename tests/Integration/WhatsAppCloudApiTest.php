@@ -2,6 +2,8 @@
 
 namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
@@ -27,6 +29,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->whatsapp_app_cloud_api = new WhatsAppCloudApi([
             'from_phone_number_id' => WhatsAppCloudApiTestConfiguration::$from_phone_number_id,
             'access_token' => WhatsAppCloudApiTestConfiguration::$access_token,
+            'business_id' => WhatsAppCloudApiTestConfiguration::$business_id,
         ]);
     }
 
@@ -257,6 +260,29 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_reply_buttons()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Yes'),
+            new Button('button-2', 'No'),
+            new Button('button-3', 'Not Now'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+        $header = 'RATE US';
+        $footer = 'Please choose an option';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'Would you like to rate us?',
+            $buttonAction,
+            $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_upload_media()
     {
         $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/netflie.png');
@@ -273,6 +299,25 @@ final class WhatsAppCloudApiTest extends TestCase
     public function test_download_media(string $media_id)
     {
         $response = $this->whatsapp_app_cloud_api->downloadMedia($media_id);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_business_profile()
+    {
+        $response = $this->whatsapp_app_cloud_api->businessProfile('about');
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_update_business_profile()
+    {
+        $response = $this->whatsapp_app_cloud_api->updateBusinessProfile([
+            'about' => 'About text',
+            'email' => 'my-email@email.com'
+        ]);
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());

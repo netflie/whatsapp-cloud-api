@@ -31,14 +31,14 @@ final class TextMessage extends Message
      * @param string         $text
      * @param bool           $preview_url
      */
-    public function __construct(string $to, string $text, bool $preview_url = false)
+    public function __construct(string $to, string $text, bool $preview_url = false, ?string $reply_to = null)
     {
         $this->assertTextIsValid($text);
 
         $this->text = $text;
         $this->preview_url = $preview_url;
 
-        parent::__construct($to);
+        parent::__construct($to, $reply_to);
     }
 
     /**

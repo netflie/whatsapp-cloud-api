@@ -222,6 +222,51 @@ $whatsapp_cloud_api->sendList(
 );
 ```
 
+### Send a button reply message
+
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+
+$whatsapp_cloud_api = new WhatsAppCloudApi([
+  'from_phone_number_id' => 'your-configured-from-phone-number-id',
+  'access_token' => 'your-facebook-whatsapp-application-token' 
+]);
+
+$rows = [
+    new Button('button-1', 'Yes'),
+    new Button('button-2', 'No'),
+    new Button('button-3', 'Not Now'),
+];
+$action = new ButtonAction($rows);
+
+$whatsapp_cloud_api->sendButton(
+    '<destination-phone-number>',
+    'Would you like to rate us on Trustpilot?',
+    $action,
+    'RATE US', // Optional: Specify a header (type "text")
+    'Please choose an option' // Optional: Specify a footer 
+);
+```
+
+### Replying messages
+
+You can reply a previous sent message:
+
+```php
+<?php
+
+$whatsapp_cloud_api
+    ->replyTo('<whatsapp-message-id-to-reply>')
+    ->sendTextMessage(
+        '34676104574',
+        'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es'
+    );
+```
+
 ## Media messages
 ### Upload media resources
 Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
@@ -294,7 +339,11 @@ fwrite(STDOUT, print_r($payload, true) . "\n");
 // Instantiate the Webhook super class.
 $webhook = new WebHook();
 
+// Read the first message
 fwrite(STDOUT, print_r($webhook->read(json_decode($payload, true)), true) . "\n");
+
+//Read all messages in case Meta decided to batch them
+fwrite(STDOUT, print_r($webhook->readAll(json_decode($payload, true)), true) . "\n");
 ```
 
 The `Webhook::read` function will return a `Notification` instance. Please, [explore](https://github.com/netflie/whatsapp-cloud-api/tree/main/src/WebHook/Notification "explore") the different notifications availables.
@@ -310,6 +359,25 @@ Marking a message as read will also mark earlier messages in the conversation as
 $whatsapp_cloud_api->markMessageAsRead('<message-id>');
 ```
 
+### Get Business Profile
+```php
+<?php
+
+$whatsapp_cloud_api->businessProfile('<fields>');
+```
+
+### Update Business Profile
+```php
+<?php
+
+$whatsapp_cloud_api->updateBusinessProfile([
+    'about' => '<about_text>',
+    'email' => '<email>'
+]);
+```
+
+Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/business-profiles
+
 ## Features
 
 - Send Text Messages
@@ -322,9 +390,11 @@ $whatsapp_cloud_api->markMessageAsRead('<message-id>');
 - Send Locations
 - Send Contacts
 - Send Lists
+- Send Buttons
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
+- Get/Update Business Profile
 - Webhook verification
 - Webhook notifications
 

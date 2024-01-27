@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.2.0 - 2023-11-19
+
+### What's Changed
+
+- Updated default Graph version to v18
+- Retrieve and update business profile. Thanks @winkelco
+- Allow to reply messages. Thanks @johnflash4real
+- Add Interactive buttons. Thanks @derrickobedgiu1 and @ianrothmann
+- Retrieve a batch of notifications from Webhook. Thanks @arneee
+- Optional headers in interactive list messages. Thanks @horatiua
+- Fix non nullable variables when empty ENV variables are defined
+
 ## 2.1.0 - 2023-08-12
 
 ### What's Changed

@@ -4,11 +4,8 @@ namespace Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
 use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-final class RequestOptionsListMessage extends MessageRequest
+class RequestButtonReplyMessage extends MessageRequest
 {
-    /**
-    * {@inheritdoc}
-    */
     public function body(): array
     {
         $body = [
@@ -17,9 +14,9 @@ final class RequestOptionsListMessage extends MessageRequest
             'to' => $this->message->to(),
             'type' => 'interactive',
             'interactive' => [
-                'type' => $this->message->type(),
+                'type' => 'button',
                 'body' => ['text' => $this->message->body()],
-                'action' => $this->message->action(),
+                'action' => ['buttons' => $this->message->action()->buttons()],
             ],
         ];
 
@@ -31,7 +28,9 @@ final class RequestOptionsListMessage extends MessageRequest
         }
 
         if ($this->message->footer()) {
-            $body['interactive']['footer'] = ['text' => $this->message->footer()];
+            $body['interactive']['footer'] = [
+                'text' => $this->message->footer(),
+            ];
         }
 
         if ($this->message->replyTo()) {

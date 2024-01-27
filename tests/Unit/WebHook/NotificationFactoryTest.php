@@ -135,6 +135,75 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('MESSAGE_BODY', $notification->message());
     }
 
+    public function test_build_from_payload_can_build_multiple_text_notification()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [{
+              "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+              "changes": [{
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                          "display_phone_number": "PHONE_NUMBER",
+                          "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [{
+                          "profile": {
+                            "name": "NAME"
+                          },
+                          "wa_id": "PHONE_NUMBER"
+                        }],
+                      "messages": [{
+                          "from": "PHONE_NUMBER",
+                          "id": "wamid.ID",
+                          "timestamp": "1669233778",
+                          "text": {
+                            "body": "MESSAGE_BODY"
+                          },
+                          "type": "text"
+                        }]
+                  },
+                  "field": "messages"
+                },
+                {
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                          "display_phone_number": "PHONE_NUMBER",
+                          "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [{
+                          "profile": {
+                            "name": "NAME"
+                          },
+                          "wa_id": "PHONE_NUMBER"
+                        }],
+                      "messages": [{
+                          "from": "PHONE_NUMBER",
+                          "id": "wamid.ID",
+                          "timestamp": "1669233779",
+                          "text": {
+                            "body": "MESSAGE_BODY2"
+                          },
+                          "type": "text"
+                        }]
+                  },
+                  "field": "messages"
+                }]
+          }]
+        }', true);
+
+        $notifications = $this->notification_factory->buildAllFromPayload($payload);
+
+        $this->assertCount(2, $notifications);
+
+        $this->assertInstanceOf(Notification\Text::class, $notifications[0]);
+        $this->assertInstanceOf(Notification\Text::class, $notifications[1]);
+        $this->assertEquals('MESSAGE_BODY', $notifications[0]->message());
+        $this->assertEquals('MESSAGE_BODY2', $notifications[1]->message());
+    }
+
     public function test_build_from_payload_can_build_a_reaction_notification()
     {
         $payload = json_decode('{
@@ -175,6 +244,47 @@ final class NotificationFactoryTest extends TestCase
         $this->assertInstanceOf(Notification\Reaction::class, $notification);
         $this->assertEquals('MESSAGE_ID', $notification->messageId());
         $this->assertEquals('EMOJI', $notification->emoji());
+    }
+
+    public function test_build_from_payload_can_build_a_removed_reaction_notification()
+    {
+        $payload = json_decode('{
+            "object": "whatsapp_business_account",
+            "entry": [{
+                "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+                "changes": [{
+                    "value": {
+                        "messaging_product": "whatsapp",
+                        "metadata": {
+                            "display_phone_number": "PHONE_NUMBER",
+                            "phone_number_id": "PHONE_NUMBER_ID"
+                        },
+                        "contacts": [{
+                            "profile": {
+                              "name": "NAME"
+                            },
+                            "wa_id": "PHONE_NUMBER"
+                          }],
+                        "messages": [{
+                            "from": "PHONE_NUMBER",
+                            "id": "wamid.ID",
+                            "timestamp": "1669233778",
+                            "reaction": {
+                              "message_id": "MESSAGE_ID"
+                            },
+                            "type": "reaction"
+                          }]
+                    },
+                    "field": "messages"
+                  }]
+            }]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\Reaction::class, $notification);
+        $this->assertEquals('MESSAGE_ID', $notification->messageId());
+        $this->assertEquals('', $notification->emoji());
     }
 
     public function test_build_from_payload_can_build_an_image_notification()
