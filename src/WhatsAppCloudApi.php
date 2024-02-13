@@ -94,7 +94,7 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption): Response
+    public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption = ''): Response
     {
         $message = new Message\DocumentMessage($to, $document_id, $name, $caption, $this->reply_to);
         $request = new Request\MessageRequest\RequestDocumentMessage(
