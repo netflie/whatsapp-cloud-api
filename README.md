@@ -446,6 +446,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send Lists
 - Send Buttons
 - Send Call To Action Button
+- Send Reaction
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
