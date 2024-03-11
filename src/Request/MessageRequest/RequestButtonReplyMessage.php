@@ -14,17 +14,14 @@ class RequestButtonReplyMessage extends MessageRequest
             'to' => $this->message->to(),
             'type' => 'interactive',
             'interactive' => [
-                'type' => 'button',
+                'type' => $this->message->type(),
                 'body' => ['text' => $this->message->body()],
                 'action' => ['buttons' => $this->message->action()->buttons()],
             ],
         ];
 
-        if ($this->message->header()) {
-            $body['interactive']['header'] = [
-                'type' => 'text',
-                'text' => $this->message->header(),
-            ];
+        if ($this->message->action()->header()) {
+            $body['interactive']['header'] = $this->message->action()->header();
         }
 
         if ($this->message->footer()) {
