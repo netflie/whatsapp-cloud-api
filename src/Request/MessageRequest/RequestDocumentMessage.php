@@ -7,8 +7,8 @@ use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 final class RequestDocumentMessage extends MessageRequest
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function body(): array
     {
         $body = [
@@ -17,11 +17,14 @@ final class RequestDocumentMessage extends MessageRequest
             'to' => $this->message->to(),
             'type' => $this->message->type(),
             'document' => [
-                'caption' => $this->message->caption(),
                 'filename' => $this->message->filename(),
                 $this->message->identifierType() => $this->message->identifierValue(),
             ],
         ];
+
+        if ($this->message->caption()) {
+            $body['document']['caption'] = $this->message->caption();
+        }
 
         if ($this->message->replyTo()) {
             $body['context']['message_id'] = $this->message->replyTo();
