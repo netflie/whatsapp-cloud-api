@@ -228,6 +228,7 @@ $whatsapp_cloud_api->sendList(
 <?php
 
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonHeader;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 
@@ -241,14 +242,53 @@ $rows = [
     new Button('button-2', 'No'),
     new Button('button-3', 'Not Now'),
 ];
-$action = new ButtonAction($rows);
 
+//text header
+$buttonHeader = new ButtonHeader('text','RATE US');
+
+// or
+
+// document header
+$filename = "Our Portfolio.pdf";
+$buttonHeader = new ButtonHeader('document','325086917243611',$filename);
+
+//or 
+
+// image or video header: @param1 depends on your decision
+$buttonHeader = new ButtonHeader('image','277147652084836');
+
+$action = new ButtonAction($rows, $buttonHeader); // $buttonHeader is optional
+
+//header previously set below now moved to $action as in above
 $whatsapp_cloud_api->sendButton(
     '<destination-phone-number>',
-    'Would you like to rate us on Trustpilot?',
+    'Would you like to rate us on Trustpilot?', // Body
     $action,
-    'RATE US', // Optional: Specify a header (type "text")
     'Please choose an option' // Optional: Specify a footer 
+);
+```
+
+### Send a Call To Action Button Message
+
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonCallToAction;
+
+$whatsapp_cloud_api = new WhatsAppCloudApi([
+  'from_phone_number_id' => 'your-configured-from-phone-number-id',
+  'access_token' => 'your-facebook-whatsapp-application-token' 
+]);
+
+$cta = new ButtonCallToAction('Let\'s Talk','https://netflie.es/contact/');
+
+$whatsapp_cloud_api->sendCallToAction(
+    '<destination-phone-number>',
+    $cta,
+    'Tap the button below to hire us for your next big incredible project!', // body
+    'Hire Us', //header: optional
+    'Subject to T&C' // footer: optional
 );
 ```
 
@@ -267,6 +307,20 @@ $whatsapp_cloud_api
     );
 ```
 
+### React to a message
+
+You can react to a message:
+
+```php
+<?php
+
+$whatsapp_cloud_api->sendReaction(
+    '<destination-phone-number>',
+    '❤',
+    '<whatsapp-message-id-to-react-to>'
+);
+```
+
 ## Media messages
 ### Upload media resources
 Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
@@ -274,7 +328,7 @@ Media messages accept as identifiers an Internet URL pointing to a public resour
 You can also upload your media resources to WhatsApp servers and you will receive a resource identifier:
 
 ```php
-$response = $whatsapp_cloud_api->uploadMedia('my-image.png');
+$response = $whatsapp_cloud_api->uploadMedia('./my-image.png');
 
 $media_id = new MediaObjectID($response->decodedBody()['id']);
 $whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
@@ -391,6 +445,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send Contacts
 - Send Lists
 - Send Buttons
+- Send Call To Action Button
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
