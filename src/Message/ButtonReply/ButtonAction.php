@@ -48,33 +48,10 @@ class ButtonAction
             return $header;
         }
 
-        switch ($this->header->type()) {
-            case 'text':
-                $header[] = [
-                    "type" => "text",
-                    "text" => $this->header->content()
-                ];
-                break;
-
-            case 'document':
-                $header[] = [
-                    "type" => "document",
-                    "document" => [
-                        "filename" => $this->header->filename(),
-                        "id" => $this->header->content()
-                    ]
-                ];
-                break;
-
-            default:
-                $header[] = [
-                    "type" => $this->header->type(),
-                    $this->header->type() => [
-                        "id" => $this->header->content()
-                    ]
-                ];
-                break;
-        }
+        $header[] = [
+            "type" => $this->header->type(),
+            $this->header->type() => $this->header->payload()
+        ];
 
         return $header[0];
     }

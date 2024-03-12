@@ -9,24 +9,18 @@ class ButtonHeader
      */
     private $type;
 
-    /**
-     * @var string The content of the button header
-     */
-    private $content;
-
-    private $filename;
+    private $payload;
 
     private const ALLOWED_TYPES = ['text', 'image', 'video', 'document'];
 
-    public function __construct(string $type, string $content, ?string $filename = null)
+    public function __construct(string $type, array $payload)
     {
         if (!in_array($type, self::ALLOWED_TYPES)) {
             throw new \InvalidArgumentException('Invalid header type. Allowed types are: ' . implode(', ', self::ALLOWED_TYPES));
         }
 
         $this->type = $type;
-        $this->filename = $filename;
-        $this->content = $content;
+        $this->payload = $payload;
     }
 
     /**
@@ -44,13 +38,12 @@ class ButtonHeader
      *
      * @return string The content of the button header
      */
-    public function content(): string
+    public function payload(): string|array
     {
-        return $this->content;
-    }
+        if ($this->type === "text") {
+            return $this->payload['text'];
+        }
 
-    public function filename(): ?string
-    {
-        return $this->filename;
+        return $this->payload;
     }
 }

@@ -354,7 +354,7 @@ class WhatsAppCloudApi
      *@param string|null $header The header text.
      *@param string|null $footer The footer text.
      *@return Response
-     *@throws Response\ResponseException 
+     *@throws Response\ResponseException
      */
     public function sendCallToAction(string $to, ButtonCallToAction $action, string $body, ?string $header = null, ?string $footer = null): Response
     {

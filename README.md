@@ -244,18 +244,25 @@ $rows = [
 ];
 
 //text header
-$buttonHeader = new ButtonHeader('text','RATE US');
+$payload = [
+    'text' => "RATE US"
+];
+$buttonHeader = new ButtonHeader('text',$payload);
 
-// or
+// image or video header
+$payload = [
+    'id' => "277147652084836"
+    //or 'link' => "http(s)://image-or-video-url"
+];
+$buttonHeader = new ButtonHeader('image',$payload); //or 'video'
 
 // document header
-$filename = "Our Portfolio.pdf";
-$buttonHeader = new ButtonHeader('document','325086917243611',$filename);
-
-//or 
-
-// image or video header: @param1 depends on your decision
-$buttonHeader = new ButtonHeader('image','277147652084836');
+$payload = [
+    'id' => "325086917243611",
+    //or 'link' => "http(s)://document-url",
+    'filename' => "Document-name.ext"
+];
+$buttonHeader = new ButtonHeader('document',$payload);
 
 $action = new ButtonAction($rows, $buttonHeader); // $buttonHeader is optional
 
