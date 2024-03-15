@@ -38,7 +38,7 @@ class ButtonHeader
      *
      * @return string|array The payload of the button header.
      */
-    public function payload(): string|array
+    public function payload()
     {
         if ($this->type === "text") {
             return $this->payload['text'];
