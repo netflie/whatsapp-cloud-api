@@ -8,6 +8,8 @@ use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\RawResponse;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonCallToAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
@@ -30,7 +32,7 @@ final class WhatsAppCloudApiTest extends TestCase
 {
     use ProphecyTrait;
 
-    private const TEST_GRAPH_VERSION = 'v18.0';
+    private const TEST_GRAPH_VERSION = 'v19.0';
 
     private $whatsapp_app_cloud_api;
     private $client_handler;
@@ -899,16 +901,15 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
-    public function test_send_reply_buttons()
+    public function test_send_reply_buttons_with_no_header()
     {
         $to = $this->faker->phoneNumber;
         $url = $this->buildMessageRequestUri();
-        $reply_to = $this->faker->uuid;
 
         $buttonRows = [
-            ['id' => $this->faker->uuid, 'title' => $this->faker->text(10)],
-            ['id' => $this->faker->uuid, 'title' => $this->faker->text(10)],
-            ['id' => $this->faker->uuid, 'title' => $this->faker->text(10)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
         ];
         $buttonAction = ['buttons' => []];
 
@@ -919,9 +920,8 @@ final class WhatsAppCloudApiTest extends TestCase
             ];
         }
 
-        $message = $this->faker->text(50);
-        $header = $this->faker->text(50);
-        $footer = $this->faker->text(50);
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
 
         $body = [
             'messaging_product' => 'whatsapp',
@@ -931,12 +931,8 @@ final class WhatsAppCloudApiTest extends TestCase
             'interactive' => [
                 'type' => 'button',
                 'body' => ['text' => $message],
-                'action' => $buttonAction,
-                'header' => ['type' => 'text', 'text' => $header],
                 'footer' => ['text' => $footer],
-            ],
-            'context' => [
-                'message_id' => $reply_to,
+                'action' => $buttonAction,
             ],
         ];
         $headers = [
@@ -954,15 +950,652 @@ final class WhatsAppCloudApiTest extends TestCase
             $actionButtons[] = new Button($button['id'], $button['title']);
         }
 
-        $response = $this->whatsapp_app_cloud_api
-            ->replyTo($reply_to)
-            ->sendButton(
-                $to,
-                $message,
-                new ButtonAction($actionButtons),
-                $header,
-                $footer
-            );
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_text_header()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+
+        $payload = [
+            'text' => $this->faker->text(20)
+        ];
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach ($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => [
+                    'type' => 'text',
+                    'text' => $payload['text']
+                ],
+                'footer' => [
+                    'text' => $footer
+                ]
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $buttonHeader = new ButtonHeader('text', $payload);
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons, $buttonHeader),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_document_id_header()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+
+        $payload = [
+            'id' => $this->faker->uuid,
+            'filename' => $this->faker->text
+        ];
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach ($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => [
+                    'type' => 'document',
+                    'document' => $payload
+                ],
+                'footer' => [
+                    'text' => $footer
+                ]
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $buttonHeader = new ButtonHeader('document', $payload);
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons, $buttonHeader),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_document_url_header()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach ($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $payload = [
+            'link' => $this->faker->url,
+            'filename' => $this->faker->text,
+        ];
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => [
+                    'type' => 'document',
+                    'document' => $payload
+                ],
+                'footer' => [
+                    'text' => $footer
+                ]
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $buttonHeader = new ButtonHeader('document', $payload);
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons, $buttonHeader),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_image_id_header()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+
+        $payload = [
+            'id' => $this->faker->uuid
+        ];
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach ($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => [
+                    'type' => 'image',
+                    'image' => $payload
+                ],
+                'footer' => [
+                    'text' => $footer
+                ]
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $buttonHeader = new ButtonHeader('image', $payload);
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons, $buttonHeader),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_image_url_header()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach ($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $payload = [
+            'link' => $this->faker->url
+        ];
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => [
+                    'type' => 'image',
+                    'image' => $payload
+                ],
+                'footer' => [
+                    'text' => $footer
+                ]
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $buttonHeader = new ButtonHeader('image', $payload);
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons, $buttonHeader),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_video_id_header()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+
+        $payload = [
+            'id' => $this->faker->uuid
+        ];
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach ($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => [
+                    'type' => 'video',
+                    'video' => $payload
+                ],
+                'footer' => [
+                    'text' => $footer
+                ]
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $buttonHeader = new ButtonHeader('video', $payload);
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons, $buttonHeader),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_video_url_header()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+
+        $buttonRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(20)],
+        ];
+        $buttonAction = ['buttons' => []];
+
+        foreach ($buttonRows as $button) {
+            $buttonAction['buttons'][] = [
+                'type' => 'reply',
+                'reply' => $button,
+            ];
+        }
+
+        $payload = [
+            'link' => $this->faker->url
+        ];
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'button',
+                'body' => ['text' => $message],
+                'action' => $buttonAction,
+                'header' => [
+                    'type' => 'video',
+                    'video' => $payload
+                ],
+                'footer' => [
+                    'text' => $footer
+                ]
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $buttonHeader = new ButtonHeader('video', $payload);
+
+        $actionButtons = [];
+
+        foreach ($buttonRows as $button) {
+            $actionButtons[] = new Button($button['id'], $button['title']);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            $to,
+            $message,
+            new ButtonAction($actionButtons, $buttonHeader),
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reaction_message()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $emoji = $this->faker->emoji;
+        $message_id = $this->faker->uuid;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'reaction',
+            'reaction' => [
+                'message_id' => $message_id,
+                'emoji' => $emoji,
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            $to,
+            $message_id,
+            $emoji
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_remove_reaction_message()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $emoji = '';
+        $message_id = $this->faker->uuid;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'reaction',
+            'reaction' => [
+                'message_id' => $message_id,
+                'emoji' => $emoji,
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            $to,
+            $message_id
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_call_to_action()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $title = $this->faker->text(20);
+        $destination = $this->faker->url;
+        $message = $this->faker->text(1024);
+        $header = $this->faker->text(20);
+        $footer = $this->faker->text(60);
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'cta_url',
+                'body' => ['text' => $message],
+                'action' => [
+                    'name' => 'cta_url',
+                    'parameters' => [
+                        'display_text' => $title,
+                        'url' => $destination
+                    ],
+                ],
+                'header' => ['type' => 'text', 'text' => $header],
+                'footer' => ['text' => $footer],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendCallToAction(
+            $to,
+            new ButtonCallToAction($title, $destination),
+            $message,
+            $header,
+            $footer
+        );
 
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());

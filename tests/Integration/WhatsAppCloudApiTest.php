@@ -4,6 +4,8 @@ namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonCallToAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
@@ -260,7 +262,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
-    public function test_send_reply_buttons()
+    public function test_send_reply_buttons_with_no_header()
     {
         $buttonRows = [
             new Button('button-1', 'Yes'),
@@ -268,15 +270,255 @@ final class WhatsAppCloudApiTest extends TestCase
             new Button('button-3', 'Not Now'),
         ];
         $buttonAction = new ButtonAction($buttonRows);
-        $header = 'RATE US';
-        $footer = 'Please choose an option';
+        $footer = 'Thanks for your time';
 
         $response = $this->whatsapp_app_cloud_api->sendButton(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
-            'Would you like to rate us?',
+            'Please consider rating your shopping experience in our website',
             $buttonAction,
-            $header,
             $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_text_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Yes'),
+            new Button('button-2', 'No'),
+            new Button('button-3', 'Not Now'),
+        ];
+
+        $payload = [
+            'text' => 'Rate your Experience'
+        ];
+        $buttonHeader = new ButtonHeader('text', $payload);
+        $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
+        $footer = 'Thanks for your time';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'Please consider rating your shopping experience in our website',
+            $buttonAction,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_image_url_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+
+        $payload = [
+            'link' => 'https://netflie.es/wp-content/uploads/2022/05/whatsapp_cloud_api_banner-1.png'
+        ];
+        $buttonHeader = new ButtonHeader('image', $payload);
+        $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
+        $footer = 'Some footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is your reply button with image url link',
+            $buttonAction,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_image_id_header()
+    {
+        $this->markTestIncomplete(
+            'This test should send a real image ID.'
+        );
+
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+
+        $payload = [
+            'id' => '277147652084836'
+        ];
+        $buttonHeader = new ButtonHeader('image', $payload);
+        $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
+        $footer = 'Some footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is your reply button with image id',
+            $buttonAction,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_video_url_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+
+        $payload = [
+            'link' => 'https://filesamples.com/samples/video/mp4/sample_640x360.mp4'
+        ];
+        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
+        $footer = 'Some footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is your reply button with video url',
+            $buttonAction,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_video_id_header()
+    {
+        $this->markTestIncomplete(
+            'This test should send a real video ID.'
+        );
+
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+
+        $payload = [
+            'id' => '849174016494294'
+        ];
+        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
+        $footer = 'Some footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is your reply button with video ID',
+            $buttonAction,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_document_url_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+
+        $payload = [
+            'link' => 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+            'filename' => 'Dummy Document.pdf'
+        ];
+        $buttonHeader = new ButtonHeader('document', $payload);
+        $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
+        $footer = 'Some footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is your reply button with document url',
+            $buttonAction,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_document_id_header()
+    {
+        $this->markTestIncomplete(
+            'This test should send a real document ID.'
+        );
+
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+
+        $payload = [
+            'id' => '325086917243611'
+        ];
+        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
+        $footer = 'Some footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is your reply button with document ID',
+            $buttonAction,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reaction_message()
+    {
+        $this->markTestIncomplete(
+            'This test should use a real message ID.'
+        );
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'wamid.HBgMMjU2NzQyMDMwNDAzFQIAERgSMEU2MkE3Q0I3RTEyRDU5NzIwAA==',
+            '👍'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_remove_reaction_message()
+    {
+        $this->markTestIncomplete(
+            'This test should use a real message ID.'
+        );
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'wamid.HBgMMjU2NzQyMDMwNDAzFQIAERgSMEU2MkE3Q0I3RTEyRDU5NzIwAA=='
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_call_to_action()
+    {
+        $cta = new ButtonCallToAction('Let\'s Talk', 'https://netflie.es/contact/');
+
+        $response = $this->whatsapp_app_cloud_api->sendCallToAction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $cta,
+            'Tap the button below to hire us for your next big incredible project!',
+            'Hire Us',
+            'Subject to T&C'
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
