@@ -34,9 +34,9 @@ class ButtonHeader
     }
 
     /**
-     * Get the content of the button header
+     * Get the payload of the button header.
      *
-     * @return string The content of the button header
+     * @return string|array The payload of the button header.
      */
     public function payload(): string|array
     {
