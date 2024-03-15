@@ -16,7 +16,7 @@ final class ReactionMessage extends Message
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $to, string $emoji, string $message_id)
+    public function __construct(string $to, string $message_id, string $emoji = '')
     {
         $this->emoji = $emoji;
         $this->message_id = $message_id;

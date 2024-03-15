@@ -323,8 +323,14 @@ You can react to a message:
 
 $whatsapp_cloud_api->sendReaction(
     '<destination-phone-number>',
-    '❤',
-    '<whatsapp-message-id-to-react-to>'
+    '<whatsapp-message-id-to-react-to>',
+    '👍'
+);
+
+// Unreact to message
+$whatsapp_cloud_api->sendReaction(
+    '<destination-phone-number>',
+    '<whatsapp-message-id-containing-reaction>'
 );
 ```
 

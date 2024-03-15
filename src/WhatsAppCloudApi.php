@@ -237,9 +237,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendReaction(string $to, string $emoji, string $message_id): Response
+    public function sendReaction(string $to, string $message_id, string $emoji = ''): Response
     {
-        $message = new Message\ReactionMessage($to, $emoji, $message_id);
+        $message = new Message\ReactionMessage($to, $message_id, $emoji);
 
         $request = new Request\MessageRequest\RequestReactionMessage(
             $message,
@@ -258,7 +258,7 @@ class WhatsAppCloudApi
      * @param  float    $longitude  Longitude position.
      * @param  float    $latitude   Latitude position.
      * @param  string   $name       Name of location sent.
-     * @param  string  $address    Address of location sent.
+     * @param  string   $address    Address of location sent.
      *
      * @return Response
      *
@@ -317,9 +317,9 @@ class WhatsAppCloudApi
     /**
      * Sends a button reply message.
      *
-     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  string   $body           The body of the message.
-     * @param  ButtonAction  $action    The button action.
+     * @param  string       $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string       $body           The body of the message.
+     * @param  ButtonAction $action    The button action.
      * @param  string|null  $footer      The footer text.
      * @return Response
      *
@@ -348,11 +348,11 @@ class WhatsAppCloudApi
     /**
      *
      *Sends a Call-to-Action button message.
-     *@param string $to WhatsApp ID or phone number for the person you want to send a message to.
+     *@param string             $to WhatsApp ID or phone number for the person you want to send a message to.
      *@param ButtonCallToAction $action The call-to-action button.
-     *@param string $body The body of the message.
-     *@param string|null $header The header text.
-     *@param string|null $footer The footer text.
+     *@param string             $body The body of the message.
+     *@param string|null        $header The header text.
+     *@param string|null        $footer The footer text.
      *@return Response
      *@throws Response\ResponseException
      */
