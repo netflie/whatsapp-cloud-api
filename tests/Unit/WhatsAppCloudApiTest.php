@@ -8,13 +8,13 @@ use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\RawResponse;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonHeader;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonCallToAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
+use Netflie\WhatsAppCloudApi\Message\Media\Header;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
@@ -1015,7 +1015,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $buttonHeader = new ButtonHeader('text', $payload);
+        $buttonHeader = new Header('text', $payload);
 
         $actionButtons = [];
 
@@ -1089,7 +1089,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $buttonHeader = new ButtonHeader('document', $payload);
+        $buttonHeader = new Header('document', $payload);
 
         $actionButtons = [];
 
@@ -1163,7 +1163,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $buttonHeader = new ButtonHeader('document', $payload);
+        $buttonHeader = new Header('document', $payload);
 
         $actionButtons = [];
 
@@ -1236,7 +1236,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $buttonHeader = new ButtonHeader('image', $payload);
+        $buttonHeader = new Header('image', $payload);
 
         $actionButtons = [];
 
@@ -1309,7 +1309,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $buttonHeader = new ButtonHeader('image', $payload);
+        $buttonHeader = new Header('image', $payload);
 
         $actionButtons = [];
 
@@ -1382,7 +1382,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonHeader = new Header('video', $payload);
 
         $actionButtons = [];
 
@@ -1455,7 +1455,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->shouldBeCalled()
             ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
-        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonHeader = new Header('video', $payload);
 
         $actionButtons = [];
 

@@ -4,13 +4,13 @@ namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonHeader;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonCallToAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
+use Netflie\WhatsAppCloudApi\Message\Media\Header;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
@@ -294,7 +294,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $payload = [
             'text' => 'Rate your Experience'
         ];
-        $buttonHeader = new ButtonHeader('text', $payload);
+        $buttonHeader = new Header('text', $payload);
         $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
         $footer = 'Thanks for your time';
 
@@ -320,7 +320,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $payload = [
             'link' => 'https://netflie.es/wp-content/uploads/2022/05/whatsapp_cloud_api_banner-1.png'
         ];
-        $buttonHeader = new ButtonHeader('image', $payload);
+        $buttonHeader = new Header('image', $payload);
         $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
         $footer = 'Some footer';
 
@@ -350,7 +350,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $payload = [
             'id' => '277147652084836'
         ];
-        $buttonHeader = new ButtonHeader('image', $payload);
+        $buttonHeader = new Header('image', $payload);
         $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
         $footer = 'Some footer';
 
@@ -376,7 +376,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $payload = [
             'link' => 'https://filesamples.com/samples/video/mp4/sample_640x360.mp4'
         ];
-        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonHeader = new Header('video', $payload);
         $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
         $footer = 'Some footer';
 
@@ -406,7 +406,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $payload = [
             'id' => '849174016494294'
         ];
-        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonHeader = new Header('video', $payload);
         $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
         $footer = 'Some footer';
 
@@ -433,7 +433,7 @@ final class WhatsAppCloudApiTest extends TestCase
             'link' => 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
             'filename' => 'Dummy Document.pdf'
         ];
-        $buttonHeader = new ButtonHeader('document', $payload);
+        $buttonHeader = new Header('document', $payload);
         $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
         $footer = 'Some footer';
 
@@ -463,7 +463,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $payload = [
             'id' => '325086917243611'
         ];
-        $buttonHeader = new ButtonHeader('video', $payload);
+        $buttonHeader = new Header('video', $payload);
         $buttonAction = new ButtonAction($buttonRows, $buttonHeader);
         $footer = 'Some footer';
 

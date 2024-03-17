@@ -2,17 +2,17 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\ButtonReply;
 
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonHeader;
+use Netflie\WhatsAppCloudApi\Message\Media\Header;
 
 class ButtonAction
 {
     private $buttons;
     /**
-     * @var ButtonHeader|null The header of the button action, can be null
+     * @var Header|null The header of the button action, can be null
      */
-    private ?ButtonHeader $header;
+    private ?Header $header;
 
-    public function __construct(array $buttons, ?ButtonHeader $header = null)
+    public function __construct(array $buttons, ?Header $header = null)
     {
         $this->buttons = $buttons;
         $this->header = $header;
