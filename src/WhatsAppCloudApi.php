@@ -9,6 +9,7 @@ use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action as MultiProductAction;
 
 class WhatsAppCloudApi
 {
@@ -431,6 +432,58 @@ class WhatsAppCloudApi
     {
         $request = new Request\MessageReadRequest(
             $message_id,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendLocationRequest(string $to, string $body)
+    {
+        $message = new Message\LocationRequestMessage($to, $body, $this->reply_to);
+        $request = new Request\MessageRequest\RequestLocationRequestMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendCatalog(string $to, string $body, ?string $footer = '', ?string $thumbnail_product_retailer_id = '')
+    {
+        $message = new Message\CatalogMessage($to, $body, $footer, $thumbnail_product_retailer_id, $this->reply_to);
+        $request = new Request\MessageRequest\RequestCatalogMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendSingleProduct(string $to, int $catalog_id, string $product_retailer_id, string $body, ?string $footer = '')
+    {
+        $message = new Message\SingleProductMessage($to, $catalog_id, $product_retailer_id, $body, $footer, $this->reply_to);
+        $request = new Request\MessageRequest\RequestSingleProductMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendMultiProduct(string $to, int $catalog_id, MultiProductAction $action, string $header, string $body, ?string $footer = '')
+    {
+        $message = new Message\MultiProductMessage($to, $catalog_id, $action, $header, $body, $footer, $this->reply_to);
+        $request = new Request\MessageRequest\RequestMultiProductMessage(
+            $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout
