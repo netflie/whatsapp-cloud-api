@@ -179,6 +179,14 @@ $whatsapp_cloud_api->sendSticker('<destination-phone-number>', $media_id);
 $whatsapp_cloud_api->sendLocation('<destination-phone-number>', $longitude, $latitude, $name, $address);
 ```
 
+### Send a location request message
+```php
+<?php
+
+$body = 'Let\'s start with your pickup. You can either manually *enter an address* or *share your current location*.';
+$whatsapp_cloud_api->sendLocationRequest('<destination-phone-number>', $body);
+```
+
 ### Send a contact message
 
 ```php
@@ -228,7 +236,7 @@ $whatsapp_cloud_api->sendList(
 <?php
 
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
-use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonHeader;
+use Netflie\WhatsAppCloudApi\Message\Media\Header;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 
@@ -247,14 +255,14 @@ $rows = [
 $payload = [
     'text' => "RATE US"
 ];
-$buttonHeader = new ButtonHeader('text',$payload);
+$buttonHeader = new Header('text',$payload);
 
 // image or video header
 $payload = [
     'id' => "277147652084836"
     //or 'link' => "http(s)://image-or-video-url"
 ];
-$buttonHeader = new ButtonHeader('image',$payload); //or 'video'
+$buttonHeader = new Header('image',$payload); //or 'video'
 
 // document header
 $payload = [
@@ -262,7 +270,7 @@ $payload = [
     //or 'link' => "http(s)://document-url",
     'filename' => "Document-name.ext"
 ];
-$buttonHeader = new ButtonHeader('document',$payload);
+$buttonHeader = new Header('document',$payload);
 
 $action = new ButtonAction($rows, $buttonHeader); // $buttonHeader is optional
 
@@ -331,6 +339,84 @@ $whatsapp_cloud_api->sendReaction(
 $whatsapp_cloud_api->sendReaction(
     '<destination-phone-number>',
     '<whatsapp-message-id-containing-reaction>'
+);
+```
+
+## Catalogs, Products
+### Send Catalog Message
+```php
+<?php
+
+$body = 'Hello! Thanks for your interest. Ordering is easy. Just visit our catalog and add items you\'d like to purchase.';
+$footer = 'Best grocery deals on WhatsApp!';
+$sku_thumbnail = '<product-sku-id>'; // product sku id to use as header thumbnail 
+
+$whatsapp_cloud_api->sendCatalog(
+    '<destination-phone-number>',
+    $body,
+    $footer, // optional
+    $sku_thumbnail // optional
+);
+```
+
+### Send Single Product Message
+```php
+<?php
+
+$catalog_id = '<catalog-id>';
+$sku_id = '<product-sku-id>';
+$body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
+$footer = 'Subject to T&C';
+
+$whatsapp_cloud_api->sendSingleProduct(
+    '<destination-phone-number>',
+    $catalog_id,
+    $sku_id,
+    $body, // body: optional
+    $footer // footer: optional
+);
+```
+
+### Send Multi Product Message
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Row;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Section;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action;
+
+$rows_section_1 = [
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    // etc
+];
+
+$rows_section_2 = [
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    // etc
+];
+
+$sections = [
+    new Section('Section 1', $rows_section_1),
+    new Section('Section 2', $rows_section_2),
+];
+
+$action = new Action($sections);
+$catalog_id = '<catalog-id>';
+$header = 'Grocery Collections';
+$body = 'Hello! Thanks for your interest. Here\'s what we can offer you under our grocery collection. Thank you for shopping with us.';
+$footer = 'Subject to T&C';
+
+$whatsapp_cloud_api->sendMultiProduct(
+    '<destination-phone-number>',
+    $catalog_id,
+    $action,
+    $header,
+    $body,
+    $footer // optional
 );
 ```
 
