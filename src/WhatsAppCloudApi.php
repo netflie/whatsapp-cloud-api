@@ -466,7 +466,7 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
-    public function sendSingleProduct(string $to, int $catalog_id, string $product_retailer_id, string $body, ?string $footer = '')
+    public function sendSingleProduct(string $to, int $catalog_id, string $product_retailer_id, ?string $body = '', ?string $footer = '')
     {
         $message = new Message\SingleProductMessage($to, $catalog_id, $product_retailer_id, $body, $footer, $this->reply_to);
         $request = new Request\MessageRequest\RequestSingleProductMessage(
