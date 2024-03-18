@@ -3,18 +3,20 @@
 namespace Netflie\WhatsAppCloudApi;
 
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonCallToAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action as MultiProductAction;
 
 class WhatsAppCloudApi
 {
     /**
      * @const string Default Graph API version.
      */
-    public const DEFAULT_GRAPH_VERSION = 'v18.0';
+    public const DEFAULT_GRAPH_VERSION = 'v19.0';
 
     /**
      * @var WhatsAppCloudApiApp The WhatsAppCloudApiApp entity.
@@ -227,13 +229,37 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Sends a reaction to a provided message id.
+     *
+     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string   $emoji          The emoji to use as a reaction.
+     * @param  string   $message_id     The ID of the message to react to.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendReaction(string $to, string $message_id, string $emoji = ''): Response
+    {
+        $message = new Message\ReactionMessage($to, $message_id, $emoji);
+
+        $request = new Request\MessageRequest\RequestReactionMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
      * Sends a location
      *
      * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
      * @param  float    $longitude  Longitude position.
      * @param  float    $latitude   Latitude position.
      * @param  string   $name       Name of location sent.
-     * @param  address  $address    Address of location sent.
+     * @param  string   $address    Address of location sent.
      *
      * @return Response
      *
@@ -289,18 +315,60 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
-    public function sendButton(string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null): Response
+    /**
+     * Sends a button reply message.
+     *
+     * @param  string       $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string       $body           The body of the message.
+     * @param  ButtonAction $action    The button action.
+     * @param  string|null  $footer      The footer text.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendButton(string $to, string $body, ButtonAction $action, ?string $footer = null): Response
     {
         $message = new Message\ButtonReplyMessage(
             $to,
             $body,
             $action,
-            $header,
             $footer,
             $this->reply_to
         );
 
         $request = new Request\MessageRequest\RequestButtonReplyMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
+     *
+     *Sends a Call-to-Action button message.
+     *@param string             $to WhatsApp ID or phone number for the person you want to send a message to.
+     *@param ButtonCallToAction $action The call-to-action button.
+     *@param string             $body The body of the message.
+     *@param string|null        $header The header text.
+     *@param string|null        $footer The footer text.
+     *@return Response
+     *@throws Response\ResponseException
+     */
+    public function sendCallToAction(string $to, ButtonCallToAction $action, string $body, ?string $header = null, ?string $footer = null): Response
+    {
+        $message = new Message\ButtonCallToActionMessage(
+            $to,
+            $action,
+            $body,
+            $header,
+            $footer,
+            $this->reply_to
+        );
+
+        $request = new Request\MessageRequest\RequestButtonCallToActionMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
@@ -364,6 +432,58 @@ class WhatsAppCloudApi
     {
         $request = new Request\MessageReadRequest(
             $message_id,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendLocationRequest(string $to, string $body)
+    {
+        $message = new Message\LocationRequestMessage($to, $body, $this->reply_to);
+        $request = new Request\MessageRequest\RequestLocationRequestMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendCatalog(string $to, string $body, ?string $footer = '', ?string $thumbnail_product_retailer_id = '')
+    {
+        $message = new Message\CatalogMessage($to, $body, $footer, $thumbnail_product_retailer_id, $this->reply_to);
+        $request = new Request\MessageRequest\RequestCatalogMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendSingleProduct(string $to, int $catalog_id, string $product_retailer_id, ?string $body = '', ?string $footer = '')
+    {
+        $message = new Message\SingleProductMessage($to, $catalog_id, $product_retailer_id, $body, $footer, $this->reply_to);
+        $request = new Request\MessageRequest\RequestSingleProductMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    public function sendMultiProduct(string $to, int $catalog_id, MultiProductAction $action, string $header, string $body, ?string $footer = '')
+    {
+        $message = new Message\MultiProductMessage($to, $catalog_id, $action, $header, $body, $footer, $this->reply_to);
+        $request = new Request\MessageRequest\RequestMultiProductMessage(
+            $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
             $this->timeout

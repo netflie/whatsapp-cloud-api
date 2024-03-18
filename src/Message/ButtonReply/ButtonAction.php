@@ -2,13 +2,20 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\ButtonReply;
 
+use Netflie\WhatsAppCloudApi\Message\Media\Header;
+
 class ButtonAction
 {
     private $buttons;
+    /**
+     * @var Header|null The header of the button action, can be null
+     */
+    private ?Header $header;
 
-    public function __construct(array $buttons)
+    public function __construct(array $buttons, ?Header $header = null)
     {
         $this->buttons = $buttons;
+        $this->header = $header;
     }
 
     public function buttons(): array
@@ -26,5 +33,26 @@ class ButtonAction
         }
 
         return $buttonActions;
+    }
+
+    /**
+     * Get the header of the button action, if it exists
+     *
+     * @return array|null The header of the button action, or null if it doesn't exist
+     */
+    public function header(): array
+    {
+        $header = [];
+
+        if (!$this->header) {
+            return $header;
+        }
+
+        $header[] = [
+            "type" => $this->header->type(),
+            $this->header->type() => $this->header->payload()
+        ];
+
+        return $header[0];
     }
 }

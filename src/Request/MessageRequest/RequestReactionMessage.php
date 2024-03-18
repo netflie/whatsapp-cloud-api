@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
 use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-final class RequestDocumentMessage extends MessageRequest
+final class RequestReactionMessage extends MessageRequest
 {
     /**
      * {@inheritdoc}
@@ -16,19 +16,11 @@ final class RequestDocumentMessage extends MessageRequest
             'recipient_type' => $this->message->recipientType(),
             'to' => $this->message->to(),
             'type' => $this->message->type(),
-            'document' => [
-                'filename' => $this->message->filename(),
-                $this->message->identifierType() => $this->message->identifierValue(),
+            $this->message->type() => [
+                'message_id' => $this->message->message_id(),
+                'emoji' => $this->message->emoji(),
             ],
         ];
-
-        if ($this->message->caption()) {
-            $body['document']['caption'] = $this->message->caption();
-        }
-
-        if ($this->message->replyTo()) {
-            $body['context']['message_id'] = $this->message->replyTo();
-        }
 
         return $body;
     }

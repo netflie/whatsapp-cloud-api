@@ -179,6 +179,14 @@ $whatsapp_cloud_api->sendSticker('<destination-phone-number>', $media_id);
 $whatsapp_cloud_api->sendLocation('<destination-phone-number>', $longitude, $latitude, $name, $address);
 ```
 
+### Send a location request message
+```php
+<?php
+
+$body = 'Let\'s start with your pickup. You can either manually *enter an address* or *share your current location*.';
+$whatsapp_cloud_api->sendLocationRequest('<destination-phone-number>', $body);
+```
+
 ### Send a contact message
 
 ```php
@@ -228,6 +236,7 @@ $whatsapp_cloud_api->sendList(
 <?php
 
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\Media\Header;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 
@@ -241,14 +250,60 @@ $rows = [
     new Button('button-2', 'No'),
     new Button('button-3', 'Not Now'),
 ];
-$action = new ButtonAction($rows);
 
+//text header
+$payload = [
+    'text' => "RATE US"
+];
+$buttonHeader = new Header('text',$payload);
+
+// image or video header
+$payload = [
+    'id' => "277147652084836"
+    //or 'link' => "http(s)://image-or-video-url"
+];
+$buttonHeader = new Header('image',$payload); //or 'video'
+
+// document header
+$payload = [
+    'id' => "325086917243611",
+    //or 'link' => "http(s)://document-url",
+    'filename' => "Document-name.ext"
+];
+$buttonHeader = new Header('document',$payload);
+
+$action = new ButtonAction($rows, $buttonHeader); // $buttonHeader is optional
+
+//header previously set below now moved to $action as in above
 $whatsapp_cloud_api->sendButton(
     '<destination-phone-number>',
-    'Would you like to rate us on Trustpilot?',
+    'Would you like to rate us on Trustpilot?', // Body
     $action,
-    'RATE US', // Optional: Specify a header (type "text")
     'Please choose an option' // Optional: Specify a footer 
+);
+```
+
+### Send a Call To Action Button Message
+
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonCallToAction;
+
+$whatsapp_cloud_api = new WhatsAppCloudApi([
+  'from_phone_number_id' => 'your-configured-from-phone-number-id',
+  'access_token' => 'your-facebook-whatsapp-application-token' 
+]);
+
+$cta = new ButtonCallToAction('Let\'s Talk','https://netflie.es/contact/');
+
+$whatsapp_cloud_api->sendCallToAction(
+    '<destination-phone-number>',
+    $cta,
+    'Tap the button below to hire us for your next big incredible project!', // body
+    'Hire Us', //header: optional
+    'Subject to T&C' // footer: optional
 );
 ```
 
@@ -267,6 +322,104 @@ $whatsapp_cloud_api
     );
 ```
 
+### React to a message
+
+You can react to a message:
+
+```php
+<?php
+
+$whatsapp_cloud_api->sendReaction(
+    '<destination-phone-number>',
+    '<whatsapp-message-id-to-react-to>',
+    '👍'
+);
+
+// Unreact to message
+$whatsapp_cloud_api->sendReaction(
+    '<destination-phone-number>',
+    '<whatsapp-message-id-containing-reaction>'
+);
+```
+
+## Catalogs, Products
+### Send Catalog Message
+```php
+<?php
+
+$body = 'Hello! Thanks for your interest. Ordering is easy. Just visit our catalog and add items you\'d like to purchase.';
+$footer = 'Best grocery deals on WhatsApp!';
+$sku_thumbnail = '<product-sku-id>'; // product sku id to use as header thumbnail 
+
+$whatsapp_cloud_api->sendCatalog(
+    '<destination-phone-number>',
+    $body,
+    $footer, // optional
+    $sku_thumbnail // optional
+);
+```
+
+### Send Single Product Message
+```php
+<?php
+
+$catalog_id = '<catalog-id>';
+$sku_id = '<product-sku-id>';
+$body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
+$footer = 'Subject to T&C';
+
+$whatsapp_cloud_api->sendSingleProduct(
+    '<destination-phone-number>',
+    $catalog_id,
+    $sku_id,
+    $body, // body: optional
+    $footer // footer: optional
+);
+```
+
+### Send Multi Product Message
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Row;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Section;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action;
+
+$rows_section_1 = [
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    // etc
+];
+
+$rows_section_2 = [
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    // etc
+];
+
+$sections = [
+    new Section('Section 1', $rows_section_1),
+    new Section('Section 2', $rows_section_2),
+];
+
+$action = new Action($sections);
+$catalog_id = '<catalog-id>';
+$header = 'Grocery Collections';
+$body = 'Hello! Thanks for your interest. Here\'s what we can offer you under our grocery collection. Thank you for shopping with us.';
+$footer = 'Subject to T&C';
+
+$whatsapp_cloud_api->sendMultiProduct(
+    '<destination-phone-number>',
+    $catalog_id,
+    $action,
+    $header,
+    $body,
+    $footer // optional
+);
+```
+
 ## Media messages
 ### Upload media resources
 Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
@@ -274,7 +427,7 @@ Media messages accept as identifiers an Internet URL pointing to a public resour
 You can also upload your media resources to WhatsApp servers and you will receive a resource identifier:
 
 ```php
-$response = $whatsapp_cloud_api->uploadMedia('my-image.png');
+$response = $whatsapp_cloud_api->uploadMedia('./my-image.png');
 
 $media_id = new MediaObjectID($response->decodedBody()['id']);
 $whatsapp_cloud_api->sendImage('<destination-phone-number>', $media_id);
@@ -391,6 +544,8 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send Contacts
 - Send Lists
 - Send Buttons
+- Send Call To Action Button
+- Send Reaction
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
