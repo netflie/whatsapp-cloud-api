@@ -14,6 +14,9 @@ use Netflie\WhatsAppCloudApi\Message\Media\Header;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action as MultiProductAction;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Row as MultiProductRow;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Section as MultiProductSection;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Tests\WhatsAppCloudApiTestConfiguration;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
@@ -519,6 +522,101 @@ final class WhatsAppCloudApiTest extends TestCase
             'Tap the button below to hire us for your next big incredible project!',
             'Hire Us',
             'Subject to T&C'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_location_request()
+    {
+        $body = 'Let\'s start with your pickup. You can either manually *enter an address* or *share your current location*.';
+        $response = $this->whatsapp_app_cloud_api->sendLocationRequest(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $body
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_catalog_message()
+    {
+        $this->markTestIncomplete(
+            'This test requires active catalog setting in whatsapp commerce, and the real sku id in catalog.'
+        );
+
+        $body = 'Hello! Thanks for your interest. Ordering is easy. Just visit our catalog and add items you\'d like to purchase.';
+        $footer = 'Best grocery deals on WhatsApp!';
+        $sku_thumbnail = '<product-sku-id>';
+        $response = $this->whatsapp_app_cloud_api->sendCatalog(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $body,
+            $footer,
+            $sku_thumbnail
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_single_product()
+    {
+        $this->markTestIncomplete(
+            'This test requires real catalog id and product sku id.'
+        );
+
+        $catalog_id = '<catalog-id>';
+        $sku_id = '<product-sku-id>';
+        $body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
+        $footer = 'Subject to T&C';
+
+        $response = $this->whatsapp_app_cloud_api->sendSingleProduct(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $catalog_id,
+            $sku_id,
+            $body, // body: optional
+            $footer // footer: optional
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_multi_product()
+    {
+        $this->markTestIncomplete(
+            'This test requires real catalog data.'
+        );
+
+        $rows_section_1 = [
+            new MultiProductRow('<product-sku-id>'),
+            // etc
+        ];
+
+        $rows_section_2 = [
+            new MultiProductRow('<product-sku-id>'),
+            // etc
+        ];
+
+        $sections = [
+            new MultiProductSection('Section 1', $rows_section_1),
+            new MultiProductSection('Section 2', $rows_section_2),
+        ];
+
+        $action = new MultiProductAction($sections);
+        $catalog_id = '<catalog-id>';
+        $header = 'Grocery Collections';
+        $body = 'Hello! Thanks for your interest. Here\'s what we can offer you under our grocery collection. Thank you for shopping with us.';
+        $footer = 'Subject to T&C';
+
+        $response = $this->whatsapp_app_cloud_api->sendMultiProduct(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $catalog_id,
+            $action,
+            $header,
+            $body,
+            $footer // optional
         );
 
         $this->assertEquals(200, $response->httpStatusCode());

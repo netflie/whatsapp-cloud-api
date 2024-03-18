@@ -18,6 +18,9 @@ use Netflie\WhatsAppCloudApi\Message\Media\Header;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Row;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Section;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action as MultiProductAction;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Row as MultiProductRow;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Section as MultiProductSection;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
 use Netflie\WhatsAppCloudApi\Response\ResponseException;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
@@ -1594,6 +1597,214 @@ final class WhatsAppCloudApiTest extends TestCase
             new ButtonCallToAction($title, $destination),
             $message,
             $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_location_request()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'location_request_message',
+                'body' => ['text' => $message],
+                'action' => [
+                    'name' => 'send_location'
+                ],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendLocationRequest(
+            $to,
+            $message
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_catalog_message()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+        $product_retailer_id = $this->faker->text;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'catalog_message',
+                'body' => ['text' => $message],
+                'footer' => ['text' => $footer],
+                'action' => [
+                    'name' => 'catalog_message',
+                    'parameters' => ['thumbnail_product_retailer_id' => $product_retailer_id]
+                ],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendCatalog(
+            $to,
+            $message,
+            $footer,
+            $product_retailer_id
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_single_product()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+        $catalog_id = $this->faker->randomNumber();
+        $product_retailer_id = $this->faker->text();
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'product',
+                'body' => ['text' => $message],
+                'footer' => ['text' => $footer],
+                'action' => [
+                    'catalog_id' => $catalog_id,
+                    'product_retailer_id' => $product_retailer_id
+                ],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendSingleProduct(
+            $to,
+            $catalog_id,
+            $product_retailer_id,
+            $message,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_multi_product()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $header = $this->faker->text(20);
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+        $catalog_id = $this->faker->randomNumber();
+
+        $rows1 = [
+            ['product_retailer_id' => $this->faker->uuid],
+            ['product_retailer_id' => $this->faker->uuid],
+            ['product_retailer_id' => $this->faker->uuid],
+        ];
+
+        $rows2 = [
+            ['product_retailer_id' => $this->faker->uuid],
+            ['product_retailer_id' => $this->faker->uuid],
+        ];
+
+
+        $sections = [
+            ['title' => $this->faker->text, 'product_items' => $rows1],
+            ['title' => $this->faker->text, 'product_items' => $rows2],
+        ];
+        $actions = ['catalog_id' => $catalog_id, 'sections' => $sections];
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'product_list',
+                'header' => ['type' => 'text', 'text' => $header],
+                'body' => ['text' => $message],
+                'footer' => ['text' => $footer],
+                'action' => $actions,
+            ],
+        ];
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $actionSections = [];
+
+        foreach ($actions['sections'] as $section) {
+            $sectionRows = [];
+
+            foreach ($section['product_items'] as $row) {
+                $sectionRows[] = new MultiProductRow($row['product_retailer_id']);
+            }
+
+            $actionSections[] = new MultiProductSection($section['title'], $sectionRows);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendMultiProduct(
+            $to,
+            $catalog_id,
+            new MultiProductAction($actionSections),
+            $header,
+            $message,
             $footer
         );
 
