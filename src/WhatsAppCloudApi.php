@@ -276,6 +276,19 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
+    /**
+     * Sends a list
+     *
+     * @param  string   $to     WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string   $header The header.
+     * @param  string   $body   The body.
+     * @param  string   $footer The footer.
+     * @param  Action   $action The action object.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
     public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
     {
         $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action, $this->reply_to);
