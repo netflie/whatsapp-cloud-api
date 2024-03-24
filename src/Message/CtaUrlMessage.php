@@ -29,8 +29,8 @@ final class CtaUrlMessage extends Message
         ?string $header,
         ?string $body,
         ?string $footer,
-        ?string $reply_to)
-    {
+        ?string $reply_to
+    ) {
         $this->displayText = $displayText;
         $this->url = $url;
         $this->header = $header;
