@@ -276,10 +276,50 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
+    /**
+     * Sends a list
+     *
+     * @param  string   $to     WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string   $header The header.
+     * @param  string   $body   The body.
+     * @param  string   $footer The footer.
+     * @param  Action   $action The action object.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
     public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
     {
         $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action, $this->reply_to);
         $request = new Request\MessageRequest\RequestOptionsListMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
+     * Sends a CTA URL
+     *
+     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string   $displayText    The display text.
+     * @param  string   $url            The URL.
+     * @param  ?string  $header         The header.
+     * @param  ?string  $body           The body.
+     * @param  ?string  $footer         The footer.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendCtaUrl(string $to, string $displayText, string $url, ?string $header, ?string $body, ?string $footer): Response
+    {
+        $message = new Message\CtaUrlMessage($to, $displayText, $url, $header, $body, $footer, $this->reply_to);
+        $request = new Request\MessageRequest\RequestCtaUrlMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),

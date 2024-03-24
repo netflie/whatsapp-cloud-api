@@ -222,6 +222,21 @@ $whatsapp_cloud_api->sendList(
 );
 ```
 
+### Send a CTA URL message
+
+```php
+<?php
+
+$whatsapp_cloud_api->sendCtaUrl(
+    '<destination-phone-number>',
+    'See Dates',
+    'https://www.example.com',
+    'Booking',
+    'Tap the button below to see available dates.',
+    'Dates subject to change.',
+);
+```
+
 ### Send a button reply message
 
 ```php
