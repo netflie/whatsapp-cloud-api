@@ -260,6 +260,21 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_cta_url()
+    {
+        $response = $this->whatsapp_app_cloud_api->sendCtaUrl(
+            '<destination-phone-number>',
+            'Button text',
+            'https://www.example.com',
+            'The header',
+            'The body',
+            'The footer',
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_send_reply_buttons()
     {
         $buttonRows = [
