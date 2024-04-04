@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Message\CtaUrl;
 
 use Netflie\WhatsAppCloudApi\Message\CtaUrl\Header;
 
-class TitleHeader extends Header
+final class TitleHeader extends Header
 {
     protected string $title;
 
