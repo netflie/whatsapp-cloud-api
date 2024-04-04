@@ -2,7 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\Message\CtaUrl;
 
-class ImageHeader extends Header
+final class ImageHeader extends Header
 {
     protected string $link;
 
