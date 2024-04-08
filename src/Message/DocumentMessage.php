@@ -31,7 +31,7 @@ final class DocumentMessage extends Message
     /**
     * {@inheritdoc}
     */
-    public function __construct(string $to, MediaID $id, string $name, ?string $caption = '', ?string $reply_to)
+    public function __construct(string $to, MediaID $id, string $name, ?string $caption, ?string $reply_to)
     {
         $this->id = $id;
         $this->name = $name;
