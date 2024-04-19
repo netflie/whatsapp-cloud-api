@@ -177,6 +177,31 @@ class Client
         return $return_response;
     }
 
+    /**
+     * Get the message templates.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function messageTemplates(Request\TemplateRequest\MessageTemplatesRequest $request): Response
+    {
+        //dd($this->buildRequestUri($request->nodePath()));
+        $raw_response = $this->handler->get(
+            $this->buildRequestUri($request->nodePath()),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = Response::fromClientResponse($request, $raw_response);
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
     private function defaultHandler(): ClientHandler
     {
         return new GuzzleClientHandler();
