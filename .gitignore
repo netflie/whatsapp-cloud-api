@@ -6,3 +6,4 @@ composer.phar
 composer.lock
 .php-cs-fixer.cache
 .idea/
+.DS_Store
