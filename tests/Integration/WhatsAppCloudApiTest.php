@@ -7,6 +7,7 @@ use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
+use Netflie\WhatsAppCloudApi\Message\CtaUrl\TitleHeader;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
@@ -254,6 +255,23 @@ final class WhatsAppCloudApiTest extends TestCase
             'Please consider rating your shopping experience in our website',
             'Thanks for your time',
             $action
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_cta_url()
+    {
+        $header = new TitleHeader('The header');
+
+        $response = $this->whatsapp_app_cloud_api->sendCtaUrl(
+            '<destination-phone-number>',
+            'Button text',
+            'https://www.example.com',
+            $header,
+            'The body',
+            'The footer',
         );
 
         $this->assertEquals(200, $response->httpStatusCode());

@@ -222,6 +222,25 @@ $whatsapp_cloud_api->sendList(
 );
 ```
 
+### Send a CTA URL message
+
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\Message\CtaUrl\TitleHeader;
+
+$header = new TitleHeader('Booking');
+
+$whatsapp_cloud_api->sendCtaUrl(
+    '<destination-phone-number>',
+    'See Dates',
+    'https://www.example.com',
+    $header,
+    'Tap the button below to see available dates.',
+    'Dates subject to change.',
+);
+```
+
 ### Send a button reply message
 
 ```php

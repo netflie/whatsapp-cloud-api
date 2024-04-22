@@ -11,6 +11,7 @@ use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
+use Netflie\WhatsAppCloudApi\Message\CtaUrl\TitleHeader;
 use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
@@ -891,6 +892,67 @@ final class WhatsAppCloudApiTest extends TestCase
                 $listBody['text'],
                 $listFooter['text'],
                 new Action($listAction['button'], $actionSections),
+            );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_cta_url()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $reply_to = $this->faker->uuid;
+
+        $ctaHeader = ['type' => 'text', 'text' => $this->faker->text(60)];
+        $ctaBody = ['text' => $this->faker->text(1024)];
+        $ctaFooter = ['text' => $this->faker->text(60)];
+        $ctaAction = [
+            'name' => 'cta_url',
+            'parameters' => [
+                'display_text' => $this->faker->text(24),
+                'url' => $this->faker->url,
+            ]
+        ];
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'cta_url',
+                'header' => $ctaHeader,
+                'body' => $ctaBody,
+                'footer' => $ctaFooter,
+                'action' => $ctaAction,
+            ],
+            'context' => [
+                'message_id' => $reply_to,
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $header = new TitleHeader($ctaHeader['text']);
+
+        $response = $this->whatsapp_app_cloud_api
+            ->replyTo($reply_to)
+            ->sendCtaUrl(
+                $to,
+                $ctaAction['parameters']['display_text'],
+                $ctaAction['parameters']['url'],
+                $header,
+                $ctaBody['text'],
+                $ctaFooter['text'],
             );
 
         $this->assertEquals(200, $response->httpStatusCode());
