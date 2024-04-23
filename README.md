@@ -241,6 +241,23 @@ $whatsapp_cloud_api->sendCtaUrl(
 );
 ```
 
+### Send Catalog Message
+
+```php
+<?php
+
+$body = 'Hello! Thanks for your interest. Ordering is easy. Just visit our catalog and add items you\'d like to purchase.';
+$footer = 'Best grocery deals on WhatsApp!';
+$sku_thumbnail = '<product-sku-id>'; // product sku id to use as header thumbnail 
+
+$whatsapp_cloud_api->sendCatalog(
+    '<destination-phone-number>',
+    $body,
+    $footer, // optional
+    $sku_thumbnail // optional
+);
+```
+
 ### Send a button reply message
 
 ```php
