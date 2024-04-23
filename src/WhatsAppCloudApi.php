@@ -393,6 +393,30 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Sends a catalog message.
+     *
+     * @param  string         $to              WhatsApp ID or phone number for the person you want to send the message to.
+     * @param  string         $body            The body of the catalog message.
+     * @param  ?string        $footer          The footer of the catalog message.
+     * @param  ?string        $thumbnail_product_retailer_id The product retailer ID to use as thumbnail.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendCatalog(string $to, string $body, ?string $footer = '', ?string $thumbnail_product_retailer_id = '')
+    {
+        $message = new Message\CatalogMessage($to, $body, $footer, $thumbnail_product_retailer_id, $this->reply_to);
+        $request = new Request\MessageRequest\RequestCatalogMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
      * Mark a message as read
      *
      * @param  string    $message_id WhatsApp Message Id will be marked as read.
