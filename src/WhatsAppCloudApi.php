@@ -414,6 +414,32 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Sends a single product message to a specified recipient.
+     *
+     * @param string $to The WhatsApp ID or phone number for the person you want to send the message to.
+     * @param int $catalog_id The ID of the catalog where the product is located.
+     * @param string $product_retailer_id The retailer-specific ID of the product.
+     * @param string|null $body The body of the message. Defaults to an empty string if not provided.
+     * @param string|null $footer The footer of the message. Defaults to an empty string if not provided.
+     *
+     * @return Response The response object containing the result of the API request.
+     *
+     * @throws Response\ResponseException If there is an error with the API request.
+     */
+    public function sendSingleProduct(string $to, int $catalog_id, string $product_retailer_id, ?string $body = '', ?string $footer = '')
+    {
+        $message = new Message\SingleProductMessage($to, $catalog_id, $product_retailer_id, $body, $footer, $this->reply_to);
+        $request = new Request\MessageRequest\RequestSingleProductMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
      * Get Business Profile
      *
      * @param  string    $fields WhatsApp profile fields.
