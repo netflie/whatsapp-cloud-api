@@ -271,6 +271,49 @@ $whatsapp_cloud_api->sendButton(
 );
 ```
 
+### Send Multi Product Message
+```php
+<?php
+
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Row;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Section;
+use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action;
+
+$rows_section_1 = [
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    // etc
+];
+
+$rows_section_2 = [
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    new Row('<product-sku-id>'),
+    // etc
+];
+
+$sections = [
+    new Section('Section 1', $rows_section_1),
+    new Section('Section 2', $rows_section_2),
+];
+
+$action = new Action($sections);
+$catalog_id = '<catalog-id>';
+$header = 'Grocery Collections';
+$body = 'Hello! Thanks for your interest. Here\'s what we can offer you under our grocery collection. Thank you for shopping with us.';
+$footer = 'Subject to T&C';
+
+$whatsapp_cloud_api->sendMultiProduct(
+    '<destination-phone-number>',
+    $catalog_id,
+    $action,
+    $header,
+    $body,
+    $footer // optional
+);
+```
+
 ### Replying messages
 
 You can reply a previous sent message:
@@ -410,6 +453,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send Contacts
 - Send Lists
 - Send Buttons
+- Send Multi Product Message
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
