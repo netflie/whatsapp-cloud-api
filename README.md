@@ -179,6 +179,15 @@ $whatsapp_cloud_api->sendSticker('<destination-phone-number>', $media_id);
 $whatsapp_cloud_api->sendLocation('<destination-phone-number>', $longitude, $latitude, $name, $address);
 ```
 
+### Send a location request message
+
+```php
+<?php
+
+$body = 'Let\'s start with your pickup. You can either manually *enter an address* or *share your current location*.';
+$whatsapp_cloud_api->sendLocationRequest('<destination-phone-number>', $body);
+```
+
 ### Send a contact message
 
 ```php
@@ -407,6 +416,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send Videos
 - Send Stickers
 - Send Locations
+- Send Location Request
 - Send Contacts
 - Send Lists
 - Send Buttons

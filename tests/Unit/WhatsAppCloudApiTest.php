@@ -719,6 +719,45 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_location_request()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'location_request_message',
+                'body' => ['text' => $message],
+                'action' => [
+                    'name' => 'send_location',
+                ],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendLocationRequest(
+            $to,
+            $message
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_send_contact()
     {
         $to = $this->faker->phoneNumber;
