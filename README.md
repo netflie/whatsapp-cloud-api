@@ -340,6 +340,24 @@ $whatsapp_cloud_api->sendMultiProduct(
 );
 ```
 
+### Send Single Product Message
+```php
+<?php
+
+$catalog_id = '<catalog-id>';
+$sku_id = '<product-sku-id>';
+$body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
+$footer = 'Subject to T&C';
+
+$whatsapp_cloud_api->sendSingleProduct(
+    '<destination-phone-number>',
+    $catalog_id,
+    $sku_id,
+    $body, // body: optional
+    $footer // footer: optional
+);
+```
+
 ### Replying messages
 
 You can reply a previous sent message:
@@ -502,6 +520,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send Lists
 - Send Buttons
 - Send Multi Product Message
+- Send Single Product
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
