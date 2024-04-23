@@ -286,6 +286,27 @@ $whatsapp_cloud_api
     );
 ```
 
+### React to a Message
+
+You can react to a message from your conversations if you know the messageid
+
+```php
+<?php
+
+$whatsapp_cloud_api->sendReaction(
+        '<destination-phone-number>',
+        '<message-id-to-react-to>',
+        '👍', // the emoji
+    );
+
+// Unreact to a message
+$whatsapp_cloud_api->sendReaction(
+        '<destination-phone-number>',
+        '<message-id-to-unreact-to>'
+    );
+
+```
+
 ## Media messages
 ### Upload media resources
 Media messages accept as identifiers an Internet URL pointing to a public resource (image, video, audio, etc.). When you try to send a media message from a URL you must instantiate the `LinkID` object.
@@ -413,6 +434,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
+- React to a Message
 - Get/Update Business Profile
 - Webhook verification
 - Webhook notifications
