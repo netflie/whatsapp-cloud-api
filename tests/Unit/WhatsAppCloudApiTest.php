@@ -1229,6 +1229,53 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_single_product()
+    {
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+        $catalog_id = $this->faker->randomNumber();
+        $product_retailer_id = $this->faker->uuid();
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'product',
+                'body' => ['text' => $message],
+                'footer' => ['text' => $footer],
+                'action' => [
+                    'catalog_id' => $catalog_id,
+                    'product_retailer_id' => $product_retailer_id,
+                ],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendSingleProduct(
+            $to,
+            $catalog_id,
+            $product_retailer_id,
+            $message,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_mark_a_message_as_read()
     {
         $url = $this->buildMessageRequestUri();
