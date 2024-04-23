@@ -301,6 +301,37 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_reaction_message()
+    {
+        $this->markTestIncomplete(
+            'This test should use a real message ID.'
+        );
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'wamid.HBgMMjU2NzQyMDMwNDAzFQIAERgSMEU2MkE3Q0I3RTEyRDU5NzIwAA==',
+            '👍'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_remove_reaction_message()
+    {
+        $this->markTestIncomplete(
+            'This test should use a real message ID.'
+        );
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'wamid.HBgMMjU2NzQyMDMwNDAzFQIAERgSMEU2MkE3Q0I3RTEyRDU5NzIwAA=='
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_upload_media()
     {
         $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/netflie.png');

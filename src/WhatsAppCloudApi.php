@@ -414,6 +414,30 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Sends a reaction to a provided message id.
+     *
+     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  string   $message_id     The ID of the message to react to.
+     * @param  string   $emoji          The emoji to use as a reaction.
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendReaction(string $to, string $message_id, string $emoji = ''): Response
+    {
+        $message = new Message\ReactionMessage($to, $message_id, $emoji);
+
+        $request = new Request\MessageRequest\RequestReactionMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
      * Get Business Profile
      *
      * @param  string    $fields WhatsApp profile fields.
