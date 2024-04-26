@@ -14,6 +14,7 @@ enum MessageTypeEnum: string
     case ORDER = 'order';
     case STICKER = 'sticker';
     case SYSTEM = 'system';
+    case TEMPLATE = 'template';
     case UNKNOWN = 'unknown';
     case VIDEO = 'video';
     case VOICE = 'voice';
@@ -32,4 +33,3 @@ enum MessageTypeEnum: string
         return in_array($type, $mediaTypes);
     }
 }
-
