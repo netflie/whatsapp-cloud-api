@@ -19,7 +19,7 @@ enum MessageTypeEnum: string
     case VIDEO = 'video';
     case VOICE = 'voice';
 
-    public static function isMedia(string $type): bool
+    public static function isMedia($type): bool
     {
         $mediaTypes = [
             MessageTypeEnum::AUDIO,
