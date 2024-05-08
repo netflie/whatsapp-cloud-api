@@ -16,6 +16,7 @@ enum MessageTypeEnum: string
     case SYSTEM = 'system';
     case TEMPLATE = 'template';
     case UNKNOWN = 'unknown';
+    case UNSUPPORTED = 'unsupported';
     case VIDEO = 'video';
     case VOICE = 'voice';
 
