@@ -12,6 +12,7 @@ enum MessageTypeEnum: string
     case INTERACTIVE = 'interactive';
     case LOCATION = 'location';
     case ORDER = 'order';
+    case REACTION = 'reaction';
     case STICKER = 'sticker';
     case SYSTEM = 'system';
     case TEMPLATE = 'template';
