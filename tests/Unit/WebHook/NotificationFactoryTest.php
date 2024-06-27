@@ -768,6 +768,61 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('', $notification->description());
     }
 
+    public function test_build_from_payload_can_build_a_flow_notification()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [
+            {
+              "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+              "changes": [
+                {
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                           "display_phone_number": "PHONE_NUMBER",
+                           "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [
+                        {
+                          "profile": {
+                            "name": "NAME"
+                          },
+                          "wa_id": "PHONE_NUMBER_ID"
+                        }
+                      ],
+                      "messages": [
+                        {
+                          "from": "PHONE_NUMBER_ID",
+                          "id": "wamid.ID",
+                          "timestamp": 1669233778,
+                          "interactive": {
+                            "type": "nfm_reply",
+                            "nfm_reply": {
+                              "response_json": "{\"screen_0_name_0\":\"Email\",\"screen_0_orderNumber_1\":\"ID\",\"flow_token\":\"unused\"}",
+                              "body": "Sent",
+                              "name": "flow"
+                            }
+                          },
+                          "type": "interactive"
+                        }
+                      ]
+                  },
+                  "field": "messages"
+                }
+              ]
+            }
+          ]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\Flow::class, $notification);
+        $this->assertEquals('flow', $notification->name());
+        $this->assertEquals('Sent', $notification->body());
+        $this->assertEquals('{"screen_0_name_0":"Email","screen_0_orderNumber_1":"ID","flow_token":"unused"}', $notification->response());
+    }
+
     public function test_build_from_payload_can_build_an_order_notification()
     {
         $payload = json_decode('{
