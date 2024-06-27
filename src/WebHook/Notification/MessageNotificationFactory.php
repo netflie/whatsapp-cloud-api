@@ -77,6 +77,19 @@ class MessageNotificationFactory
                     $message['timestamp']
                 );
             case 'interactive':
+                if(isset($message['interactive']['nfm_reply'])) {
+                    $nfmReply = $message['interactive']['nfm_reply'];
+
+                    return new Flow(
+                        $message['id'],
+                        new Support\Business($metadata['phone_number_id'], $metadata['display_phone_number']),
+                        $nfmReply['name'],
+                        $nfmReply['body'],
+                        $nfmReply['response_json'] ?? '',
+                        $message['timestamp'],
+                    );
+                }
+
                 return new Interactive(
                     $message['id'],
                     new Support\Business($metadata['phone_number_id'], $metadata['display_phone_number']),
