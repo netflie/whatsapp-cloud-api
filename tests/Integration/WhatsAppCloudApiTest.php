@@ -209,6 +209,18 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_location_request()
+    {
+        $body = 'Let\'s start with your pickup. You can either manually *enter an address* or *share your current location*.';
+        $response = $this->whatsapp_app_cloud_api->sendLocationRequest(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $body
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_send_contact()
     {
         $contact_name = new ContactName('Adams', 'Smith');

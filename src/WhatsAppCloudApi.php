@@ -254,6 +254,29 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Sends a location request message.
+     *
+     * @param string $to   The WhatsApp ID or phone number for the person you want to send the message to.
+     * @param string $body The body of the location request message.
+     *
+     * @return Response The response object containing the result of the API request.
+     *
+     * @throws Response\ResponseException If there's an error with the API request.
+     */
+    public function sendLocationRequest(string $to, string $body)
+    {
+        $message = new Message\LocationRequestMessage($to, $body, $this->reply_to);
+        $request = new Request\MessageRequest\RequestLocationRequestMessage(
+            $message,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
      * Sends a contact
      *
      * @param  string        $to    WhatsApp ID or phone number for the person you want to send a message to.
