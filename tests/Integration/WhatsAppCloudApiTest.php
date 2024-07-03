@@ -303,13 +303,17 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_reaction_message()
     {
-        $this->markTestIncomplete(
-            'This test should use a real message ID.'
+        $textMessage = $this->whatsapp_app_cloud_api->sendTextMessage(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This text will receive a reaction',
+            true
         );
+
+        $messageId = $textMessage->decodedBody()['messages'][0]['id'];
 
         $response = $this->whatsapp_app_cloud_api->sendReaction(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
-            'wamid.HBgMMjU2NzQyMDMwNDAzFQIAERgSMEU2MkE3Q0I3RTEyRDU5NzIwAA==',
+            $messageId,
             '👍'
         );
 
@@ -319,13 +323,25 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_remove_reaction_message()
     {
-        $this->markTestIncomplete(
-            'This test should use a real message ID.'
+        $textMessage = $this->whatsapp_app_cloud_api->sendTextMessage(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This text will receive a reaction and then the reaction will be removed',
+            true
         );
+
+        $messageId = $textMessage->decodedBody()['messages'][0]['id'];
+
+        $reactToMessage = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $messageId,
+            '👍'
+        );
+
+        // sleep(3); // can delay next request to see reaction
 
         $response = $this->whatsapp_app_cloud_api->sendReaction(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
-            'wamid.HBgMMjU2NzQyMDMwNDAzFQIAERgSMEU2MkE3Q0I3RTEyRDU5NzIwAA=='
+            $messageId
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
