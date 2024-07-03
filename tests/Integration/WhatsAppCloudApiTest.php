@@ -280,18 +280,12 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_catalog_message()
     {
-        $this->markTestIncomplete(
-            'This test requires active catalog setting in whatsapp commerce, and the real sku id in catalog.'
-        );
-
         $body = 'Hello! Thanks for your interest. Ordering is easy. Just visit our catalog and add items you\'d like to purchase.';
         $footer = 'Best grocery deals on WhatsApp!';
-        $sku_thumbnail = '<product-sku-id>';
         $response = $this->whatsapp_app_cloud_api->sendCatalog(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
             $body,
             $footer,
-            $sku_thumbnail
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
@@ -354,7 +348,7 @@ final class WhatsAppCloudApiTest extends TestCase
     {
         $response = $this->whatsapp_app_cloud_api->updateBusinessProfile([
             'about' => 'About text',
-            'email' => 'my-email@email.com'
+            'email' => 'my-email@email.com',
         ]);
 
         $this->assertEquals(200, $response->httpStatusCode());
