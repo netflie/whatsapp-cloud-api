@@ -313,6 +313,53 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_reaction_message()
+    {
+        $textMessage = $this->whatsapp_app_cloud_api->sendTextMessage(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This text will receive a reaction',
+            true
+        );
+
+        $messageId = $textMessage->decodedBody()['messages'][0]['id'];
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $messageId,
+            '👍'
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_remove_reaction_message()
+    {
+        $textMessage = $this->whatsapp_app_cloud_api->sendTextMessage(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This text will receive a reaction and then the reaction will be removed',
+            true
+        );
+
+        $messageId = $textMessage->decodedBody()['messages'][0]['id'];
+
+        $reactToMessage = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $messageId,
+            '👍'
+        );
+
+        // sleep(3); // can delay next request to see reaction
+
+        $response = $this->whatsapp_app_cloud_api->sendReaction(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $messageId
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_upload_media()
     {
         $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/netflie.png');
