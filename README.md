@@ -61,7 +61,7 @@ $whatsapp_cloud_api->sendDocument('34676104574', $link_id, $document_name, $docu
 ```php
 <?php
 
-$whatsapp_cloud_api->sendTemplate('34676104574', 'hello_world', 'en_US'); // Language is optional
+$whatsapp_cloud_api->sendTemplate('34676104574', 'hello_world', 'en_US'); // If not specified, Language will be default to en_US and otherwise it will be required.
 ```
 
 You also can build templates with parameters:
