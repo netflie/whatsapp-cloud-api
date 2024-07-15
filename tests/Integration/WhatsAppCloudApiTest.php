@@ -283,18 +283,14 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_multi_product()
     {
-        $this->markTestIncomplete(
-            'This test requires real catalog data.'
-        );
-
         $rows_section_1 = [
             new MultiProductRow('<product-sku-id>'),
-            // etc
+            // can add more
         ];
 
         $rows_section_2 = [
             new MultiProductRow('<product-sku-id>'),
-            // etc
+            // can add more
         ];
 
         $sections = [
