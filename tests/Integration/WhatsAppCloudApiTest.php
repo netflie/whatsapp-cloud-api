@@ -303,10 +303,6 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_single_product()
     {
-        $this->markTestIncomplete(
-            'This test requires real catalog id and product sku id.'
-        );
-
         $catalog_id = '<catalog-id>';
         $sku_id = '<product-sku-id>';
         $body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
