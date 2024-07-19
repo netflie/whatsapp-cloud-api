@@ -303,15 +303,15 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_single_product()
     {
-        $catalog_id = '<catalog-id>';
-        $sku_id = '<product-sku-id>';
+        $catalog_id = WhatsAppCloudApiTestConfiguration::$catalog_id;
+        $product_sku_id = WhatsAppCloudApiTestConfiguration::$product_sku_id;
         $body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
         $footer = 'Subject to T&C';
 
         $response = $this->whatsapp_app_cloud_api->sendSingleProduct(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
             $catalog_id,
-            $sku_id,
+            $product_sku_id,
             $body, // body: optional
             $footer // footer: optional
         );
