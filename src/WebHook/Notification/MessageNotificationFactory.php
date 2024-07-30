@@ -77,7 +77,7 @@ class MessageNotificationFactory
                     $message['timestamp']
                 );
             case 'interactive':
-                if(isset($message['interactive']['nfm_reply'])) {
+                if (isset($message['interactive']['nfm_reply'])) {
                     $nfmReply = $message['interactive']['nfm_reply'];
 
                     return new Flow(
