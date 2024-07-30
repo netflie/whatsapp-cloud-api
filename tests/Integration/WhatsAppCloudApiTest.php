@@ -334,7 +334,7 @@ final class WhatsAppCloudApiTest extends TestCase
     {
         $response = $this->whatsapp_app_cloud_api->updateBusinessProfile([
             'about' => 'About text',
-            'email' => 'my-email@email.com'
+            'email' => 'my-email@email.com',
         ]);
 
         $this->assertEquals(200, $response->httpStatusCode());
