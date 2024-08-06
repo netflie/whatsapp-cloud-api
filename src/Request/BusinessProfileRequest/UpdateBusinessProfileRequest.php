@@ -33,7 +33,7 @@ final class UpdateBusinessProfileRequest extends Request
     {
         return array_merge(
             [
-                'messaging_product' => 'whatsapp'
+                'messaging_product' => 'whatsapp',
             ],
             $this->information
         );

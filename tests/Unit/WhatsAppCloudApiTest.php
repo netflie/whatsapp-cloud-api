@@ -953,7 +953,7 @@ final class WhatsAppCloudApiTest extends TestCase
             'parameters' => [
                 'display_text' => $this->faker->text(24),
                 'url' => $this->faker->url,
-            ]
+            ],
         ];
 
         $body = [
