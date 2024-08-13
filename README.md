@@ -444,6 +444,44 @@ $whatsapp_cloud_api->updateBusinessProfile([
 
 Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/business-profiles
 
+### Get existing WhatsApp Templates
+You can retrieve an array of existing templates using the `messageTemplates` method. This method requires the `fields` parameter, which is a string with a comma seperated list of the [WhatsApp template fields](https://developers.facebook.com/docs/graph-api/reference/whats-app-business-hsm/#fields "WhatsApp Template Fields docs") you want. 
+
+You can optionally filter on template `status` and set a `limit`.
+
+```php
+<?php
+use Netflie\WhatsAppCloudApi\Enums\TemplateCategoryEnum;
+
+$templates = $whatsapp_cloud_api->messageTemplates(
+    fields: 'name,status,id', // comma seperated fields, you can also add 'components' to retrieve the full template components
+    status: TemplateCategoryEnum::APPROVED, // to only retrieve templates with a specific status, leave empty to get all templates
+    limit: 10, // to overwrite the default limit of 50
+);
+```
+
+This results in an array of templates, example result:
+```php
+// value of $templates
+$templates = [
+    [
+        "name" => "seasonal_promotion_text_only",
+        "status" => "APPROVED",
+        "id" => "564750795574598"
+    ],
+    [
+        "name" => "seasonal_promotion_video",
+        "status" => "APPROVED",
+        "id" => "1252715608684590"
+    ],
+    [
+        "name" => "seasonal_promotion_image_header",
+        "status" => "APPROVED",
+        "id" => "1372429296936443"
+    ]
+];
+```
+
 ## Features
 
 - Send Text Messages
@@ -463,6 +501,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Mark messages as read
 - React to a Message
 - Get/Update Business Profile
+- Get existing whatsapp templates
 - Webhook verification
 - Webhook notifications
 

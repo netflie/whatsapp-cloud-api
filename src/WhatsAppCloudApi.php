@@ -536,13 +536,19 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function messageTemplates(string $fields): Response
+    public function messageTemplates(
+        string $fields,
+        null|string|TemplateCategoryEnum $status = null,
+        int $limit = 50
+    ): Response
     {
         $request = new Request\TemplateRequest\MessageTemplatesRequest(
-            $fields,
-            $this->app->accessToken(),
-            $this->app->businessId(),
-            $this->timeout
+            fields: $fields,
+            limit: $limit,
+            status: $status,
+            access_token: $this->app->accessToken(),
+            business_id: $this->app->businessId(),
+            timeout: $this->timeout
         );
 
         return $this->client->messageTemplates($request);
