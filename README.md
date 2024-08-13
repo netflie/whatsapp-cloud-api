@@ -9,7 +9,7 @@ The first **1,000 conversations** each month are free from WhatsApp Cloud API. A
 ## Getting Started
 Please create and configure your Facebook WhatsApp application following the ["Get Stared"](https://developers.facebook.com/docs/whatsapp/cloud-api/get-started) section of the official guide.
 
-Minimum requirements – To run the SDK, your system will require **PHP >= 7.4** with a recent version of **CURL >=7.19.4** compiled with OpenSSL and zlib.
+Minimum requirements – To run the SDK, your system will require **PHP >= 8.1** with a recent version of **CURL >=7.19.4** compiled with OpenSSL and zlib.
 
 ## Installation
 ```composer require netflie/whatsapp-cloud-api ```
