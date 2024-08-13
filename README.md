@@ -1,5 +1,48 @@
 ![](https://netflie.es/wp-content/uploads/2022/05/whatsapp_cloud_api_banner-1.png)
 
+## Table of Contents
+
+1. [What It Does](#what-it-does)
+2. [Getting Started](#getting-started)
+3. [Installation](#installation)
+4. [Quick Examples](#quick-examples)
+   - [Send a text message](#send-a-text-message)
+   - [Send a document](#send-a-document)
+   - [Send a template message](#send-a-template-message)
+   - [Send an audio message](#send-an-audio-message)
+   - [Send an image message](#send-an-image-message)
+   - [Send a video message](#send-a-video-message)
+   - [Send a sticker message](#send-a-sticker-message)
+   - [Send a location message](#send-a-location-message)
+   - [Send a location request message](#send-a-location-request-message)
+   - [Send a contact message](#send-a-contact-message)
+   - [Send a list message](#send-a-list-message)
+   - [Send a CTA URL message](#send-a-cta-url-message)
+   - [Send a Catalog Message](#send-a-catalog-message)
+   - [Send a button reply message](#send-a-button-reply-message)
+   - [Replying messages](#replying-messages)
+   - [React to a Message](#react-to-a-message)
+5. [Media Messages](#media-messages)
+   - [Upload media resources](#upload-media-resources)
+   - [Download media resources](#download-media-resources)
+6. [Message Response](#message-response)
+7. [Webhooks](#webhooks)
+   - [Webhook verification](#webhook-verification)
+   - [Webhook notifications](#webhook-notifications)
+   - [Mark a message as read](#mark-a-message-as-read)
+8. [Business Profile](#business-profile)
+   - [Get Business Profile](#get-business-profile)
+   - [Update Business Profile](#update-business-profile)
+   - [Get existing WhatsApp Templates](#get-existing-whatsapp-templates)
+9. [Features](#features)
+10. [Getting Help](#getting-help)
+11. [Migration to v2](#migration-to-v2)
+12. [Changelog](#changelog)
+13. [Testing](#testing)
+14. [Contributing](#contributing)
+15. [License](#license)
+16. [Disclaimer](#disclaimer)
+
 
 ## What It Does
 This package makes it easy for developers to access [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api "WhatsApp Cloud API") service in their PHP code.
@@ -425,6 +468,27 @@ Marking a message as read will also mark earlier messages in the conversation as
 $whatsapp_cloud_api->markMessageAsRead('<message-id>');
 ```
 
+## Business profile
+To use the following functionalities, pass a valid WhatsApp `business_id` to the `WhatsAppCloudApi` config. Example:
+
+```php
+<?php
+use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
+
+$config = [
+        'from_phone_number_id' => null,
+        'access_token' => '',
+        'business_id' => '', // this value is required to make the following calls work
+        'graph_version' => 'v18.0',
+        'client_handler' => null,
+        'timeout' => null,
+    ];
+$whatsapp_cloud_api = new WhatsAppCloudApi($config);
+
+```
+
+Please also see the full [WhatsApp Business Management API reference](https://developers.facebook.com/docs/whatsapp/business-management-api).
+
 ### Get Business Profile
 ```php
 <?php
@@ -454,9 +518,9 @@ You can optionally filter on template `status` and set a `limit`.
 use Netflie\WhatsAppCloudApi\Enums\TemplateCategoryEnum;
 
 $templates = $whatsapp_cloud_api->messageTemplates(
-    fields: 'name,status,id', // comma seperated fields, you can also add 'components' to retrieve the full template components
-    status: TemplateCategoryEnum::APPROVED, // to only retrieve templates with a specific status, leave empty to get all templates
-    limit: 10, // to overwrite the default limit of 50
+    fields: 'name,status,id', // comma seperated fields
+    status: TemplateCategoryEnum::APPROVED, // leave empty to get all templates
+    limit: 10, // leave empty for the default limit of 50
 );
 ```
 
