@@ -1311,20 +1311,48 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_send_single_product()
     {
-        $catalog_id = WhatsAppCloudApiTestConfiguration::$catalog_id;
-        $product_sku_id = WhatsAppCloudApiTestConfiguration::$product_sku_id;
-        $body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
-        $footer = 'Subject to T&C';
+        $to = $this->faker->phoneNumber;
+        $url = $this->buildMessageRequestUri();
+        $message = $this->faker->text(1024);
+        $footer = $this->faker->text(60);
+        $catalog_id = $this->faker->randomNumber();
+        $product_retailer_id = $this->faker->uuid();
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'product',
+                'body' => ['text' => $message],
+                'footer' => ['text' => $footer],
+                'action' => [
+                    'catalog_id' => $catalog_id,
+                    'product_retailer_id' => $product_retailer_id,
+                ],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
 
         $response = $this->whatsapp_app_cloud_api->sendSingleProduct(
-            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $to,
             $catalog_id,
-            $product_sku_id,
-            $body, // body: optional
-            $footer // footer: optional
+            $product_retailer_id,
+            $message,
+            $footer
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
         $this->assertEquals(false, $response->isError());
     }
 
