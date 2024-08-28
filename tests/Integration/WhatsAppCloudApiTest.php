@@ -390,6 +390,25 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_single_product()
+    {
+        $catalog_id = WhatsAppCloudApiTestConfiguration::$catalog_id;
+        $product_sku_id = WhatsAppCloudApiTestConfiguration::$product_sku_id;
+        $body = 'Hello! Here\'s your requested product. Thanks for shopping with us.';
+        $footer = 'Subject to T&C';
+
+        $response = $this->whatsapp_app_cloud_api->sendSingleProduct(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            $catalog_id,
+            $product_sku_id,
+            $body, // body: optional
+            $footer // footer: optional
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_send_remove_reaction_message()
     {
         $textMessage = $this->whatsapp_app_cloud_api->sendTextMessage(
