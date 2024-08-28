@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.2.1 - 2024-08-28
+
+### What's Changed
+
+- Document caption is not required. Thanks @limsenkeat
+- Implement CTA URL message (With text & Image support). Thanks @jfradj
+- Add reaction to messages. Thanks @derrickobedgiu1
+- Send Catalog Message. Thanks @derrickobedgiu1
+- Add Send Location Request. Thanks @derrickobedgiu1
+- Adding flow message support. Thanks @pravnyadv
+- Add Multi Products. Thanks @derrickobedgiu1
+- Add Single Products. Thanks @derrickobedgiu1
+- Support for ctwa_clid. Thanks @jpsilvaa
+
 ## 2.2.0 - 2023-11-19
 
 ### What's Changed
