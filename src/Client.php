@@ -177,6 +177,55 @@ class Client
         return $return_response;
     }
 
+    /**
+     * Get the Conversational Components.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function conversationalComponents(Request\ConversationalComponentRequest\ConversationalComponentRequest $request): Response
+    {
+        $raw_response = $this->handler->get(
+            $this->buildRequestUri($request->nodePath()),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = Response::fromClientResponse($request, $raw_response);
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
+    /**
+     * Update the Conversational Component settings.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function updateConversationalComponents(Request\ConversationalComponentRequest\UpdateConversationalComponentRequest $request): Response
+    {
+        $raw_response = $this->handler->postJsonData(
+            $this->buildRequestUri($request->nodePath()),
+            $request->body(),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = Response::fromClientResponse($request, $raw_response);
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
     private function defaultHandler(): ClientHandler
     {
         return new GuzzleClientHandler();

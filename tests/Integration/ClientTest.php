@@ -108,4 +108,47 @@ final class ClientTest extends TestCase
         $this->assertEquals($request, $response->request());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_conversational_components()
+    {
+        $request = new Request\ConversationalComponentRequest\ConversationalComponentRequest(
+            'conversational_automation',
+            WhatsAppCloudApiTestConfiguration::$access_token,
+            WhatsAppCloudApiTestConfiguration::$from_phone_number_id
+        );
+
+        $response = $this->client->conversationalComponents($request);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($request, $response->request());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_update_conversational_components()
+    {
+        $request = new Request\ConversationalComponentRequest\UpdateConversationalComponentRequest(
+            [
+                'enable_welcome_message' => false,
+                'commands' => [
+                    [
+                        'command_name' => 'tickets',
+                        'command_description' => 'Book flight tickets',
+                    ],
+                    [
+                        'command_name' => 'hotel',
+                        'command_description' => 'Book hotel',
+                    ],
+                ],
+                'prompts' => ['Book a flight','plan a vacation'],
+            ],
+            WhatsAppCloudApiTestConfiguration::$access_token,
+            WhatsAppCloudApiTestConfiguration::$from_phone_number_id
+        );
+
+        $response = $this->client->updateConversationalComponents($request);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals($request, $response->request());
+        $this->assertEquals(false, $response->isError());
+    }
 }
