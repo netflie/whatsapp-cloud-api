@@ -268,12 +268,13 @@ $whatsapp_cloud_api->sendCatalog(
 ```
 
 ### Send a button reply message
-
+Button reply with Text Header
 ```php
 <?php
 
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\TextHeader;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
 
 $whatsapp_cloud_api = new WhatsAppCloudApi([
@@ -288,13 +289,59 @@ $rows = [
 ];
 $action = new ButtonAction($rows);
 
+$header = new TextHeader('RATE US');
+
 $whatsapp_cloud_api->sendButton(
     '<destination-phone-number>',
     'Would you like to rate us on Trustpilot?',
     $action,
-    'RATE US', // Optional: Specify a header (type "text")
+    $header, // Optional, can be text, image, video, or document
     'Please choose an option' // Optional: Specify a footer 
 );
+```
+
+Button Reply with Image Header
+```php
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ImageHeader;
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+
+$link_id = new LinkID('http(s)://image-url');
+$header = new ImageHeader($link_id);
+
+//or
+
+$media_id = new MediaObjectID('<image-object-id>');
+$header = new ImageHeader($media_id);
+```
+
+Button Reply with Video Header
+```php
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\VideoHeader;
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+
+$link_id = new LinkID('http(s)://video-url');
+$header = new VideoHeader($link_id);
+
+//or
+
+$media_id = new MediaObjectID('<video-object-id>');
+$header = new VideoHeader($media_id);
+```
+
+Button Reply with Document Header
+```php
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\DocumentHeader;
+use Netflie\WhatsAppCloudApi\Message\Media\LinkID;
+
+$filename = 'whatsapp-cloud-api-from-url.pdf';
+$link_id = new LinkID('http(s)://document-url');
+$header = new DocumentHeader($link_id);
+
+//or
+
+$filename = 'whatsapp-cloud-api-from-id.pdf';
+$media_id = new MediaObjectID('<document-object-id>');
+$header = new DocumentoHeader($media_id,);
 ```
 
 ### Send Multi Product Message
