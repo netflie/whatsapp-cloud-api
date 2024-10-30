@@ -4,6 +4,10 @@ namespace Netflie\WhatsAppCloudApi\Tests\Integration;
 
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\DocumentHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ImageHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\TextHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\VideoHeader;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
@@ -347,7 +351,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
-    public function test_send_reply_buttons()
+    public function test_send_reply_buttons_with_text_header()
     {
         $buttonRows = [
             new Button('button-1', 'Yes'),
@@ -355,12 +359,165 @@ final class WhatsAppCloudApiTest extends TestCase
             new Button('button-3', 'Not Now'),
         ];
         $buttonAction = new ButtonAction($buttonRows);
-        $header = 'RATE US';
+        $header = new TextHeader('RATE US');
         $footer = 'Please choose an option';
 
         $response = $this->whatsapp_app_cloud_api->sendButton(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
             'Would you like to rate us?',
+            $buttonAction,
+            $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_image_id_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+
+        $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/netflie.png');
+        $media_id = new MediaObjectID($response->decodedBody()['id']);
+        $header = new ImageHeader($media_id);
+        $footer = 'This is the footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is a sample body, but the image in the header above was sent using its upload id',
+            $buttonAction,
+            $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_image_link_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+
+        $link_id = new LinkID('https://netflie.es/wp-content/uploads/2022/05/whatsapp_cloud_api_banner-1.png');
+        $header = new ImageHeader($link_id);
+        $footer = 'This is an optional footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is a sample body, but the image in the header above was sent using a direct image url',
+            $buttonAction,
+            $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_video_id_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+
+        $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/sample.mp4');
+        $media_id = new MediaObjectID($response->decodedBody()['id']);
+        $header = new VideoHeader($media_id);
+        $footer = 'This is the footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is a sample body, but the video in the header above was sent using its upload id',
+            $buttonAction,
+            $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_video_link_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+
+        $link_id = new LinkID('https://sample-videos.com/video321/mp4/720/big_buck_bunny_720p_1mb.mp4');
+        $header = new VideoHeader($link_id);
+        $footer = 'This is an optional footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is a sample body, but the video in the header above was sent using a direct video url',
+            $buttonAction,
+            $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_document_id_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+
+        $response = $this->whatsapp_app_cloud_api->uploadMedia('tests/Support/sample.pdf');
+        $media_id = new MediaObjectID($response->decodedBody()['id']);
+        $header = new DocumentHeader($media_id, 'whatsapp-cloud-api.pdf');
+        $footer = 'This is the footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is a sample body, but the document in the header above was sent using its upload id',
+            $buttonAction,
+            $header,
+            $footer
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_reply_buttons_with_document_link_header()
+    {
+        $buttonRows = [
+            new Button('button-1', 'Button 1'),
+            new Button('button-2', 'Button 2'),
+            new Button('button-3', 'Button 3'),
+        ];
+        $buttonAction = new ButtonAction($buttonRows);
+
+        $link_id = new LinkID('https://netflie.es/wp-content/uploads/2022/05/image.png');
+        $header = new DocumentHeader($link_id,'whatsapp-cloud-api.png');
+        $footer = 'This is an optional footer';
+
+        $response = $this->whatsapp_app_cloud_api->sendButton(
+            WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
+            'This is a sample body, but the document in the header above was sent using its direct url',
             $buttonAction,
             $header,
             $footer
