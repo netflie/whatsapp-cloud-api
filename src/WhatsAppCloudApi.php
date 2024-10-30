@@ -364,7 +364,7 @@ class WhatsAppCloudApi
         }
 
         if (!$header instanceof ButtonHeader && $header !== null) {
-            throw new InvalidMessage('Header must be instance of use Netflie\WhatsAppCloudApi\Message\ButtonReply\Header if not left null');
+            throw new InvalidMessage('Header must be instance of Netflie\WhatsAppCloudApi\Message\ButtonReply\Header if not left null');
         }
         $message = new Message\ButtonReplyMessage(
             $to,
