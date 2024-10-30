@@ -512,7 +512,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $buttonAction = new ButtonAction($buttonRows);
 
         $link_id = new LinkID('https://netflie.es/wp-content/uploads/2022/05/image.png');
-        $header = new DocumentHeader($link_id,'whatsapp-cloud-api.png');
+        $header = new DocumentHeader($link_id, 'whatsapp-cloud-api.png');
         $footer = 'This is an optional footer';
 
         $response = $this->whatsapp_app_cloud_api->sendButton(

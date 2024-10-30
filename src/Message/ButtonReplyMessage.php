@@ -17,7 +17,7 @@ final class ButtonReplyMessage extends Message
 
     private ButtonAction $action;
 
-    public function __construct(string $to, string $body, ButtonAction $action, ?Header  $header = null, ?string $footer = null, ?string $reply_to = null)
+    public function __construct(string $to, string $body, ButtonAction $action, ?Header $header = null, ?string $footer = null, ?string $reply_to = null)
     {
         $this->body = $body;
         $this->action = $action;
