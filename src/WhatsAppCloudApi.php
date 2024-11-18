@@ -581,6 +581,28 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Update webhook configuration (phone number override)
+     *
+     * @param  array    $uri Whatsapp webhook uri.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function updateWebhook(string $uri, ?string $verify_token = null): Response
+    {
+        $request = new Request\WebhookRequest\UpdateWebhookRequest(
+            $uri,
+            $verify_token,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->updateWebhook($request);
+    }
+
+    /**
      * Returns the Facebook Whatsapp Access Token.
      *
      * @return string
