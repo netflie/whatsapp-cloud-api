@@ -583,13 +583,14 @@ class WhatsAppCloudApi
     /**
      * Update webhook configuration (phone number override)
      *
-     * @param  array    $uri Whatsapp webhook uri.
+     * @param  string    $uri Whatsapp webhook uri.
+     * @param  string    $verify_token Whatsapp webhook verify token.
      *
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function updateWebhook(string $uri, ?string $verify_token = null): Response
+    public function updateWebhook(string $uri, string $verify_token): Response
     {
         $request = new Request\WebhookRequest\UpdateWebhookRequest(
             $uri,

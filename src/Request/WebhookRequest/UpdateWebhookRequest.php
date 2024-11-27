@@ -13,16 +13,16 @@ final class UpdateWebhookRequest extends Request implements RequestWithBody
     private string $uri;
 
     /**
-     * @var ?string WhatsApp webhook verify token, if provided.
+     * @var string WhatsApp webhook verify token, if provided.
      */
-    private ?string $verify_token;
+    private string $verify_token;
 
     /**
      * @var string WhatsApp Number Id from messages will sent.
      */
     private string $from_phone_number_id;
 
-    public function __construct(array $uri, ?string $verify_token, string $access_token, string $from_phone_number_id, ?int $timeout = null)
+    public function __construct(string $uri, string $verify_token, string $access_token, string $from_phone_number_id, ?int $timeout = null)
     {
         $this->uri = $uri;
         $this->verify_token = $verify_token;
@@ -38,17 +38,12 @@ final class UpdateWebhookRequest extends Request implements RequestWithBody
      */
     public function body(): array
     {
-        $body = [
+        return [
             'webhook_configuration' => [
                 'override_callback_uri' => $this->uri,
+                'verify_token' => $this->verify_token,
             ],
         ];
-
-        if ($this->verify_token) {
-            $body['webhook_configuration']['verify_token'] = $this->verify_token;
-        }
-
-        return $body;
     }
 
     /**
