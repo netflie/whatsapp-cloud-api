@@ -146,6 +146,7 @@ class MessageNotificationFactory
             $notification->withContext(new Support\Context(
                 $message['context']['id'] ?? null,
                 $message['context']['forwarded'] ?? false,
+                $message['context']['frequently_forwarded'] ?? false,
                 $referred_product ?? null
             ));
         }

@@ -35,6 +35,15 @@ abstract class MessageNotification extends Notification
         return $this->context->isForwarded();
     }
 
+    public function isFrequentlyForwarded(): bool
+    {
+        if (!$this->context) {
+            return false;
+        }
+
+        return $this->context->isFrequentlyForwarded();
+    }
+
     public function context(): ?Support\Context
     {
         return $this->context;

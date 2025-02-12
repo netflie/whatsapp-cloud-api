@@ -8,15 +8,19 @@ final class Context
 
     private bool $forwarded;
 
+    private bool $frequently_forwarded;
+
     private ?ReferredProduct $referred_product;
 
     public function __construct(
         string $replying_to_message_id = null,
         bool $forwarded = false,
+        bool $frequently_forwarded = false,
         ReferredProduct $referred_product = null
     ) {
         $this->replying_to_message_id = $replying_to_message_id;
         $this->forwarded = $forwarded;
+        $this->frequently_forwarded = $frequently_forwarded;
         $this->referred_product = $referred_product;
     }
 
@@ -28,6 +32,11 @@ final class Context
     public function isForwarded(): bool
     {
         return $this->forwarded;
+    }
+
+    public function isFrequentlyForwarded(): bool
+    {
+        return $this->frequently_forwarded;
     }
 
     public function hasReferredProduct(): bool
