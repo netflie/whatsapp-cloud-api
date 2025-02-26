@@ -2,6 +2,8 @@
 
 namespace Netflie\WhatsAppCloudApi\WebHook\Notification;
 
+use Netflie\WhatsAppCloudApi\Message\Media\MediaType;
+
 final class Media extends MessageNotification
 {
     private string $image_id;
@@ -14,6 +16,8 @@ final class Media extends MessageNotification
 
     private string $caption;
 
+    private MediaType $type;
+
     public function __construct(
         string $id,
         Support\Business $business,
@@ -22,7 +26,8 @@ final class Media extends MessageNotification
         string $sha256,
         string $filename,
         string $caption,
-        string $received_at_timestamp
+        string $received_at_timestamp,
+        MediaType $type
     ) {
         parent::__construct($id, $business, $received_at_timestamp);
 
@@ -31,6 +36,7 @@ final class Media extends MessageNotification
         $this->sha256 = $sha256;
         $this->filename = $filename;
         $this->caption = $caption;
+        $this->type = $type;
     }
 
     public function imageId(): string
@@ -56,5 +62,10 @@ final class Media extends MessageNotification
     public function caption(): string
     {
         return $this->caption;
+    }
+
+    public function type(): MediaType
+    {
+        return $this->type;
     }
 }
