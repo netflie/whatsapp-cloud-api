@@ -2,6 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\Tests\Unit\WebHook;
 
+use Netflie\WhatsAppCloudApi\Message\Media\MediaType;
 use Netflie\WhatsAppCloudApi\WebHook\Notification;
 use Netflie\WhatsAppCloudApi\WebHook\NotificationFactory;
 use PHPUnit\Framework\TestCase;
@@ -331,6 +332,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('IMAGE_HASH', $notification->sha256());
         $this->assertEquals('image/jpeg', $notification->mimeType());
         $this->assertEquals('CAPTION_TEXT', $notification->caption());
+        $this->assertEquals(MediaType::IMAGE(), $notification->type());
     }
 
     public function test_build_from_payload_can_build_an_document_notification()
@@ -379,6 +381,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $notification->mimeType());
         $this->assertEquals('CAPTION_TEXT', $notification->caption());
         $this->assertEquals('FILENAME', $notification->filename());
+        $this->assertEquals(MediaType::DOCUMENT(), $notification->type());
     }
 
     public function test_build_from_payload_can_build_a_sticker_notification()
@@ -431,6 +434,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('STICKER_ID', $notification->imageId());
         $this->assertEquals('STICKER_HASH', $notification->sha256());
         $this->assertEquals('image/webp', $notification->mimeType());
+        $this->assertEquals(MediaType::STICKER(), $notification->type());
     }
 
     public function test_build_from_payload_can_build_an_unknown_notification()

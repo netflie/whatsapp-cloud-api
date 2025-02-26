@@ -2,6 +2,8 @@
 
 namespace Netflie\WhatsAppCloudApi\WebHook\Notification;
 
+use Netflie\WhatsAppCloudApi\Message\Media\MediaType;
+
 class MessageNotificationFactory
 {
     public function buildFromPayload(array $metadata, array $message, array $contact): MessageNotification
@@ -43,7 +45,8 @@ class MessageNotificationFactory
                     $message[$message['type']]['sha256'],
                     $message[$message['type']]['filename'] ?? '',
                     $message[$message['type']]['caption'] ?? '',
-                    $message['timestamp']
+                    $message['timestamp'],
+                    new MediaType($message['type'])
                 );
             case 'location':
                 return new Location(
