@@ -7,7 +7,7 @@ final class Error
     protected int $code;
 
     protected string $title;
-    
+
     protected string $details;
 
     public function __construct(int $code, string $title, ?string $details = null)
