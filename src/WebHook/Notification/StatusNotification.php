@@ -178,4 +178,13 @@ final class StatusNotification extends Notification
 
         return $this->error->title();
     }
+
+    public function errorDetails(): ?string
+    {
+        if (!$this->error) {
+            return null;
+        }
+
+        return $this->error->details();
+    }
 }
