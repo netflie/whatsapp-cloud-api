@@ -33,7 +33,8 @@ class StatusNotificationFactory
         if (isset($status['errors'])) {
             $notification->withError(new Support\Error(
                 $status['errors'][0]['code'],
-                $status['errors'][0]['title']
+                $status['errors'][0]['title'],
+                $status['errors'][0]['error_data']['details'] ?? null,
             ));
         }
 
