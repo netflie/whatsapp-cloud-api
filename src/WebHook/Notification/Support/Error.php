@@ -14,6 +14,7 @@ final class Error
     {
         $this->code = $code;
         $this->title = $title;
+        $this->details = $details;
     }
 
     public function code(): int
