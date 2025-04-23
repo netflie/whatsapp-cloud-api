@@ -7,8 +7,7 @@ use Netflie\WhatsAppCloudApi\WebHook\Notification;
 final class PhoneUpdateNotification extends Notification
 {
     private string $display_phone_number;
-    private string $decision;
-    private string $requested_verified_name;
+    private ?Phone\Name $name = null;
 
     public function __construct(
         string $id,
@@ -21,12 +20,37 @@ final class PhoneUpdateNotification extends Notification
         $this->display_phone_number = $display_phone_number;
     }
 
-    public function displayName(Phone\Name $name): self
+    public function name(Phone\Name $name): self
     {
-        $this->display_phone_number = $name->displayPhoneNumber();
-        $this->decision = $name->decision();
-        $this->requested_verified_name = $name->requestedVerifiedName();
+        $this->name = $name;
 
         return $this;
+    }
+
+    public function displayName(): string
+    {
+        if (!$this->name) {
+            return null;
+        }
+
+        return $this->name->displayPhoneNumber();
+    }
+
+    public function decision(): string
+    {
+        if (!$this->name) {
+            return null;
+        }
+
+        return $this->name->decision();
+    }
+
+    public function verifiedName(): string
+    {
+        if (!$this->name) {
+            return null;
+        }
+
+        return $this->name->requestedVerifiedName();
     }
 }

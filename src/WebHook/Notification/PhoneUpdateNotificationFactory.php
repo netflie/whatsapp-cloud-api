@@ -19,7 +19,7 @@ class PhoneUpdateNotificationFactory
         );
 
         if (isset($field) && $field === 'phone_number_name_update') {
-            $phoneUpdate->displayName(new Phone\Name(
+            $phoneUpdate->name(new Phone\Name(
                 $payload['display_phone_number'] ?? '',
                 $payload['decision'] ?? '',
                 $payload['requested_verified_name'] ?? '',
