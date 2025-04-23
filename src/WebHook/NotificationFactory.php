@@ -57,7 +57,7 @@ final class NotificationFactory
                     $notifications[] = $this->status_notification_factory->buildFromPayload($metadata, $status);
                 }
 
-                if ($field === 'phone_number_name_update') {
+                if (!empty($field) && $field === 'phone_number_name_update') {
                     $notifications[] = $this->phone_number_name_update_factory->buildFromPayload($value, $timestamp, $id);
                 }
             }
