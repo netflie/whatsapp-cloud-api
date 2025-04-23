@@ -8,8 +8,7 @@ class PhoneNumberNameUpdateNotificationFactory
     {
         $business = new Support\Business(
             '',
-            $payload['display_phone_number'] ?? '',
-            $id ?? ''
+            $payload['display_phone_number'] ?? ''
         );
 
         return new PhoneNumberNameUpdateNotification(
