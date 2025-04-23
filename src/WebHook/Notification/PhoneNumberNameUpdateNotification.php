@@ -9,7 +9,6 @@ final class PhoneNumberNameUpdateNotification extends Notification
     private string $display_phone_number;
     private string $decision;
     private string $requested_verified_name;
-    private string $rejection_reason;
 
     public function __construct(
         string $id,
