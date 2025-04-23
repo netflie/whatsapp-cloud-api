@@ -38,6 +38,9 @@ final class NotificationFactory
                 continue;
             }
 
+            $timestamp = $entry['time'] ?? null;
+            $id = $entry['id'] ?? null;
+
             foreach ($entry['changes'] as $change) {
                 $value = $change['value'] ?? [];
                 $field = $change['field'] ?? '';
@@ -55,7 +58,7 @@ final class NotificationFactory
                 }
 
                 if ($field === 'phone_number_name_update') {
-                    $notifications[] = $this->phone_number_name_update_factory->buildFromPayload($value);
+                    $notifications[] = $this->phone_number_name_update_factory->buildFromPayload($value, $timestamp, $id);
                 }
             }
         }

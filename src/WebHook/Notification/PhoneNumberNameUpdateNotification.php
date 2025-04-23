@@ -17,7 +17,6 @@ final class PhoneNumberNameUpdateNotification extends Notification
         string $display_phone_number,
         string $decision,
         string $requested_verified_name,
-        string $rejection_reason,
         string $received_at
     ) {
         parent::__construct($id, $business, $received_at);
@@ -25,7 +24,6 @@ final class PhoneNumberNameUpdateNotification extends Notification
         $this->display_phone_number = $display_phone_number;
         $this->decision = $decision;
         $this->requested_verified_name = $requested_verified_name;
-        $this->rejection_reason = $rejection_reason;
     }
 
     public function displayPhoneNumber(): string
@@ -41,10 +39,5 @@ final class PhoneNumberNameUpdateNotification extends Notification
     public function requestedVerifiedName(): string
     {
         return $this->requested_verified_name;
-    }
-
-    public function rejectionReason(): string
-    {
-        return $this->rejection_reason;
     }
 }
