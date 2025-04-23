@@ -7,8 +7,9 @@ class PhoneNumberNameUpdateNotificationFactory
     public function buildFromPayload(array $payload, string $timestamp, int $id): PhoneNumberNameUpdateNotification
     {
         $business = new Support\Business(
-            $id ?? '',
-            $payload['display_phone_number'] ?? ''
+            '',
+            $payload['display_phone_number'] ?? '',
+            $id ?? ''
         );
 
         return new PhoneNumberNameUpdateNotification(
