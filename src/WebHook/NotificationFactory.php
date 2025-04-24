@@ -6,11 +6,13 @@ final class NotificationFactory
 {
     private Notification\MessageNotificationFactory $message_notification_factory;
     private Notification\StatusNotificationFactory $status_notification_factory;
+    private Notification\PhoneUpdateNotificationFactory $phone_update_factory;
 
     public function __construct()
     {
         $this->message_notification_factory = new Notification\MessageNotificationFactory();
         $this->status_notification_factory = new Notification\StatusNotificationFactory();
+        $this->phone_update_factory = new Notification\PhoneUpdateNotificationFactory();
     }
 
     public function buildFromPayload(array $payload): ?Notification
@@ -36,7 +38,12 @@ final class NotificationFactory
                 continue;
             }
 
+            $timestamp = $entry['time'] ?? null;
+            $id = $entry['id'] ?? null;
+
             foreach ($entry['changes'] as $change) {
+                $value = $change['value'] ?? [];
+                $field = $change['field'] ?? '';
                 $message = $change['value']['messages'][0] ?? [];
                 $status = $change['value']['statuses'][0] ?? [];
                 $contact = $change['value']['contacts'][0] ?? [];
@@ -48,6 +55,10 @@ final class NotificationFactory
 
                 if ($status) {
                     $notifications[] = $this->status_notification_factory->buildFromPayload($metadata, $status);
+                }
+
+                if ($field) {
+                    $notifications[] = $this->phone_update_factory->buildFromPayload($value, $timestamp, $id, $field);
                 }
             }
         }
