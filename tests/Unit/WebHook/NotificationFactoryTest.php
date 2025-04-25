@@ -823,6 +823,72 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('{"screen_0_name_0":"Email","screen_0_orderNumber_1":"ID","flow_token":"unused"}', $notification->response());
     }
 
+    public function test_build_from_payload_can_build_a_template_notification()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [
+            {
+              "id": 1212121,
+              "time": 1745501204,
+              "changes": [
+                {
+                  "value": {
+                    "event": "APPROVED",
+                    "message_template_id": "WHATSAPP_TEMPLATE_ID",
+                    "message_template_name": "TEMPLATE_NAME",
+                    "message_template_language": "TEMPLATE_LANGUAGE",
+                    "reason": "NONE"
+                  },
+                  "field": "message_template_status_update"
+                }
+              ]
+            }
+          ]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\TemplateNotification::class, $notification);
+        $this->assertEquals('APPROVED', $notification->event());
+        $this->assertEquals('WHATSAPP_TEMPLATE_ID', $notification->templateId());
+        $this->assertEquals('TEMPLATE_NAME', $notification->templateName());
+        $this->assertEquals('TEMPLATE_LANGUAGE', $notification->templateLanguage());
+        $this->assertEquals('NONE', $notification->reason());
+    }
+
+    public function test_build_from_payload_can_build_a_phone_notification()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [
+            {
+              "id": 1111111,
+              "time": 1745233149,
+              "changes": [
+                {
+                  "value": {
+                    "display_phone_number": "DISPLAY_PHONE_NUMBER",
+                    "decision": "APPROVED",
+                    "requested_verified_name": "REQUESTED_VERIFIED_NAME",
+                    "rejection_reason": "NONE"
+                  },
+                  "field": "phone_number_name_update"
+                }
+              ]
+            }
+          ]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\PhoneNotification::class, $notification);
+        $this->assertEquals('DISPLAY_PHONE_NUMBER', $notification->displayPhoneNumber());
+        $this->assertEquals('DISPLAY_PHONE_NUMBER', $notification->displayName());
+        $this->assertEquals('APPROVED', $notification->decision());
+        $this->assertEquals('REQUESTED_VERIFIED_NAME', $notification->verifiedName());
+    }
+
     public function test_build_from_payload_can_build_an_order_notification()
     {
         $payload = json_decode('{
@@ -1133,7 +1199,11 @@ final class NotificationFactoryTest extends TestCase
                         "errors": [
                           {
                             "code": 131053,
-                            "title": "ERROR_TITLE"
+                            "title": "ERROR_TITLE",
+                            "message": "Business eligibility payment issue",
+                            "error_data": {
+                              "details": "Message failed to send because there were one or more errors related to your payment method."
+                            }
                           }
                         ]
                       }

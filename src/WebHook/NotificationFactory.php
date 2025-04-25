@@ -4,15 +4,17 @@ namespace Netflie\WhatsAppCloudApi\WebHook;
 
 final class NotificationFactory
 {
-    private Notification\MessageNotificationFactory $message_notification_factory;
+    private Notification\PhoneNotificationFactory $phone_notification_factory;
     private Notification\StatusNotificationFactory $status_notification_factory;
-    private Notification\PhoneUpdateNotificationFactory $phone_update_factory;
+    private Notification\MessageNotificationFactory $message_notification_factory;
+    private Notification\TemplateNotificationFactory $template_notification_factory;
 
     public function __construct()
     {
-        $this->message_notification_factory = new Notification\MessageNotificationFactory();
+        $this->phone_notification_factory = new Notification\PhoneNotificationFactory();
         $this->status_notification_factory = new Notification\StatusNotificationFactory();
-        $this->phone_update_factory = new Notification\PhoneUpdateNotificationFactory();
+        $this->message_notification_factory = new Notification\MessageNotificationFactory();
+        $this->template_notification_factory = new Notification\TemplateNotificationFactory();
     }
 
     public function buildFromPayload(array $payload): ?Notification
@@ -57,8 +59,12 @@ final class NotificationFactory
                     $notifications[] = $this->status_notification_factory->buildFromPayload($metadata, $status);
                 }
 
-                if ($field) {
-                    $notifications[] = $this->phone_update_factory->buildFromPayload($value, $timestamp, $id, $field);
+                if ($field && str_starts_with($field, 'phone_number')) {
+                    $notifications[] = $this->phone_notification_factory->buildFromPayload($value, $timestamp, $id, $field);
+                }
+
+                if ($field && str_starts_with($field, 'message_template')) {
+                    $notifications[] = $this->template_notification_factory->buildFromPayload($value, $timestamp, $id, $field);
                 }
             }
         }
