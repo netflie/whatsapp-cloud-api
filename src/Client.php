@@ -4,6 +4,8 @@ namespace Netflie\WhatsAppCloudApi;
 
 use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\GuzzleClientHandler;
+use Netflie\WhatsAppCloudApi\Request\TemplateRequest\CreateTemplateRequest;
+use Netflie\WhatsAppCloudApi\Request\TemplateRequest\UpdateTemplateRequest;
 
 class Client
 {
@@ -190,5 +192,69 @@ class Client
     private function buildRequestUri(string $node_path): string
     {
         return $this->buildBaseUri() . '/' . $node_path;
+    }
+
+    /**
+     * Create a new WhatsApp message template using the Graph API.
+     *
+     * @param CreateTemplateRequest $request The template creation request payload.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws \Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function createTemplate(CreateTemplateRequest $request): Response
+    {
+        $raw_response = $this->handler->postJsonData(
+            $this->buildRequestUri($request->nodePath()),
+            $request->body(),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = new Response(
+            $request,
+            $raw_response->body(),
+            $raw_response->httpResponseCode(),
+            $raw_response->headers()
+        );
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
+    /**
+     * Update an existing WhatsApp message template using the Graph API.
+     *
+     * @param UpdateTemplateRequest $request The template update request payload.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws \Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function updateTemplate(UpdateTemplateRequest $request): Response
+    {
+        $raw_response = $this->handler->postJsonData(
+            $this->buildRequestUri($request->nodePath()),
+            $request->body(),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = new Response(
+            $request,
+            $raw_response->body(),
+            $raw_response->httpResponseCode(),
+            $raw_response->headers()
+        );
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
     }
 }

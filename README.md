@@ -503,6 +503,112 @@ $whatsapp_cloud_api->updateBusinessProfile([
 ]);
 ```
 
+### Create a Template
+```php
+<?php
+
+$whatsapp = new WhatsAppCloudApi([
+    'from_phone_number_id' => 'your-configured-from-phone-number-id',
+    'access_token'         => 'your-facebook-whatsapp-application-token',
+    'business_id'          => 'your-business-id',
+]);
+
+$whatsapp->createTemplate(
+    'seasonal_promotion',
+    'MARKETING', // UTILITY | MARKETING | AUTHENTICATION
+    'en_US',
+    [
+        [
+            'type' => 'HEADER',
+            'format' => 'TEXT',
+            'text' => 'Our {{1}} is on!',
+            'example' => [
+                'header_text' => ['Summer Sale']
+            ]
+        ],
+        [
+            'type' => 'BODY',
+            'text' => 'Shop now through {{1}} and use code {{2}} to get {{3}} off of all merchandise.',
+            'example' => [
+                'body_text' => [[ 'the end of August', '25OFF', '25%' ]]
+            ]
+        ],
+        [
+            'type' => 'FOOTER',
+            'text' => 'Use the buttons below to manage your marketing subscriptions'
+        ],
+        [
+            'type' => 'BUTTONS',
+            'buttons' => [
+                [
+                    'type' => 'QUICK_REPLY',
+                    'text' => 'Unsubscribe from Promos'
+                ],
+                [
+                    'type' => 'QUICK_REPLY',
+                    'text' => 'Unsubscribe from All'
+                ]
+            ]
+        ]
+    ]
+);
+```
+
+### Update a Template
+```php
+<?php
+
+$whatsapp = new WhatsAppCloudApi([
+    'from_phone_number_id' => 'your-configured-from-phone-number-id',
+    'access_token'         => 'your-facebook-whatsapp-application-token',
+    'business_id'          => 'your-business-id',
+]);
+
+$template_id = 'your-template-id';
+
+// New payload to update the template
+$payload = [
+    'category' => 'MARKETING',
+    'language' => 'en_US',
+    'components' => [
+        [
+            'type'    => 'HEADER',
+            'format'  => 'TEXT',
+            'text'    => 'Hello {{1}} is live now!',
+            'example' => [
+                'header_text' => ['Flash Sale']
+            ]
+        ],
+        [
+            'type'    => 'BODY',
+            'text'    => 'Buy now before {{1}} ends. Use code {{2}} to get {{3}} off!',
+            'example' => [
+                'body_text' => [['midnight', 'FLASH20', '20%']]
+            ]
+        ],
+        [
+            'type' => 'FOOTER',
+            'text' => 'Tap below to shop.'
+        ],
+        [
+            'type'    => 'BUTTONS',
+            'buttons' => [
+                [
+                    'type' => 'QUICK_REPLY',
+                    'text' => 'Show Me Deals'
+                ],
+                [
+                    'type' => 'QUICK_REPLY',
+                    'text' => 'Stop Promotions'
+                ]
+            ]
+        ]
+    ]
+];
+
+$whatsapp->updateTemplateById($template_id, $payload);
+```
+
 Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/business-profiles
 
 ## Features
@@ -528,6 +634,8 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Get/Update Business Profile
 - Webhook verification
 - Webhook notifications
+- Create Template
+- Update Template
 
 ## Getting Help
 - Ask a question on the [Discussions forum](https://github.com/netflie/whatsapp-cloud-api/discussions "Discussions forum")
