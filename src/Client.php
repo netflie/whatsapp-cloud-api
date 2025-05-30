@@ -239,5 +239,4 @@ class Client
     {
         return $this->sendJsonRequest($request);
     }
-
 }
