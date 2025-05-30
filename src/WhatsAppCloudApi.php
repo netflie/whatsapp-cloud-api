@@ -638,20 +638,7 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        try {
-            return $this->client->createTemplate($request);
-        } catch (\Netflie\WhatsAppCloudApi\Response\ResponseException $e) {
-            $decoded = json_decode($e->getMessage(), true);
-
-            if (
-                isset($decoded['error']['error_subcode']) &&
-                $decoded['error']['error_subcode'] === 2388024
-            ) {
-                throw new \RuntimeException('Template already exists or has conflicting parameters.');
-            }
-
-            throw $e;
-        }
+        return $this->client->createTemplate($request);
     }
 
     /**
@@ -674,19 +661,6 @@ class WhatsAppCloudApi
             $this->timeout
         );
 
-        try {
-            return $this->client->updateTemplate($request);
-        } catch (\Netflie\WhatsAppCloudApi\Response\ResponseException $e) {
-            $decoded = json_decode($e->getMessage(), true);
-
-            if (
-                isset($decoded['error']['error_subcode']) &&
-                (int)$decoded['error']['error_subcode'] === 2388024
-            ) {
-                throw new \RuntimeException('Template update failed due to conflict or invalid data.');
-            }
-
-            throw $e;
-        }
+        return $this->client->updateTemplate($request);
     }
 }

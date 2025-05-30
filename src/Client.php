@@ -38,13 +38,15 @@ class Client
     }
 
     /**
-     * Send a message request to.
+     * Sends a JSON-encoded POST request and processes the response.
      *
-     * @return Response Raw response from the server.
+     * @param Request\RequestWithBody $request The request to send.
      *
-     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     * @return Response The API response.
+     *
+     * @throws Response\ResponseException If the API returns an error.
      */
-    public function sendMessage(Request\RequestWithBody $request): Response
+    private function sendJsonRequest(Request\RequestWithBody $request): Response
     {
         $raw_response = $this->handler->postJsonData(
             $this->buildRequestUri($request->nodePath()),
@@ -53,6 +55,21 @@ class Client
             $request->timeout()
         );
 
+        return $this->processResponse($request, $raw_response);
+    }
+
+    /**
+     * Processes a raw HTTP response and returns a Response object.
+     *
+     * @param Request\Request $request      The original request.
+     * @param mixed           $raw_response The raw HTTP response data.
+     *
+     * @return Response The processed response.
+     *
+     * @throws Response\ResponseException If the response indicates an error.
+     */
+    private function processResponse(Request\Request $request, $raw_response): Response
+    {
         $return_response = new Response(
             $request,
             $raw_response->body(),
@@ -65,6 +82,18 @@ class Client
         }
 
         return $return_response;
+    }
+
+    /**
+     * Send a message request to.
+     *
+     * @return Response Raw response from the server.
+     *
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    public function sendMessage(Request\RequestWithBody $request): Response
+    {
+        return $this->sendJsonRequest($request);
     }
 
     /**
@@ -83,18 +112,7 @@ class Client
             $request->timeout()
         );
 
-        $return_response = new Response(
-            $request,
-            $raw_response->body(),
-            $raw_response->httpResponseCode(),
-            $raw_response->headers()
-        );
-
-        if ($return_response->isError()) {
-            $return_response->throwException();
-        }
-
-        return $return_response;
+        return $this->processResponse($request, $raw_response);
     }
 
     /**
@@ -205,25 +223,7 @@ class Client
      */
     public function createTemplate(CreateTemplateRequest $request): Response
     {
-        $raw_response = $this->handler->postJsonData(
-            $this->buildRequestUri($request->nodePath()),
-            $request->body(),
-            $request->headers(),
-            $request->timeout()
-        );
-
-        $return_response = new Response(
-            $request,
-            $raw_response->body(),
-            $raw_response->httpResponseCode(),
-            $raw_response->headers()
-        );
-
-        if ($return_response->isError()) {
-            $return_response->throwException();
-        }
-
-        return $return_response;
+        return $this->sendJsonRequest($request);
     }
 
     /**
@@ -237,24 +237,7 @@ class Client
      */
     public function updateTemplate(UpdateTemplateRequest $request): Response
     {
-        $raw_response = $this->handler->postJsonData(
-            $this->buildRequestUri($request->nodePath()),
-            $request->body(),
-            $request->headers(),
-            $request->timeout()
-        );
-
-        $return_response = new Response(
-            $request,
-            $raw_response->body(),
-            $raw_response->httpResponseCode(),
-            $raw_response->headers()
-        );
-
-        if ($return_response->isError()) {
-            $return_response->throwException();
-        }
-
-        return $return_response;
+        return $this->sendJsonRequest($request);
     }
+
 }
