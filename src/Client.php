@@ -38,15 +38,13 @@ class Client
     }
 
     /**
-     * Sends a JSON-encoded POST request and processes the response.
+     * Send a message request to.
      *
-     * @param Request\RequestWithBody $request The request to send.
+     * @return Response Raw response from the server.
      *
-     * @return Response The API response.
-     *
-     * @throws Response\ResponseException If the API returns an error.
+     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
      */
-    private function sendJsonRequest(Request\RequestWithBody $request): Response
+    public function sendMessage(Request\RequestWithBody $request): Response
     {
         $raw_response = $this->handler->postJsonData(
             $this->buildRequestUri($request->nodePath()),
@@ -55,21 +53,6 @@ class Client
             $request->timeout()
         );
 
-        return $this->processResponse($request, $raw_response);
-    }
-
-    /**
-     * Processes a raw HTTP response and returns a Response object.
-     *
-     * @param Request\Request $request      The original request.
-     * @param mixed           $raw_response The raw HTTP response data.
-     *
-     * @return Response The processed response.
-     *
-     * @throws Response\ResponseException If the response indicates an error.
-     */
-    private function processResponse(Request\Request $request, $raw_response): Response
-    {
         $return_response = new Response(
             $request,
             $raw_response->body(),
@@ -82,18 +65,6 @@ class Client
         }
 
         return $return_response;
-    }
-
-    /**
-     * Send a message request to.
-     *
-     * @return Response Raw response from the server.
-     *
-     * @throws Netflie\WhatsAppCloudApi\Response\ResponseException
-     */
-    public function sendMessage(Request\RequestWithBody $request): Response
-    {
-        return $this->sendJsonRequest($request);
     }
 
     /**
@@ -112,7 +83,18 @@ class Client
             $request->timeout()
         );
 
-        return $this->processResponse($request, $raw_response);
+        $return_response = new Response(
+            $request,
+            $raw_response->body(),
+            $raw_response->httpResponseCode(),
+            $raw_response->headers()
+        );
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
     }
 
     /**
@@ -213,30 +195,44 @@ class Client
     }
 
     /**
-     * Create a new WhatsApp message template using the Graph API.
+     * Handles sending a template request (create/update) and processing the response.
      *
-     * @param CreateTemplateRequest $request The template creation request payload.
+     * @param object $request The request object with required methods.
      *
-     * @return Response Raw response from the server.
+     * @return Response
      *
      * @throws \Netflie\WhatsAppCloudApi\Response\ResponseException
      */
-    public function createTemplate(CreateTemplateRequest $request): Response
+    private function sendTemplateRequest($request): Response
     {
-        return $this->sendJsonRequest($request);
+        $raw_response = $this->handler->postJsonData(
+            $this->buildRequestUri($request->nodePath()),
+            $request->body(),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = new Response(
+            $request,
+            $raw_response->body(),
+            $raw_response->httpResponseCode(),
+            $raw_response->headers()
+        );
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
     }
 
-    /**
-     * Update an existing WhatsApp message template using the Graph API.
-     *
-     * @param UpdateTemplateRequest $request The template update request payload.
-     *
-     * @return Response Raw response from the server.
-     *
-     * @throws \Netflie\WhatsAppCloudApi\Response\ResponseException
-     */
+    public function createTemplate(CreateTemplateRequest $request): Response
+    {
+        return $this->sendTemplateRequest($request);
+    }
+
     public function updateTemplate(UpdateTemplateRequest $request): Response
     {
-        return $this->sendJsonRequest($request);
+        return $this->sendTemplateRequest($request);
     }
 }
