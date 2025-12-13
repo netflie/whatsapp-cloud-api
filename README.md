@@ -237,8 +237,23 @@ $whatsapp_cloud_api->sendList(
 <?php
 
 use Netflie\WhatsAppCloudApi\Message\CtaUrl\TitleHeader;
+use Netflie\WhatsAppCloudApi\Message\CtaUrl\ImageHeader;
+use Netflie\WhatsAppCloudApi\Message\CtaUrl\VideoHeader;
+use Netflie\WhatsAppCloudApi\Message\CtaUrl\DocumentHeader;
+use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 
+// 1. Title Header
 $header = new TitleHeader('Booking');
+
+// 2. Image Header
+$header = new ImageHeader('https://www.example.com/image.png');
+
+// 3. Video Header
+$header = new VideoHeader('https://www.example.com/video.mp4');
+
+// 4. Document Header
+$document_id = new MediaObjectID('<document-object-id>');
+$header = new DocumentHeader($document_id, 'file-name.pdf');
 
 $whatsapp_cloud_api->sendCtaUrl(
     '<destination-phone-number>',
@@ -275,6 +290,11 @@ $whatsapp_cloud_api->sendCatalog(
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\Button;
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\TextHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\ImageHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\VideoHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\DocumentHeader;
+use Netflie\WhatsAppCloudApi\Message\Media\MediaObjectID;
 
 $whatsapp_cloud_api = new WhatsAppCloudApi([
   'from_phone_number_id' => 'your-configured-from-phone-number-id',
@@ -288,11 +308,27 @@ $rows = [
 ];
 $action = new ButtonAction($rows);
 
+// Optional: Header
+// 1. Text Header
+$header = new TextHeader('RATE US');
+
+// 2. Image Header
+$image_id = new MediaObjectID('<image-object-id>');
+$header = new ImageHeader($image_id);
+
+// 3. Video Header
+$video_id = new MediaObjectID('<video-object-id>');
+$header = new VideoHeader($video_id);
+
+// 4. Document Header
+$document_id = new MediaObjectID('<document-object-id>');
+$header = new DocumentHeader($document_id, 'file-name.pdf');
+
 $whatsapp_cloud_api->sendButton(
     '<destination-phone-number>',
     'Would you like to rate us on Trustpilot?',
     $action,
-    'RATE US', // Optional: Specify a header (type "text")
+    $header, // Optional: Specify the header object (TextHeader, ImageHeader, VideoHeader, DocumentHeader)
     'Please choose an option' // Optional: Specify a footer 
 );
 ```

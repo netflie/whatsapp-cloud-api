@@ -19,11 +19,14 @@ final class Component
      */
     private array $buttons;
 
-    public function __construct(array $header = [], array $body = [], array $buttons = [])
+    private array $carousel;
+
+    public function __construct(array $header = [], array $body = [], array $buttons = [], array $carousel = [])
     {
         $this->header = $header;
         $this->body = $body;
         $this->buttons = $buttons;
+        $this->carousel = $carousel;
     }
 
     public function header(): array
@@ -39,5 +42,9 @@ final class Component
     public function buttons(): array
     {
         return $this->buttons;
+    }
+    public function carousel(): array
+    {
+        return $this->carousel;
     }
 }

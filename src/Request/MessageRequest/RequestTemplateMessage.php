@@ -44,6 +44,10 @@ final class RequestTemplateMessage extends MessageRequest
         if ($this->message->replyTo()) {
             $body['context']['message_id'] = $this->message->replyTo();
         }
+         if ($this->message->carousel()) {
+            $carousel = $this->message->carousel();
+            $body['template']['components'][] = $carousel;
+        }
 
         return $body;
     }

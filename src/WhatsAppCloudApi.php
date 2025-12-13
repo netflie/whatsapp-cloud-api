@@ -3,9 +3,12 @@
 namespace Netflie\WhatsAppCloudApi;
 
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\Header as ButtonHeader;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\TextHeader;
 use Netflie\WhatsAppCloudApi\Message\Contact\ContactName;
 use Netflie\WhatsAppCloudApi\Message\Contact\Phone;
 use Netflie\WhatsAppCloudApi\Message\CtaUrl\Header;
+use Netflie\WhatsAppCloudApi\Message\Error\InvalidMessage;
 use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action as MultiProductAction;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
@@ -122,14 +125,15 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null): Response
+    public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null, $use_mm_lite = false): Response
     {
         $message = new Message\TemplateMessage($to, $template_name, $language, $components, $this->reply_to);
         $request = new Request\MessageRequest\RequestTemplateMessage(
             $message,
             $this->app->accessToken(),
             $this->app->fromPhoneNumberId(),
-            $this->timeout
+            $this->timeout,
+            $use_mm_lite
         );
 
         return $this->client->sendMessage($request);
@@ -235,7 +239,7 @@ class WhatsAppCloudApi
      * @param  float    $longitude  Longitude position.
      * @param  float    $latitude   Latitude position.
      * @param  string   $name       Name of location sent.
-     * @param  address  $address    Address of location sent.
+     * @param  string   $address    Address of location sent.
      *
      * @return Response
      *
@@ -354,8 +358,15 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
-    public function sendButton(string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null): Response
+    public function sendButton(string $to, string $body, ButtonAction $action, $header = null, ?string $footer = null): Response
     {
+        if (is_string($header)) {
+            $header = new TextHeader($header);
+        }
+
+        if (!$header instanceof ButtonHeader && $header !== null) {
+            throw new InvalidMessage('Header must be instance of Netflie\WhatsAppCloudApi\Message\ButtonReply\Header if not left null');
+        }
         $message = new Message\ButtonReplyMessage(
             $to,
             $body,
