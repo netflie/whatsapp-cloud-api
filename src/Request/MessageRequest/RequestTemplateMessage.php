@@ -7,8 +7,8 @@ use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 final class RequestTemplateMessage extends MessageRequest
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function body(): array
     {
         $body = [
@@ -44,7 +44,7 @@ final class RequestTemplateMessage extends MessageRequest
         if ($this->message->replyTo()) {
             $body['context']['message_id'] = $this->message->replyTo();
         }
-         if ($this->message->carousel()) {
+        if ($this->message->carousel()) {
             $carousel = $this->message->carousel();
             $body['template']['components'][] = $carousel;
         }
