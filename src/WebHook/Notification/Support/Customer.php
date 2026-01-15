@@ -6,11 +6,11 @@ final class Customer
 {
     private string $id;
 
-    private string $name;
+    private ?string $name;
 
     private string $phone_number;
 
-    public function __construct(string $id, string $name, string $phone_number)
+    public function __construct(string $id, ?string $name, string $phone_number)
     {
         $this->id = $id;
         $this->name = $name;
@@ -22,7 +22,7 @@ final class Customer
         return $this->id;
     }
 
-    public function name(): string
+    public function name(): ?string
     {
         return $this->name;
     }

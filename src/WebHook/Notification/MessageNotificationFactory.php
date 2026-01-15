@@ -130,7 +130,7 @@ class MessageNotificationFactory
         if ($contact) {
             $notification->withCustomer(new Support\Customer(
                 $contact['wa_id'],
-                $contact['profile']['name'],
+                $contact['profile']['name'] ?? null,
                 $message['from']
             ));
         }
