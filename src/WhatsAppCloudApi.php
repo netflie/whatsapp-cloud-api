@@ -10,6 +10,7 @@ use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action as MultiProductAction;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
+use Netflie\WhatsAppCloudApi\Enums\TemplateCategoryEnum;
 
 class WhatsAppCloudApi
 {
@@ -578,6 +579,33 @@ class WhatsAppCloudApi
         );
 
         return $this->client->updateBusinessProfile($request);
+    }
+
+    /**
+     * Get Message Templates
+     *
+     * @param  string    $fields WhatsApp profile fields.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function messageTemplates(
+        string $fields,
+        null|string|TemplateCategoryEnum $status = null,
+        int $limit = 50
+    ): Response
+    {
+        $request = new Request\TemplateRequest\MessageTemplatesRequest(
+            fields: $fields,
+            limit: $limit,
+            status: $status,
+            access_token: $this->app->accessToken(),
+            business_id: $this->app->businessId(),
+            timeout: $this->timeout
+        );
+
+        return $this->client->messageTemplates($request);
     }
 
     /**
