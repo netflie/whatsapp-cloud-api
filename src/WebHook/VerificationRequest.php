@@ -9,6 +9,7 @@ final class VerificationRequest
      * @link https://developers.facebook.com/docs/graph-api/webhooks/getting-started?locale=en_US#configure-webhooks-product
      */
     protected string $verify_token;
+    private int $response_code = 200;
 
     public function __construct(string $verify_token)
     {
@@ -22,13 +23,27 @@ final class VerificationRequest
         $challenge = $payload['hub_challenge'] ?? '';
 
         if ('subscribe' !== $mode || $token !== $this->verify_token) {
-            http_response_code(403);
+            $this->setResponseCode(403);
 
             return $challenge;
         }
 
-        http_response_code(200);
+        $this->setResponseCode(200);
 
         return $challenge;
+    }
+
+    public function responseCode(): int
+    {
+        return $this->response_code;
+    }
+
+    private function setResponseCode(int $response_code): void
+    {
+        $this->response_code = $response_code;
+
+        if (!headers_sent()) {
+            http_response_code($response_code);
+        }
     }
 }

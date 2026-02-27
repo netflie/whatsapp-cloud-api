@@ -21,7 +21,7 @@ final class VerificationRequestTest extends TestCase
         ]);
 
         $this->assertEquals('challenge_code', $response);
-        $this->assertEquals(200, http_response_code());
+        $this->assertEquals(200, $verification_request->responseCode());
     }
 
     public function test_verification_request_fails()
@@ -35,6 +35,6 @@ final class VerificationRequestTest extends TestCase
         ]);
 
         $this->assertEquals('challenge_code', $response);
-        $this->assertEquals(403, http_response_code());
+        $this->assertEquals(403, $verification_request->responseCode());
     }
 }

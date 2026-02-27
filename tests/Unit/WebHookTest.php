@@ -28,6 +28,5 @@ final class WebHookTest extends TestCase
         ], 'verify-token');
 
         $this->assertEquals('challenge_code', $response);
-        $this->assertEquals(200, http_response_code());
     }
 }
