@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\WebHook\Notification;
 
 use Netflie\WhatsAppCloudApi\Message\Media\MediaType;
 
-class MessageNotificationFactory
+final class MessageNotificationFactory
 {
     public function buildFromPayload(array $metadata, array $message, array $contact): MessageNotification
     {
