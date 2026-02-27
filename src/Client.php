@@ -4,6 +4,8 @@ namespace Netflie\WhatsAppCloudApi;
 
 use Netflie\WhatsAppCloudApi\Http\ClientHandler;
 use Netflie\WhatsAppCloudApi\Http\GuzzleClientHandler;
+use Netflie\WhatsAppCloudApi\Request\TemplateRequest\CreateTemplateRequest;
+use Netflie\WhatsAppCloudApi\Request\TemplateRequest\UpdateTemplateRequest;
 
 class Client
 {
@@ -190,5 +192,47 @@ class Client
     private function buildRequestUri(string $node_path): string
     {
         return $this->buildBaseUri() . '/' . $node_path;
+    }
+
+    /**
+     * Handles sending a template request (create/update) and processing the response.
+     *
+     * @param object $request The request object with required methods.
+     *
+     * @return Response
+     *
+     * @throws \Netflie\WhatsAppCloudApi\Response\ResponseException
+     */
+    private function sendTemplateRequest($request): Response
+    {
+        $raw_response = $this->handler->postJsonData(
+            $this->buildRequestUri($request->nodePath()),
+            $request->body(),
+            $request->headers(),
+            $request->timeout()
+        );
+
+        $return_response = new Response(
+            $request,
+            $raw_response->body(),
+            $raw_response->httpResponseCode(),
+            $raw_response->headers()
+        );
+
+        if ($return_response->isError()) {
+            $return_response->throwException();
+        }
+
+        return $return_response;
+    }
+
+    public function createTemplate(CreateTemplateRequest $request): Response
+    {
+        return $this->sendTemplateRequest($request);
+    }
+
+    public function updateTemplate(UpdateTemplateRequest $request): Response
+    {
+        return $this->sendTemplateRequest($request);
     }
 }

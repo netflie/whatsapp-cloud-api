@@ -20,4 +20,6 @@ class WhatsAppCloudApiTestConfiguration {
   public static $catalog_id = '';
   public static $product_sku_id = '';
 
+  public static $template_id = '';
+
 }
