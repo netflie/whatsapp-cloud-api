@@ -44,6 +44,7 @@ final class NotificationFactoryTest extends TestCase
                             "from": "PHONE_NUMBER",
                             "id": "wamid.ID",
                             "forwarded": true,
+                            "frequently_forwarded": true,
                             "referred_product": {
                               "catalog_id": "CATALOG_ID",
                               "product_retailer_id": "PRODUCT_ID"
@@ -81,6 +82,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('PHONE_NUMBER_ID', $notification->businessPhoneNumberId());
         $this->assertEquals('PHONE_NUMBER', $notification->businessPhoneNumber());
         $this->assertTrue($notification->isForwarded());
+        $this->assertTrue($notification->isFrequentlyForwarded());
         $this->assertEquals('WHATSAPP_ID', $notification->customer()->id());
         $this->assertEquals('NAME', $notification->customer()->name());
         $this->assertEquals('ADID', $notification->referral()->sourceId());
