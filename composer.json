@@ -38,7 +38,7 @@
         }
     },
     "scripts": {
-        "unit-test": "vendor/bin/phpunit --group unit",
-        "integration-test": "vendor/bin/phpunit --group integration"
+        "unit-test": "vendor/bin/phpunit --testsuite unit",
+        "integration-test": "vendor/bin/phpunit --testsuite integration"
     }
 }
