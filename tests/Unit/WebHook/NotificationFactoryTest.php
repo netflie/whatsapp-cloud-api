@@ -1452,4 +1452,41 @@ final class NotificationFactoryTest extends TestCase
         $this->assertTrue($notification->isMessageDelivered());
         $this->assertTrue($notification->isMessageSent());
     }
+
+    public function test_build_from_payload_without_contact_profile_can_build_a_notification()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [{
+              "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+              "changes": [{
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                          "display_phone_number": "PHONE_NUMBER",
+                          "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [{
+                          "wa_id": "PHONE_NUMBER"
+                        }],
+                      "messages": [{
+                          "from": "PHONE_NUMBER",
+                          "id": "wamid.ID",
+                          "timestamp": "1669233778",
+                          "text": {
+                            "body": "MESSAGE_BODY"
+                          },
+                          "type": "text"
+                        }]
+                  },
+                  "field": "messages"
+                }]
+          }]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\Text::class, $notification);
+        $this->assertEquals('MESSAGE_BODY', $notification->message());
+    }
 }
