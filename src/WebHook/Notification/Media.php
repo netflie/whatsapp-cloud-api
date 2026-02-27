@@ -26,8 +26,8 @@ final class Media extends MessageNotification
         string $sha256,
         string $filename,
         string $caption,
-        string $received_at_timestamp,
-        MediaType $type
+        MediaType $type,
+        string $received_at_timestamp
     ) {
         parent::__construct($id, $business, $received_at_timestamp);
 

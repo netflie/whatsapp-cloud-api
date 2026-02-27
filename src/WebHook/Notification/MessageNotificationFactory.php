@@ -45,8 +45,8 @@ final class MessageNotificationFactory
                     $message[$message['type']]['sha256'],
                     $message[$message['type']]['filename'] ?? '',
                     $message[$message['type']]['caption'] ?? '',
-                    $message['timestamp'],
-                    new MediaType($message['type'])
+                    new MediaType($message['type']),
+                    $message['timestamp']
                 );
             case 'location':
                 return new Location(
