@@ -159,8 +159,7 @@ class MessageNotificationFactory
                 $message['referral']['body'] ?? '',
                 $message['referral']['media_type'] ?? '',
                 $message['referral']['image_url'] ?? $message['referral']['video_url'] ?? '',
-                $message['referral']['thumbnail_url'] ?? '',
-                $message['referral']['ctwa_clid'] ?? ''
+                $message['referral']['thumbnail_url'] ?? ''
             ));
         }
 
