@@ -13,10 +13,10 @@ final class Context
     private ?ReferredProduct $referred_product;
 
     public function __construct(
-        string $replying_to_message_id = null,
+        ?string $replying_to_message_id = null,
         bool $forwarded = false,
         bool $frequently_forwarded = false,
-        ReferredProduct $referred_product = null
+        ?ReferredProduct $referred_product = null
     ) {
         $this->replying_to_message_id = $replying_to_message_id;
         $this->forwarded = $forwarded;
