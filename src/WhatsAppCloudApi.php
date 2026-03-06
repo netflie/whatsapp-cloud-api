@@ -10,6 +10,7 @@ use Netflie\WhatsAppCloudApi\Message\Media\MediaID;
 use Netflie\WhatsAppCloudApi\Message\MultiProduct\Action as MultiProductAction;
 use Netflie\WhatsAppCloudApi\Message\OptionsList\Action;
 use Netflie\WhatsAppCloudApi\Message\Template\Component;
+use Netflie\WhatsAppCloudApi\Request\TemplateRequest\CreateTemplateRequest;
 
 class WhatsAppCloudApi
 {
@@ -608,5 +609,58 @@ class WhatsAppCloudApi
         $this->reply_to = $message_id;
 
         return $this;
+    }
+
+    /**
+     * Creates a new WhatsApp message template.
+     *
+     * @param string $name       The name of the template.
+     * @param string $category   The category of the template (e.g., MARKETING, TRANSACTIONAL).
+     * @param string $language   The language code (e.g., en_US).
+     * @param array  $components Array of template components (header, body, footer, buttons).
+     *
+     * @return Response The API response.
+     *
+     * @throws \RuntimeException If the template already exists or has conflicting parameters.
+     * @throws \Netflie\WhatsAppCloudApi\Response\ResponseException For other API errors.
+     */
+    public function createTemplate(string $name, string $category, string $language, array $components): Response
+    {
+        $request = new CreateTemplateRequest(
+            $this->app->accessToken(),
+            $this->app->businessId(),
+            [
+                'name' => $name,
+                'category' => $category,
+                'language' => $language,
+                'components' => $components,
+            ],
+            $this->timeout
+        );
+
+        return $this->client->createTemplate($request);
+    }
+
+    /**
+     * Updates an existing WhatsApp message template by ID.
+     *
+     * @param string $template_id The ID of the template to update.
+     * @param array  $payload     The update payload (components, name, etc.).
+     *
+     * @return Response The API response.
+     *
+     * @throws \RuntimeException If the template update fails due to conflict or invalid data.
+     * @throws \Netflie\WhatsAppCloudApi\Response\ResponseException For other API errors.
+     */
+    public function updateTemplateById(string $template_id, array $payload): Response
+    {
+        $request = new Request\TemplateRequest\UpdateTemplateRequest(
+            $this->app->accessToken(),
+            $template_id,
+            $payload,
+            $this->timeout
+        );
+
+        return $this->client->updateTemplate($request);
     }
 }

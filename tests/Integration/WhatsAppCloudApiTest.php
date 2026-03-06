@@ -475,4 +475,40 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(200, $response->httpStatusCode());
         $this->assertEquals(false, $response->isError());
     }
+
+    public function test_create_template()
+    {
+        $name = 'test_template_' . uniqid();
+        $category = 'MARKETING';
+        $language = 'en_US';
+        $components = [
+            [
+                'type' => 'BODY',
+                'text' => 'Test body',
+            ],
+        ];
+
+        $response = $this->whatsapp_app_cloud_api->createTemplate($name, $category, $language, $components);
+
+        $this->assertInstanceOf(\Netflie\WhatsAppCloudApi\Response::class, $response);
+        $this->assertFalse($response->isError(), $response->body());
+    }
+
+    public function test_update_template_by_id()
+    {
+        $templateId = WhatsAppCloudApiTestConfiguration::$template_id;
+        $payload = [
+            'components' => [
+                [
+                    'type' => 'BODY',
+                    'text' => 'Updated body',
+                ],
+            ],
+        ];
+
+        $response = $this->whatsapp_app_cloud_api->updateTemplateById($templateId, $payload);
+
+        $this->assertInstanceOf(\Netflie\WhatsAppCloudApi\Response::class, $response);
+        $this->assertFalse($response->isError(), $response->body());
+    }
 }

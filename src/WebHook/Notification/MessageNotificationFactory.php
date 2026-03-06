@@ -2,7 +2,9 @@
 
 namespace Netflie\WhatsAppCloudApi\WebHook\Notification;
 
-class MessageNotificationFactory
+use Netflie\WhatsAppCloudApi\Message\Media\MediaType;
+
+final class MessageNotificationFactory
 {
     public function buildFromPayload(array $metadata, array $message, array $contact): MessageNotification
     {
@@ -43,6 +45,7 @@ class MessageNotificationFactory
                     $message[$message['type']]['sha256'],
                     $message[$message['type']]['filename'] ?? '',
                     $message[$message['type']]['caption'] ?? '',
+                    new MediaType($message['type']),
                     $message['timestamp']
                 );
             case 'location':
@@ -130,7 +133,7 @@ class MessageNotificationFactory
         if ($contact) {
             $notification->withCustomer(new Support\Customer(
                 $contact['wa_id'],
-                $contact['profile']['name'],
+                $contact['profile']['name'] ?? '',
                 $message['from']
             ));
         }
@@ -146,6 +149,7 @@ class MessageNotificationFactory
             $notification->withContext(new Support\Context(
                 $message['context']['id'] ?? null,
                 $message['context']['forwarded'] ?? false,
+                $message['context']['frequently_forwarded'] ?? false,
                 $referred_product ?? null
             ));
         }

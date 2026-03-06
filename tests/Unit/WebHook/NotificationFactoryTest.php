@@ -2,6 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\Tests\Unit\WebHook;
 
+use Netflie\WhatsAppCloudApi\Message\Media\MediaType;
 use Netflie\WhatsAppCloudApi\WebHook\Notification;
 use Netflie\WhatsAppCloudApi\WebHook\NotificationFactory;
 use PHPUnit\Framework\TestCase;
@@ -44,6 +45,7 @@ final class NotificationFactoryTest extends TestCase
                             "from": "PHONE_NUMBER",
                             "id": "wamid.ID",
                             "forwarded": true,
+                            "frequently_forwarded": true,
                             "referred_product": {
                               "catalog_id": "CATALOG_ID",
                               "product_retailer_id": "PRODUCT_ID"
@@ -81,6 +83,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('PHONE_NUMBER_ID', $notification->businessPhoneNumberId());
         $this->assertEquals('PHONE_NUMBER', $notification->businessPhoneNumber());
         $this->assertTrue($notification->isForwarded());
+        $this->assertTrue($notification->isFrequentlyForwarded());
         $this->assertEquals('WHATSAPP_ID', $notification->customer()->id());
         $this->assertEquals('NAME', $notification->customer()->name());
         $this->assertEquals('ADID', $notification->referral()->sourceId());
@@ -331,6 +334,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('IMAGE_HASH', $notification->sha256());
         $this->assertEquals('image/jpeg', $notification->mimeType());
         $this->assertEquals('CAPTION_TEXT', $notification->caption());
+        $this->assertEquals(MediaType::IMAGE(), $notification->type());
     }
 
     public function test_build_from_payload_can_build_an_document_notification()
@@ -379,6 +383,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', $notification->mimeType());
         $this->assertEquals('CAPTION_TEXT', $notification->caption());
         $this->assertEquals('FILENAME', $notification->filename());
+        $this->assertEquals(MediaType::DOCUMENT(), $notification->type());
     }
 
     public function test_build_from_payload_can_build_a_sticker_notification()
@@ -431,6 +436,7 @@ final class NotificationFactoryTest extends TestCase
         $this->assertEquals('STICKER_ID', $notification->imageId());
         $this->assertEquals('STICKER_HASH', $notification->sha256());
         $this->assertEquals('image/webp', $notification->mimeType());
+        $this->assertEquals(MediaType::STICKER(), $notification->type());
     }
 
     public function test_build_from_payload_can_build_an_unknown_notification()
@@ -1445,5 +1451,42 @@ final class NotificationFactoryTest extends TestCase
         $this->assertFalse($notification->isMessageRead());
         $this->assertTrue($notification->isMessageDelivered());
         $this->assertTrue($notification->isMessageSent());
+    }
+
+    public function test_build_from_payload_without_contact_profile_can_build_a_notification()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [{
+              "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+              "changes": [{
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                          "display_phone_number": "PHONE_NUMBER",
+                          "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [{
+                          "wa_id": "PHONE_NUMBER"
+                        }],
+                      "messages": [{
+                          "from": "PHONE_NUMBER",
+                          "id": "wamid.ID",
+                          "timestamp": "1669233778",
+                          "text": {
+                            "body": "MESSAGE_BODY"
+                          },
+                          "type": "text"
+                        }]
+                  },
+                  "field": "messages"
+                }]
+          }]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\Text::class, $notification);
+        $this->assertEquals('MESSAGE_BODY', $notification->message());
     }
 }
