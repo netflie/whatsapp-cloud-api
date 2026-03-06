@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.0.0 - 2026-03-06
+
+### What's Changed
+
+* Single product message by @aalbarca in https://github.com/netflie/whatsapp-cloud-api/pull/209
+* Support for ctwa_clid by @jpsilvaa in https://github.com/netflie/whatsapp-cloud-api/pull/202
+* Update phpstan/phpstan requirement from ^1.9 to ^1.9 || ^2.0 by @dependabot[bot] in https://github.com/netflie/whatsapp-cloud-api/pull/218
+* Bump actions/checkout from 4 to 6 by @dependabot[bot] in https://github.com/netflie/whatsapp-cloud-api/pull/233
+* Bug - Support empty profile name of Contact by @rafaelqueiroz in https://github.com/netflie/whatsapp-cloud-api/pull/234
+* Add feature: add support for creating and updating WhatsApp message templates by @krishna035 in https://github.com/netflie/whatsapp-cloud-api/pull/227
+* Add UPGRADE.md guide for 2.x → 3.x migration by @Copilot in https://github.com/netflie/whatsapp-cloud-api/pull/240
+* Add support for WhatsApp message templates and improve Client class by @aalbarca in https://github.com/netflie/whatsapp-cloud-api/pull/241
+
+### New Contributors
+
+* @jpsilvaa made their first contribution in https://github.com/netflie/whatsapp-cloud-api/pull/202
+* @rafaelqueiroz made their first contribution in https://github.com/netflie/whatsapp-cloud-api/pull/234
+* @krishna035 made their first contribution in https://github.com/netflie/whatsapp-cloud-api/pull/227
+* @Copilot made their first contribution in https://github.com/netflie/whatsapp-cloud-api/pull/240
+
+**Full Changelog**: https://github.com/netflie/whatsapp-cloud-api/compare/2.2.1...3.0.0
+
 ## 2.2.1 - 2024-08-28
 
 ### What's Changed
