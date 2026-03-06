@@ -4,7 +4,7 @@ namespace Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
 use Netflie\WhatsAppCloudApi\Request\MessageRequest;
 
-class RequestButtonReplyMessage extends MessageRequest
+final class RequestButtonReplyMessage extends MessageRequest
 {
     public function body(): array
     {
@@ -21,10 +21,7 @@ class RequestButtonReplyMessage extends MessageRequest
         ];
 
         if ($this->message->header()) {
-            $body['interactive']['header'] = [
-                'type' => 'text',
-                'text' => $this->message->header(),
-            ];
+            $body['interactive']['header'] = $this->message->header();
         }
 
         if ($this->message->footer()) {

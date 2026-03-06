@@ -3,12 +3,13 @@
 namespace Netflie\WhatsAppCloudApi\Message;
 
 use Netflie\WhatsAppCloudApi\Message\ButtonReply\ButtonAction;
+use Netflie\WhatsAppCloudApi\Message\ButtonReply\Header;
 
-class ButtonReplyMessage extends Message
+final class ButtonReplyMessage extends Message
 {
     protected string $type = 'button';
 
-    private ?string $header;
+    private ?Header $header;
 
     private string $body;
 
@@ -16,7 +17,7 @@ class ButtonReplyMessage extends Message
 
     private ButtonAction $action;
 
-    public function __construct(string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null, ?string $reply_to = null)
+    public function __construct(string $to, string $body, ButtonAction $action, ?Header $header = null, ?string $footer = null, ?string $reply_to = null)
     {
         $this->body = $body;
         $this->action = $action;
@@ -26,9 +27,9 @@ class ButtonReplyMessage extends Message
         parent::__construct($to, $reply_to);
     }
 
-    public function header(): ?string
+    public function header(): ?array
     {
-        return $this->header;
+        return $this->header ? $this->header->getBody() : null;
     }
 
     public function body(): string

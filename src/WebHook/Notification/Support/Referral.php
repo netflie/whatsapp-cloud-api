@@ -20,8 +20,6 @@ final class Referral
 
     private string $thumbnail_url;
 
-    private string $ctwa_clid;
-
     public function __construct(
         string $source_id,
         string $source_url,
@@ -30,8 +28,7 @@ final class Referral
         string $body,
         string $media_type,
         string $media_url,
-        string $thumbnail_url,
-        string $ctwa_clid
+        string $thumbnail_url
     ) {
         $this->source_id = $source_id;
         $this->source_url = $source_url;
@@ -41,7 +38,6 @@ final class Referral
         $this->media_type = $media_type;
         $this->media_url = $media_url;
         $this->thumbnail_url = $thumbnail_url;
-        $this->ctwa_clid = $ctwa_clid;
     }
 
     public function sourceId(): string
@@ -82,10 +78,5 @@ final class Referral
     public function thumbnailUrl(): string
     {
         return $this->thumbnail_url;
-    }
-
-    public function ctwaClid(): string
-    {
-        return $this->ctwa_clid;
     }
 }

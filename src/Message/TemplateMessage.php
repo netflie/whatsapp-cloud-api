@@ -7,8 +7,8 @@ use Netflie\WhatsAppCloudApi\Message\Template\Component;
 final class TemplateMessage extends Message
 {
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     protected string $type = 'template';
 
     /**
@@ -29,8 +29,8 @@ final class TemplateMessage extends Message
     private ?Component $components;
 
     /**
-    * {@inheritdoc}
-    */
+     * {@inheritdoc}
+     */
     public function __construct(string $to, string $name, string $language = 'en_US', ?Component $components = null, ?string $reply_to = null)
     {
         $this->name = $name;
@@ -68,6 +68,12 @@ final class TemplateMessage extends Message
     {
         return $this->components
             ? $this->components->buttons()
+            : [];
+    }
+    public function carousel(): array
+    {
+        return $this->components
+            ? $this->components->carousel()
             : [];
     }
 }
