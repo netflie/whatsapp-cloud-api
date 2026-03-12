@@ -1113,7 +1113,7 @@ final class WhatsAppCloudApiTest extends TestCase
 
     public function test_download_media()
     {
-        $media_id = (string) $this->faker->randomNumber;
+        $media_id = (string)$this->faker->randomNumber;
         $url = $this->buildBaseUri() . $media_id;
         $headers = [
             'Authorization' => 'Bearer ' . $this->access_token,
@@ -1456,6 +1456,68 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_get_conversational_components()
+    {
+        $url = $this->buildConversationalComponentRequestUri() . '?fields=conversational_automation';
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->get($url, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->conversationalComponents();
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_update_conversational_components()
+    {
+        $url = $this->buildConversationalComponentRequestUri() . '/conversational_automation';
+        $components = [
+            'enable_welcome_message' => $this->faker->boolean,
+            'commands' => [
+                [
+                    'command_name' => $this->faker->word,
+                    'command_description' => $this->faker->sentence,
+                ],
+                [
+                    'command_name' => $this->faker->word,
+                    'command_description' => $this->faker->sentence,
+                ],
+            ],
+            'prompts' => [$this->faker->sentence, $this->faker->sentence],
+        ];
+
+        $body = array_merge(
+            [
+                'messaging_product' => 'whatsapp',
+            ],
+            $components
+        );
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->updateConversationalComponents($components);
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     private function buildBaseUri(): string
     {
         return Client::BASE_GRAPH_URL . '/' . static::TEST_GRAPH_VERSION . '/';
@@ -1474,6 +1536,11 @@ final class WhatsAppCloudApiTest extends TestCase
     private function buildBusinessProfileRequestUri(): string
     {
         return $this->buildBaseUri() . $this->from_phone_number_id . '/whatsapp_business_profile';
+    }
+
+    private function buildConversationalComponentRequestUri(): string
+    {
+        return $this->buildBaseUri() . $this->from_phone_number_id;
     }
 
     private function successfulMessageNodeResponse(): string
