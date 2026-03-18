@@ -6,12 +6,20 @@ class StatusNotificationFactory
 {
     public function buildFromPayload(array $metadata, array $status): StatusNotification
     {
+        // BSUID support: recipient_id may be omitted for username-enabled users.
+        // Fall back to recipient_user_id when phone-based recipient_id is missing.
+        $recipientId = $status['recipient_id'] ?? null;
+        $recipientUserId = $status['recipient_user_id'] ?? null;
+        $parentRecipientUserId = $status['parent_recipient_user_id'] ?? null;
+
         $notification = new StatusNotification(
             $status['id'],
             new Support\Business($metadata['phone_number_id'], $metadata['display_phone_number']),
-            $status['recipient_id'],
+            $recipientId,
             $status['status'],
-            $status['timestamp']
+            $status['timestamp'],
+            $recipientUserId,
+            $parentRecipientUserId
         );
 
         if (isset($status['conversation'])) {

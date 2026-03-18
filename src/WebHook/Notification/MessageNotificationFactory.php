@@ -2,9 +2,7 @@
 
 namespace Netflie\WhatsAppCloudApi\WebHook\Notification;
 
-use Netflie\WhatsAppCloudApi\Message\Media\MediaType;
-
-final class MessageNotificationFactory
+class MessageNotificationFactory
 {
     public function buildFromPayload(array $metadata, array $message, array $contact): MessageNotification
     {
@@ -45,7 +43,6 @@ final class MessageNotificationFactory
                     $message[$message['type']]['sha256'],
                     $message[$message['type']]['filename'] ?? '',
                     $message[$message['type']]['caption'] ?? '',
-                    new MediaType($message['type']),
                     $message['timestamp']
                 );
             case 'location':
@@ -131,10 +128,22 @@ final class MessageNotificationFactory
     private function decorateNotification(MessageNotification $notification, array $message, array $contact): MessageNotification
     {
         if ($contact) {
+            // BSUID support: wa_id and from may be omitted for username-enabled users.
+            // Fall back gracefully when phone number fields are missing.
+            $waId = $contact['wa_id'] ?? null;
+            $fromPhone = $message['from'] ?? null;
+            $userId = $contact['user_id'] ?? $message['from_user_id'] ?? null;
+            $username = $contact['profile']['username'] ?? null;
+            $parentUserId = $contact['parent_user_id'] ?? $message['from_parent_user_id'] ?? null;
+            $profileName = $contact['profile']['name'] ?? '';
+
             $notification->withCustomer(new Support\Customer(
-                $contact['wa_id'],
-                $contact['profile']['name'] ?? '',
-                $message['from']
+                $waId,
+                $profileName,
+                $fromPhone,
+                $userId,
+                $username,
+                $parentUserId
             ));
         }
 
@@ -149,7 +158,6 @@ final class MessageNotificationFactory
             $notification->withContext(new Support\Context(
                 $message['context']['id'] ?? null,
                 $message['context']['forwarded'] ?? false,
-                $message['context']['frequently_forwarded'] ?? false,
                 $referred_product ?? null
             ));
         }
@@ -163,8 +171,7 @@ final class MessageNotificationFactory
                 $message['referral']['body'] ?? '',
                 $message['referral']['media_type'] ?? '',
                 $message['referral']['image_url'] ?? $message['referral']['video_url'] ?? '',
-                $message['referral']['thumbnail_url'] ?? '',
-                $message['referral']['ctwa_clid'] ?? ''
+                $message['referral']['thumbnail_url'] ?? ''
             ));
         }
 
