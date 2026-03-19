@@ -490,6 +490,31 @@ class WhatsAppCloudApi
     }
 
     /**
+     * Send a typing indicator to a WhatsApp user.
+     *
+     * Displays a "typing..." status in the user's chat for up to 25 seconds
+     * or until a message is sent, whichever comes first.
+     * Also marks the referenced message as read.
+     *
+     * @param  string    $message_id WhatsApp Message Id to show typing indicator for.
+     *
+     * @return Response
+     *
+     * @throws Response\ResponseException
+     */
+    public function sendTypingIndicator(string $message_id): Response
+    {
+        $request = new Request\TypingIndicatorRequest(
+            $message_id,
+            $this->app->accessToken(),
+            $this->app->fromPhoneNumberId(),
+            $this->timeout
+        );
+
+        return $this->client->sendMessage($request);
+    }
+
+    /**
      * Sends a reaction to a provided message id.
      *
      * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.

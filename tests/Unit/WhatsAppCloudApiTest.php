@@ -1381,6 +1381,34 @@ final class WhatsAppCloudApiTest extends TestCase
         $this->assertEquals(false, $response->isError());
     }
 
+    public function test_send_typing_indicator()
+    {
+        $url = $this->buildMessageRequestUri();
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'status' => 'read',
+            'message_id' => '<message-id>',
+            'typing_indicator' => [
+                'type' => 'text',
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendTypingIndicator('<message-id>');
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
     public function test_send_reaction_message()
     {
         $to = $this->faker->phoneNumber;

@@ -486,6 +486,15 @@ Marking a message as read will also mark earlier messages in the conversation as
 $whatsapp_cloud_api->markMessageAsRead('<message-id>');
 ```
 
+### Send a typing indicator
+Show a "typing..." indicator in the user's chat for up to 25 seconds or until you send a message, whichever comes first. This also marks the referenced message as read.
+
+```php
+<?php
+
+$whatsapp_cloud_api->sendTypingIndicator('<message-id>');
+```
+
 ### Get Business Profile
 ```php
 <?php
@@ -630,6 +639,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Upload media resources to WhatsApp servers
 - Download media resources from WhatsApp servers
 - Mark messages as read
+- Send typing indicator
 - React to a Message
 - Get/Update Business Profile
 - Webhook verification
