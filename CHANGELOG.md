@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.0 - 2026-03-23
+
+### What's Changed
+
+* Typing Indicator Support by @rafaelqueiroz in https://github.com/netflie/whatsapp-cloud-api/pull/244
+
+**Full Changelog**: https://github.com/netflie/whatsapp-cloud-api/compare/3.0.0...3.1.0
+
 ## 3.0.0 - 2026-03-06
 
 ### What's Changed
