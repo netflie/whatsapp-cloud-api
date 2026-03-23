@@ -10,23 +10,31 @@ final class StatusNotification extends Notification
 
     private ?Support\Pricing $pricing = null;
 
-    private string $customer_id;
+    private ?string $customer_id;
 
     private Support\Status $status;
 
     private ?Support\Error $error = null;
 
+    private ?string $recipient_user_id;
+
+    private ?string $parent_recipient_user_id;
+
     public function __construct(
         string $id,
         Support\Business $business,
-        string $customer_id,
+        ?string $customer_id,
         string $status,
-        string $received_at
+        string $received_at,
+        ?string $recipient_user_id = null,
+        ?string $parent_recipient_user_id = null
     ) {
         parent::__construct($id, $business, $received_at);
 
         $this->customer_id = $customer_id;
         $this->status = new Support\Status($status);
+        $this->recipient_user_id = $recipient_user_id;
+        $this->parent_recipient_user_id = $parent_recipient_user_id;
     }
 
     public function withConversation(Support\Conversation $conversation): self
@@ -50,9 +58,33 @@ final class StatusNotification extends Notification
         return $this;
     }
 
-    public function customerId(): string
+    public function customerId(): ?string
     {
         return $this->customer_id;
+    }
+
+    /**
+     * Get the Business-Scoped User ID from the status webhook.
+     */
+    public function recipientUserId(): ?string
+    {
+        return $this->recipient_user_id;
+    }
+
+    /**
+     * Get the parent Business-Scoped User ID from the status webhook.
+     */
+    public function parentRecipientUserId(): ?string
+    {
+        return $this->parent_recipient_user_id;
+    }
+
+    /**
+     * Get the best available recipient identifier: phone or BSUID.
+     */
+    public function recipientIdentifier(): string
+    {
+        return $this->customer_id ?? $this->recipient_user_id ?? '';
     }
 
     public function conversationId(): ?string
