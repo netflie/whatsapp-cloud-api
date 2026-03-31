@@ -620,6 +620,35 @@ $whatsapp->updateTemplateById($template_id, $payload);
 
 Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/business-profiles
 
+### Get Conversational Component Settings
+```php
+<?php
+
+$whatsapp_cloud_api->conversationalComponents();
+
+```
+
+### Update Conversational Component Settings
+```php
+<?php
+
+$whatsapp_cloud_api->updateConversationalComponents([
+    'enable_welcome_message' => false, // true/false
+    'commands' => [
+        [
+            'command_name' => 'tickets',
+            'command_description' => 'Book flight tickets',
+        ],
+        [
+            'command_name' => 'hotel',
+            'command_description' => 'Book hotel',
+        ],
+    ],
+    'prompts' => ['Book a flight','plan a vacation'],
+]);
+```
+Note: All existing Conversational Component settings will be overwritten with the new update and excluded fields will be removed.
+
 ## Features
 
 - Send Text Messages
@@ -642,6 +671,7 @@ Fields list: https://developers.facebook.com/docs/whatsapp/cloud-api/reference/b
 - Send typing indicator
 - React to a Message
 - Get/Update Business Profile
+- Get/Update Conversational Components
 - Webhook verification
 - Webhook notifications
 - Create Template
@@ -663,7 +693,7 @@ Please see [CHANGELOG](https://github.com/netflie/whatsapp-cloud-api/blob/main/C
 ```php
 composer unit-test
 ```
-You also can run tests making real calls to the WhastApp Clou API. Please put your testing credentials on **WhatsAppCloudApiTestConfiguration** file.
+You also can run tests making real calls to the WhastApp Cloud API. Please put your testing credentials on **WhatsAppCloudApiTestConfiguration** file.
 ```php
 composer integration-test
 ```
