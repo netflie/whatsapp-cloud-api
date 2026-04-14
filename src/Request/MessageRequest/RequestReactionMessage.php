@@ -11,15 +11,11 @@ final class RequestReactionMessage extends MessageRequest
      */
     public function body(): array
     {
-        $body = [
-            'messaging_product' => $this->message->messagingProduct(),
-            'recipient_type' => $this->message->recipientType(),
-            'to' => $this->message->to(),
-            'type' => $this->message->type(),
-            $this->message->type() => [
-                'message_id' => $this->message->message_id(),
-                'emoji' => $this->message->emoji(),
-            ],
+        $body = parent::body();
+        $body['type'] = $this->message->type();
+        $body[$this->message->type()] = [
+            'message_id' => $this->message->message_id(),
+            'emoji' => $this->message->emoji(),
         ];
 
         return $body;

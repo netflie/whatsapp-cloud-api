@@ -11,15 +11,11 @@ final class RequestCtaUrlMessage extends MessageRequest
     */
     public function body(): array
     {
-        $body = [
-            'messaging_product' => $this->message->messagingProduct(),
-            'recipient_type' => $this->message->recipientType(),
-            'to' => $this->message->to(),
-            'type' => 'interactive',
-            'interactive' => [
-                'type' => $this->message->type(),
-                'action' => $this->message->action(),
-            ],
+        $body = parent::body();
+        $body['type'] = 'interactive';
+        $body['interactive'] = [
+            'type' => $this->message->type(),
+            'action' => $this->message->action(),
         ];
 
         if ($this->message->header()) {
@@ -32,10 +28,6 @@ final class RequestCtaUrlMessage extends MessageRequest
 
         if ($this->message->footer()) {
             $body['interactive']['footer'] = ['text' => $this->message->footer()];
-        }
-
-        if ($this->message->replyTo()) {
-            $body['context']['message_id'] = $this->message->replyTo();
         }
 
         return $body;

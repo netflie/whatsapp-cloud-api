@@ -20,14 +20,14 @@ final class SingleProductMessage extends Message
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $to, int $catalog_id, string $product_retailer_id, ?string $body, ?string $footer, ?string $reply_to)
+    public function __construct(?string $to, int $catalog_id, string $product_retailer_id, ?string $body, ?string $footer, ?string $reply_to, ?string $recipient = null)
     {
         $this->catalog_id = $catalog_id;
         $this->product_retailer_id = $product_retailer_id;
         $this->body = $body;
         $this->footer = $footer;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function catalog_id(): int

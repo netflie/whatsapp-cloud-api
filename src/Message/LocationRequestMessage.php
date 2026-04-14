@@ -14,11 +14,11 @@ final class LocationRequestMessage extends Message
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $to, string $body, ?string $reply_to)
+    public function __construct(?string $to, string $body, ?string $reply_to, ?string $recipient = null)
     {
         $this->body = $body;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function body(): string

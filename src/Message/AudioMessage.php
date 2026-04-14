@@ -21,11 +21,11 @@ final class AudioMessage extends Message
     /**
     * {@inheritdoc}
     */
-    public function __construct(string $to, MediaID $id, ?string $reply_to)
+    public function __construct(?string $to, MediaID $id, ?string $recipient, ?string $reply_to)
     {
         $this->id = $id;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function identifierType(): string

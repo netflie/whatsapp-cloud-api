@@ -26,12 +26,12 @@ final class VideoMessage extends Message
     /**
     * {@inheritdoc}
     */
-    public function __construct(string $to, MediaID $id, ?string $caption = '', ?string $reply_to = null)
+    public function __construct(?string $to, MediaID $id, ?string $caption = '', ?string $reply_to = null, ?string $recipient = null)
     {
         $this->id = $id;
         $this->caption = $caption;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function caption(): ?string

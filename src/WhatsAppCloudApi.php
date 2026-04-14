@@ -74,9 +74,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendTextMessage(string $to, string $text, bool $preview_url = false): Response
+    public function sendTextMessage(?string $to, string $text, bool $preview_url = false, ?string $recipient = null): Response
     {
-        $message = new Message\TextMessage($to, $text, $preview_url, $this->reply_to);
+        $message = new Message\TextMessage($to, $text, $preview_url, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestTextMessage(
             $message,
             $this->app->accessToken(),
@@ -91,15 +91,15 @@ class WhatsAppCloudApi
      * Sends a document uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some document uploaded on Internet.
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ?string   $to         WhatsApp ID or phone number for the person you want to send a message to.
      * @param  MediaID $document_id WhatsApp Media ID or any Internet public document link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendDocument(string $to, MediaID $document_id, string $name, ?string $caption = ''): Response
+    public function sendDocument(?string $to, MediaID $document_id, string $name, ?string $caption = '', ?string $recipient = null): Response
     {
-        $message = new Message\DocumentMessage($to, $document_id, $name, $caption, $this->reply_to);
+        $message = new Message\DocumentMessage($to, $document_id, $name, $caption, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestDocumentMessage(
             $message,
             $this->app->accessToken(),
@@ -113,7 +113,7 @@ class WhatsAppCloudApi
     /**
      * Sends a message template.
      *
-     * @param  string         $to              WhatsApp ID or phone number for the person you want to send a message to.
+    * @param  ?string        $to              WhatsApp ID or phone number for the person you want to send a message to.
      * @param  string         $template_name   Name of the template to send.
      * @param  string         $language        Language code
      * @param  Component|null $component       Component parameters of a template
@@ -123,9 +123,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendTemplate(string $to, string $template_name, string $language = 'en_US', ?Component $components = null): Response
+    public function sendTemplate(?string $to, string $template_name, string $language = 'en_US', ?Component $components = null, ?string $recipient = null): Response
     {
-        $message = new Message\TemplateMessage($to, $template_name, $language, $components, $this->reply_to);
+        $message = new Message\TemplateMessage($to, $template_name, $language, $components, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestTemplateMessage(
             $message,
             $this->app->accessToken(),
@@ -140,15 +140,15 @@ class WhatsAppCloudApi
      * Sends an audio uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some audio uploaded on Internet.
      *
-     * @param  string  $to         WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId $audio_id   WhatsApp Media ID or any Internet public audio link.
+     * @param  ?string  $to         WhatsApp ID or phone number for the person you want to send a message to.
+    * @param  MediaID $audio_id   WhatsApp Media ID or any Internet public audio link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendAudio(string $to, MediaID $audio_id): Response
+    public function sendAudio(?string $to, MediaID $audio_id, ?string $recipient = null): Response
     {
-        $message = new Message\AudioMessage($to, $audio_id, $this->reply_to);
+        $message = new Message\AudioMessage($to, $audio_id, $recipient, $this->reply_to);
         $request = new Request\MessageRequest\RequestAudioMessage(
             $message,
             $this->app->accessToken(),
@@ -163,16 +163,17 @@ class WhatsAppCloudApi
      * Sends an image uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some image uploaded on Internet.
      *
-     * @param  string   $to          WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  string   $caption     Description of the specified image file.
-     * @param  MediaId  $image_id    WhatsApp Media ID or any Internet public image link.
+     * @param  ?string   $to          WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ?string   $caption     Description of the specified image file.
+    * @param  MediaID   $image_id    WhatsApp Media ID or any Internet public image link.
+     * @param  ?string   $recipient   Business-scoped user id (BSUID) recipient.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendImage(string $to, MediaID $image_id, ?string $caption = ''): Response
+    public function sendImage(?string $to, MediaID $image_id, ?string $caption = '', ?string $recipient = null): Response
     {
-        $message = new Message\ImageMessage($to, $image_id, $caption, $this->reply_to);
+        $message = new Message\ImageMessage($to, $image_id, $caption, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestImageMessage(
             $message,
             $this->app->accessToken(),
@@ -187,15 +188,15 @@ class WhatsAppCloudApi
      * Sends a video uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some video uploaded on Internet.
      *
-     * @param  string   $to       WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $video_id WhatsApp Media ID or any Internet public video link.
+     * @param  ?string   $to       WhatsApp ID or phone number for the person you want to send a message to.
+    * @param  MediaID  $video_id WhatsApp Media ID or any Internet public video link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendVideo(string $to, MediaID $video_id, string $caption = ''): Response
+    public function sendVideo(?string $to, MediaID $video_id, string $caption = '', ?string $recipient = null): Response
     {
-        $message = new Message\VideoMessage($to, $video_id, $caption, $this->reply_to);
+        $message = new Message\VideoMessage($to, $video_id, $caption, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestVideoMessage(
             $message,
             $this->app->accessToken(),
@@ -210,15 +211,15 @@ class WhatsAppCloudApi
      * Sends a sticker uploaded to the WhatsApp Cloud servers by it Media ID or you also
      * can put any public URL of some sticker uploaded on Internet.
      *
-     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  MediaId  $sticker_id    WhatsApp Media ID or any Internet public sticker link.
+     * @param  ?string   $to             WhatsApp ID or phone number for the person you want to send a message to.
+    * @param  MediaID  $sticker_id    WhatsApp Media ID or any Internet public sticker link.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendSticker(string $to, MediaID $sticker_id): Response
+    public function sendSticker(?string $to, MediaID $sticker_id, ?string $recipient = null): Response
     {
-        $message = new Message\StickerMessage($to, $sticker_id, $this->reply_to);
+        $message = new Message\StickerMessage($to, $sticker_id, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestStickerMessage(
             $message,
             $this->app->accessToken(),
@@ -232,19 +233,19 @@ class WhatsAppCloudApi
     /**
      * Sends a location
      *
-     * @param  string   $to         WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ?string   $to         WhatsApp ID or phone number for the person you want to send a message to.
      * @param  float    $longitude  Longitude position.
      * @param  float    $latitude   Latitude position.
      * @param  string   $name       Name of location sent.
-     * @param  address  $address    Address of location sent.
+    * @param  string   $address    Address of location sent.
      *
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendLocation(string $to, float $longitude, float $latitude, string $name = '', string $address = ''): Response
+    public function sendLocation(?string $to, float $longitude, float $latitude, string $name = '', string $address = '', ?string $recipient = null): Response
     {
-        $message = new Message\LocationMessage($to, $longitude, $latitude, $name, $address, $this->reply_to);
+        $message = new Message\LocationMessage($to, $longitude, $latitude, $name, $address, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestLocationMessage(
             $message,
             $this->app->accessToken(),
@@ -258,16 +259,16 @@ class WhatsAppCloudApi
     /**
      * Sends a location request message.
      *
-     * @param string $to   The WhatsApp ID or phone number for the person you want to send the message to.
+     * @param ?string $to   The WhatsApp ID or phone number for the person you want to send the message to.
      * @param string $body The body of the location request message.
      *
      * @return Response The response object containing the result of the API request.
      *
      * @throws Response\ResponseException If there's an error with the API request.
      */
-    public function sendLocationRequest(string $to, string $body)
+    public function sendLocationRequest(?string $to, string $body, ?string $recipient = null)
     {
-        $message = new Message\LocationRequestMessage($to, $body, $this->reply_to);
+        $message = new Message\LocationRequestMessage($to, $body, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestLocationRequestMessage(
             $message,
             $this->app->accessToken(),
@@ -281,17 +282,18 @@ class WhatsAppCloudApi
     /**
      * Sends a contact
      *
-     * @param  string        $to    WhatsApp ID or phone number for the person you want to send a message to.
-     * @param  ContactName   $name  The contact name object.
-     * @param  Phone|null    $phone The contact phone number.
+     * @param  string|null         $to               WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ContactName         $name             The contact name object.
+     * @param  string|null         $recipient        Business-scoped user id (BSUID) recipient.
+     * @param  Phone               ...$phone         The contact phone numbers from the user's address book.
      *
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendContact(string $to, ContactName $name, Phone ...$phone): Response
+    public function sendContact(?string $to, ContactName $name, ?string $recipient = null, Phone ...$phone): Response
     {
-        $message = new Message\ContactMessage($to, $name, $this->reply_to, ...$phone);
+        $message = new Message\ContactMessage($to, $name, $this->reply_to, $recipient, ...$phone);
         $request = new Request\MessageRequest\RequestContactMessage(
             $message,
             $this->app->accessToken(),
@@ -305,7 +307,7 @@ class WhatsAppCloudApi
     /**
      * Sends a list
      *
-     * @param  string   $to     WhatsApp ID or phone number for the person you want to send a message to.
+    * @param  ?string  $to     WhatsApp ID or phone number for the person you want to send a message to.
      * @param  string   $header The header.
      * @param  string   $body   The body.
      * @param  string   $footer The footer.
@@ -315,9 +317,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendList(string $to, string $header, string $body, string $footer, Action $action): Response
+    public function sendList(?string $to, string $header, string $body, string $footer, Action $action, ?string $recipient = null): Response
     {
-        $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action, $this->reply_to);
+        $message = new Message\OptionsListMessage($to, $header, $body, $footer, $action, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestOptionsListMessage(
             $message,
             $this->app->accessToken(),
@@ -331,7 +333,7 @@ class WhatsAppCloudApi
     /**
      * Sends a CTA URL
      *
-     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ?string   $to             WhatsApp ID or phone number for the person you want to send a message to.
      * @param  string   $displayText    The display text.
      * @param  string   $url            The URL.
      * @param  ?Header  $header         The header.
@@ -342,9 +344,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendCtaUrl(string $to, string $displayText, string $url, ?Header $header, ?string $body, ?string $footer): Response
+    public function sendCtaUrl(?string $to, string $displayText, string $url, ?Header $header, ?string $body, ?string $footer, ?string $recipient = null): Response
     {
-        $message = new Message\CtaUrlMessage($to, $displayText, $url, $header, $body, $footer, $this->reply_to);
+        $message = new Message\CtaUrlMessage($to, $displayText, $url, $header, $body, $footer, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestCtaUrlMessage(
             $message,
             $this->app->accessToken(),
@@ -355,7 +357,7 @@ class WhatsAppCloudApi
         return $this->client->sendMessage($request);
     }
 
-    public function sendButton(string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null): Response
+    public function sendButton(?string $to, string $body, ButtonAction $action, ?string $header = null, ?string $footer = null, ?string $recipient = null): Response
     {
         $message = new Message\ButtonReplyMessage(
             $to,
@@ -363,7 +365,8 @@ class WhatsAppCloudApi
             $action,
             $header,
             $footer,
-            $this->reply_to
+            $this->reply_to,
+            $recipient
         );
 
         $request = new Request\MessageRequest\RequestButtonReplyMessage(
@@ -400,7 +403,7 @@ class WhatsAppCloudApi
     /**
      * Sends a message with multiple products to a user.
      *
-     * @param string $to The WhatsApp ID or phone number for the person you want to send a message to.
+     * @param ?string $to The WhatsApp ID or phone number for the person you want to send a message to.
      * @param int $catalog_id The ID of the catalog where the products are located.
      * @param MultiProductAction $action The contents of the catalog products to be sent.
      * @param string $header The header of the message.
@@ -411,9 +414,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException If the API request fails.
      */
-    public function sendMultiProduct(string $to, int $catalog_id, MultiProductAction $action, string $header, string $body, ?string $footer = '')
+    public function sendMultiProduct(?string $to, int $catalog_id, MultiProductAction $action, string $header, string $body, ?string $footer = '', ?string $recipient = null)
     {
-        $message = new Message\MultiProductMessage($to, $catalog_id, $action, $header, $body, $footer, $this->reply_to);
+        $message = new Message\MultiProductMessage($to, $catalog_id, $action, $header, $body, $footer, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestMultiProductMessage(
             $message,
             $this->app->accessToken(),
@@ -447,7 +450,7 @@ class WhatsAppCloudApi
     /**
      * Sends a catalog message.
      *
-     * @param  string         $to              WhatsApp ID or phone number for the person you want to send the message to.
+     * @param  ?string         $to              WhatsApp ID or phone number for the person you want to send the message to.
      * @param  string         $body            The body of the catalog message.
      * @param  ?string        $footer          The footer of the catalog message.
      * @param  ?string        $thumbnail_product_retailer_id The product retailer ID to use as thumbnail.
@@ -455,9 +458,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException
      */
-    public function sendCatalog(string $to, string $body, ?string $footer = '', ?string $thumbnail_product_retailer_id = '')
+    public function sendCatalog(?string $to, string $body, ?string $footer = '', ?string $thumbnail_product_retailer_id = '', ?string $recipient = null)
     {
-        $message = new Message\CatalogMessage($to, $body, $footer, $thumbnail_product_retailer_id, $this->reply_to);
+        $message = new Message\CatalogMessage($to, $body, $footer, $thumbnail_product_retailer_id, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestCatalogMessage(
             $message,
             $this->app->accessToken(),
@@ -471,7 +474,7 @@ class WhatsAppCloudApi
     /**
      * Mark a message as read
      *
-     * @param  string    $message_id WhatsApp Message Id will be marked as read.
+    * @param  string    $message_id Identifier of the WhatsApp message to mark as read.
      *
      * @return Response
      *
@@ -496,7 +499,7 @@ class WhatsAppCloudApi
      * or until a message is sent, whichever comes first.
      * Also marks the referenced message as read.
      *
-     * @param  string    $message_id WhatsApp Message Id to show typing indicator for.
+    * @param  string    $message_id Identifier of the WhatsApp message to show a typing indicator for.
      *
      * @return Response
      *
@@ -517,16 +520,16 @@ class WhatsAppCloudApi
     /**
      * Sends a reaction to a provided message id.
      *
-     * @param  string   $to             WhatsApp ID or phone number for the person you want to send a message to.
+     * @param  ?string   $to             WhatsApp ID or phone number for the person you want to send a message to.
      * @param  string   $message_id     The ID of the message to react to.
      * @param  string   $emoji          The emoji to use as a reaction.
      * @return Response
      *
      * @throws Response\ResponseException
      */
-    public function sendReaction(string $to, string $message_id, string $emoji = ''): Response
+    public function sendReaction(?string $to, string $message_id, string $emoji = '', ?string $recipient = null): Response
     {
-        $message = new Message\ReactionMessage($to, $message_id, $emoji);
+        $message = new Message\ReactionMessage($to, $message_id, $emoji, $recipient);
 
         $request = new Request\MessageRequest\RequestReactionMessage(
             $message,
@@ -541,7 +544,7 @@ class WhatsAppCloudApi
     /**
      * Sends a single product message to a specified recipient.
      *
-     * @param string $to The WhatsApp ID or phone number for the person you want to send the message to.
+     * @param ?string $to The WhatsApp ID or phone number for the person you want to send the message to.
      * @param int $catalog_id The ID of the catalog where the product is located.
      * @param string $product_retailer_id The retailer-specific ID of the product.
      * @param string|null $body The body of the message. Defaults to an empty string if not provided.
@@ -551,9 +554,9 @@ class WhatsAppCloudApi
      *
      * @throws Response\ResponseException If there is an error with the API request.
      */
-    public function sendSingleProduct(string $to, int $catalog_id, string $product_retailer_id, ?string $body = '', ?string $footer = '')
+    public function sendSingleProduct(?string $to, int $catalog_id, string $product_retailer_id, ?string $body = '', ?string $footer = '', ?string $recipient = null)
     {
-        $message = new Message\SingleProductMessage($to, $catalog_id, $product_retailer_id, $body, $footer, $this->reply_to);
+        $message = new Message\SingleProductMessage($to, $catalog_id, $product_retailer_id, $body, $footer, $this->reply_to, $recipient);
         $request = new Request\MessageRequest\RequestSingleProductMessage(
             $message,
             $this->app->accessToken(),

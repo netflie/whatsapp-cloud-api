@@ -25,13 +25,14 @@ final class CtaUrlMessage extends Message
     * {@inheritdoc}
     */
     public function __construct(
-        string $to,
+        ?string $to,
         string $displayText,
         string $url,
         ?Header $header,
         ?string $body,
         ?string $footer,
-        ?string $reply_to
+        ?string $reply_to,
+        ?string $recipient = null
     ) {
         $this->displayText = $displayText;
         $this->url = $url;
@@ -39,7 +40,7 @@ final class CtaUrlMessage extends Message
         $this->body = $body;
         $this->footer = $footer;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function getDisplayText(): string

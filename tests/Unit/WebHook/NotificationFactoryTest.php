@@ -1489,4 +1489,89 @@ final class NotificationFactoryTest extends TestCase
         $this->assertInstanceOf(Notification\Text::class, $notification);
         $this->assertEquals('MESSAGE_BODY', $notification->message());
     }
+
+    public function test_build_from_payload_can_build_a_notification_with_bsuid_only_and_no_from()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [{
+              "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+              "changes": [{
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                          "display_phone_number": "PHONE_NUMBER",
+                          "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [{
+                          "profile": {
+                            "name": "NAME"
+                          },
+                          "user_id": "BSUID_123"
+                        }],
+                      "messages": [{
+                          "id": "wamid.ID",
+                          "timestamp": "1669233778",
+                          "text": {
+                            "body": "MESSAGE_BODY"
+                          },
+                          "type": "text"
+                        }]
+                  },
+                  "field": "messages"
+                }]
+          }]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\Text::class, $notification);
+        $this->assertEquals('BSUID_123', $notification->customer()->id());
+        $this->assertEquals('BSUID_123', $notification->customer()->userId());
+        $this->assertEquals('user_id', $notification->customer()->idType());
+        $this->assertNull($notification->customer()->phoneNumber());
+    }
+
+    public function test_build_from_payload_can_keep_wa_id_priority_when_user_id_is_present()
+    {
+        $payload = json_decode('{
+          "object": "whatsapp_business_account",
+          "entry": [{
+              "id": "WHATSAPP_BUSINESS_ACCOUNT_ID",
+              "changes": [{
+                  "value": {
+                      "messaging_product": "whatsapp",
+                      "metadata": {
+                          "display_phone_number": "PHONE_NUMBER",
+                          "phone_number_id": "PHONE_NUMBER_ID"
+                      },
+                      "contacts": [{
+                          "profile": {
+                            "name": "NAME"
+                          },
+                          "wa_id": "WHATSAPP_ID",
+                          "user_id": "BSUID_123"
+                        }],
+                      "messages": [{
+                          "from": "PHONE_NUMBER",
+                          "id": "wamid.ID",
+                          "timestamp": "1669233778",
+                          "text": {
+                            "body": "MESSAGE_BODY"
+                          },
+                          "type": "text"
+                        }]
+                  },
+                  "field": "messages"
+                }]
+          }]
+        }', true);
+
+        $notification = $this->notification_factory->buildFromPayload($payload);
+
+        $this->assertInstanceOf(Notification\Text::class, $notification);
+        $this->assertEquals('WHATSAPP_ID', $notification->customer()->id());
+        $this->assertEquals('BSUID_123', $notification->customer()->userId());
+        $this->assertEquals('wa_id', $notification->customer()->idType());
+    }
 }

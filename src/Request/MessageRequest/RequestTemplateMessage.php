@@ -11,16 +11,12 @@ final class RequestTemplateMessage extends MessageRequest
     */
     public function body(): array
     {
-        $body = [
-            'messaging_product' => $this->message->messagingProduct(),
-            'recipient_type' => $this->message->recipientType(),
-            'to' => $this->message->to(),
-            'type' => $this->message->type(),
-            'template' => [
-                'name' => $this->message->name(),
-                'language' => ['code' => $this->message->language()],
-                'components' => [],
-            ],
+        $body = parent::body();
+        $body['type'] = $this->message->type();
+        $body['template'] = [
+            'name' => $this->message->name(),
+            'language' => ['code' => $this->message->language()],
+            'components' => [],
         ];
 
         if ($this->message->header()) {
@@ -39,10 +35,6 @@ final class RequestTemplateMessage extends MessageRequest
 
         foreach ($this->message->buttons() as $button) {
             $body['template']['components'][] = $button;
-        }
-
-        if ($this->message->replyTo()) {
-            $body['context']['message_id'] = $this->message->replyTo();
         }
 
         return $body;

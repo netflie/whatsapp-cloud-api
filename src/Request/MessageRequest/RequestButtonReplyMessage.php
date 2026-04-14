@@ -8,16 +8,12 @@ class RequestButtonReplyMessage extends MessageRequest
 {
     public function body(): array
     {
-        $body = [
-            'messaging_product' => $this->message->messagingProduct(),
-            'recipient_type' => $this->message->recipientType(),
-            'to' => $this->message->to(),
-            'type' => 'interactive',
-            'interactive' => [
-                'type' => 'button',
-                'body' => ['text' => $this->message->body()],
-                'action' => ['buttons' => $this->message->action()->buttons()],
-            ],
+        $body = parent::body();
+        $body['type'] = 'interactive';
+        $body['interactive'] = [
+            'type' => 'button',
+            'body' => ['text' => $this->message->body()],
+            'action' => ['buttons' => $this->message->action()->buttons()],
         ];
 
         if ($this->message->header()) {
@@ -31,10 +27,6 @@ class RequestButtonReplyMessage extends MessageRequest
             $body['interactive']['footer'] = [
                 'text' => $this->message->footer(),
             ];
-        }
-
-        if ($this->message->replyTo()) {
-            $body['context']['message_id'] = $this->message->replyTo();
         }
 
         return $body;
