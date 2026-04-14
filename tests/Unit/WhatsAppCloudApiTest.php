@@ -810,6 +810,7 @@ final class WhatsAppCloudApiTest extends TestCase
             ->sendContact(
                 $to,
                 $contact_name,
+                null,
                 new Phone($phone, $phone_type)
             );
 
@@ -863,7 +864,61 @@ final class WhatsAppCloudApiTest extends TestCase
         $response = $this->whatsapp_app_cloud_api->sendContact(
             $to,
             $contact_name,
+            null,
             new Phone($phone, $phone_type, $phone)
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_contact_with_recipient_only()
+    {
+        $recipient = 'US.13491208655302741918';
+        $url = $this->buildMessageRequestUri();
+        $first_name = $this->faker->firstName();
+        $last_name = $this->faker->lastName;
+        $phone = $this->faker->e164PhoneNumber;
+        $phone_type = PhoneType::CELL();
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'recipient' => $recipient,
+            'type' => 'contacts',
+            'contacts' => [
+                [
+                    'name' => [
+                        'formatted_name' => "$first_name $last_name",
+                        'first_name' => $first_name,
+                        'last_name' => $last_name,
+                    ],
+                    'phones' => [
+                        [
+                            'phone' => $phone,
+                            'type' => $phone_type,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $contact_name = new ContactName($first_name, $last_name);
+        $response = $this->whatsapp_app_cloud_api->sendContact(
+            null,
+            $contact_name,
+            $recipient,
+            new Phone($phone, $phone_type)
         );
 
         $this->assertEquals(200, $response->httpStatusCode());
@@ -1022,8 +1077,7 @@ final class WhatsAppCloudApiTest extends TestCase
                 'reply' => $button,
             ];
         }
-
-        $message = $this->faker->text(50);
+        $message = $this->faker->text(1024);
         $header = $this->faker->text(50);
         $footer = $this->faker->text(50);
 
@@ -1476,6 +1530,234 @@ final class WhatsAppCloudApiTest extends TestCase
         $response = $this->whatsapp_app_cloud_api->sendReaction(
             $to,
             $message_id
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_text_message_with_recipient_only()
+    {
+        $recipient = 'US.13491208655302741918';
+        $url = $this->buildMessageRequestUri();
+        $text_message = $this->faker->text;
+        $preview_url = $this->faker->boolean;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'recipient' => $recipient,
+            'type' => 'text',
+            'text' => [
+                'preview_url' => $preview_url,
+                'body' => $text_message,
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendTextMessage(
+            null,
+            $text_message,
+            $preview_url,
+            $recipient
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_text_message_with_to_and_recipient()
+    {
+        $to = $this->faker->phoneNumber;
+        $recipient = 'US.13491208655302741918';
+        $url = $this->buildMessageRequestUri();
+        $text_message = $this->faker->text;
+        $preview_url = $this->faker->boolean;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'to' => $to,
+            'recipient' => $recipient,
+            'type' => 'text',
+            'text' => [
+                'preview_url' => $preview_url,
+                'body' => $text_message,
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendTextMessage(
+            $to,
+            $text_message,
+            $preview_url,
+            $recipient
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_template_with_recipient_only()
+    {
+        $recipient = 'US.13491208655302741918';
+        $url = $this->buildMessageRequestUri();
+        $template_name = $this->faker->text(10);
+        $language = 'en_US';
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'recipient' => $recipient,
+            'type' => 'template',
+            'template' => [
+                'name' => $template_name,
+                'language' => ['code' => $language],
+                'components' => [],
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $response = $this->whatsapp_app_cloud_api->sendTemplate(
+            null,
+            $template_name,
+            $language,
+            null,
+            $recipient
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_list_with_recipient_only()
+    {
+        $recipient = 'US.13491208655302741918';
+        $url = $this->buildMessageRequestUri();
+
+        $listHeader = ['type' => 'text', 'text' => $this->faker->text(60)];
+        $listBody = ['text' => $this->faker->text(1024)];
+        $listFooter = ['text' => $this->faker->text(60)];
+
+        $listRows = [
+            ['id' => $this->faker->uuid, 'title' => $this->faker->text(24), 'description' => $this->faker->text(72)],
+        ];
+        $listSections = [['title' => $this->faker->text, 'rows' => $listRows]];
+        $listAction = ['button' => $this->faker->text, 'sections' => $listSections];
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'recipient' => $recipient,
+            'type' => 'interactive',
+            'interactive' => [
+                'type' => 'list',
+                'header' => $listHeader,
+                'body' => $listBody,
+                'footer' => $listFooter,
+                'action' => $listAction,
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $actionSections = [];
+
+        foreach ($listAction['sections'] as $section) {
+            $sectionRows = [];
+
+            foreach ($section['rows'] as $row) {
+                $sectionRows[] = new Row($row['id'], $row['title'], $row['description']);
+            }
+
+            $actionSections[] = new Section($section['title'], $sectionRows);
+        }
+
+        $response = $this->whatsapp_app_cloud_api->sendList(
+            null,
+            $listHeader['text'],
+            $listBody['text'],
+            $listFooter['text'],
+            new Action($listAction['button'], $actionSections),
+            $recipient
+        );
+
+        $this->assertEquals(200, $response->httpStatusCode());
+        $this->assertEquals(json_decode($this->successfulMessageNodeResponse(), true), $response->decodedBody());
+        $this->assertEquals($this->successfulMessageNodeResponse(), $response->body());
+        $this->assertEquals(false, $response->isError());
+    }
+
+    public function test_send_document_with_recipient_only()
+    {
+        $recipient = 'US.13491208655302741918';
+        $url = $this->buildMessageRequestUri();
+        $caption = $this->faker->text;
+        $filename = $this->faker->text;
+        $document_id = $this->faker->uuid;
+
+        $body = [
+            'messaging_product' => 'whatsapp',
+            'recipient_type' => 'individual',
+            'recipient' => $recipient,
+            'type' => 'document',
+            'document' => [
+                'caption' => $caption,
+                'filename' => $filename,
+                'id' => $document_id,
+            ],
+        ];
+        $headers = [
+            'Authorization' => 'Bearer ' . $this->access_token,
+        ];
+
+        $this->client_handler
+            ->postJsonData($url, $body, $headers, Argument::type('int'))
+            ->shouldBeCalled()
+            ->willReturn(new RawResponse($headers, $this->successfulMessageNodeResponse(), 200));
+
+        $media_id = new MediaObjectID($document_id);
+        $response = $this->whatsapp_app_cloud_api->sendDocument(
+            null,
+            $media_id,
+            $filename,
+            $caption,
+            $recipient
         );
 
         $this->assertEquals(200, $response->httpStatusCode());

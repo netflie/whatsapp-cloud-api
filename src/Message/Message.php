@@ -25,6 +25,11 @@ abstract class Message
     private string $to;
 
     /**
+     * @var string|null Business-scoped user id (BSUID) recipient.
+     */
+    private ?string $recipient = null;
+
+    /**
      * The WhatsApp Message ID to reply to.
      */
     private ?string $reply_to = null;
@@ -46,6 +51,18 @@ abstract class Message
     public function to(): string
     {
         return $this->to;
+    }
+
+    public function withRecipient(?string $recipient): self
+    {
+        $this->recipient = $recipient;
+
+        return $this;
+    }
+
+    public function recipient(): ?string
+    {
+        return $this->recipient;
     }
 
     /**

@@ -231,6 +231,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $response = $this->whatsapp_app_cloud_api->sendContact(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
             $contact_name,
+            null,
             $phone
         );
 
@@ -245,6 +246,7 @@ final class WhatsAppCloudApiTest extends TestCase
         $response = $this->whatsapp_app_cloud_api->sendContact(
             WhatsAppCloudApiTestConfiguration::$to_phone_number_id,
             $contact_name,
+            null,
             $phone
         );
 

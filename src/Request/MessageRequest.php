@@ -44,4 +44,31 @@ abstract class MessageRequest extends Request implements RequestWithBody
     {
         return $this->from_phone_number_id . '/messages';
     }
+
+    public function body(): array
+    {
+        return $this->build();
+    }
+
+    protected function build(): array
+    {
+        $body = [
+            'messaging_product' => $this->message->messagingProduct(),
+            'recipient_type' => $this->message->recipientType(),
+        ];
+
+        if (!empty($this->message->to())) {
+            $body['to'] = $this->message->to();
+        }
+
+        if (!empty($this->message->recipient())) {
+            $body['recipient'] = $this->message->recipient();
+        }
+
+        if ($this->message->replyTo()) {
+            $body['context']['message_id'] = $this->message->replyTo();
+        }
+
+        return $body;
+    }
 }

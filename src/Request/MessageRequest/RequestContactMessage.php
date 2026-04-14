@@ -13,18 +13,14 @@ final class RequestContactMessage extends MessageRequest
     {
         $message_type = $this->message->type();
 
-        $body = [
-            'messaging_product' => $this->message->messagingProduct(),
-            'recipient_type' => $this->message->recipientType(),
-            'to' => $this->message->to(),
-            'type' => $this->message->type(),
-            $message_type => [
-                [
-                    'name' => [
-                        'formatted_name' => $this->message->fullName(),
-                        'first_name' => $this->message->firstName(),
-                        'last_name' => $this->message->lastName(),
-                    ],
+        $body = parent::body();
+        $body['type'] = $this->message->type();
+        $body[$message_type] = [
+            [
+                'name' => [
+                    'formatted_name' => $this->message->fullName(),
+                    'first_name' => $this->message->firstName(),
+                    'last_name' => $this->message->lastName(),
                 ],
             ],
         ];
@@ -40,10 +36,6 @@ final class RequestContactMessage extends MessageRequest
             }
 
             $body[$message_type][0]['phones'][] = $phone_array;
-        }
-
-        if ($this->message->replyTo()) {
-            $body['context']['message_id'] = $this->message->replyTo();
         }
 
         return $body;
