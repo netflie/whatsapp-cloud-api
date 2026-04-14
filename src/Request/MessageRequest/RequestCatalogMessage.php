@@ -11,17 +11,13 @@ final class RequestCatalogMessage extends MessageRequest
      */
     public function body(): array
     {
-        $body = [
-            'messaging_product' => $this->message->messagingProduct(),
-            'recipient_type' => $this->message->recipientType(),
-            'to' => $this->message->to(),
-            'type' => 'interactive',
-            'interactive' => [
-                'type' => $this->message->type(),
-                'body' => ['text' => $this->message->body()],
-                'action' => [
-                    'name' => 'catalog_message',
-                ],
+        $body = parent::body();
+        $body['type'] = 'interactive';
+        $body['interactive'] = [
+            'type' => $this->message->type(),
+            'body' => ['text' => $this->message->body()],
+            'action' => [
+                'name' => 'catalog_message',
             ],
         ];
 
@@ -31,10 +27,6 @@ final class RequestCatalogMessage extends MessageRequest
 
         if ($this->message->footer()) {
             $body['interactive']['footer'] = ['text' => $this->message->footer()];
-        }
-
-        if ($this->message->replyTo()) {
-            $body['context']['message_id'] = $this->message->replyTo();
         }
 
         return $body;

@@ -27,18 +27,18 @@ final class TextMessage extends Message
     /**
      * Creates a new message of type text.
      *
-     * @param string         $to
+     * @param ?string        $to
      * @param string         $text
      * @param bool           $preview_url
      */
-    public function __construct(string $to, string $text, bool $preview_url = false, ?string $reply_to = null)
+    public function __construct(?string $to, string $text, bool $preview_url = false, ?string $reply_to = null, ?string $recipient = null)
     {
         $this->assertTextIsValid($text);
 
         $this->text = $text;
         $this->preview_url = $preview_url;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     /**

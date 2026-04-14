@@ -34,6 +34,30 @@ $whatsapp_cloud_api = new WhatsAppCloudApi([
 $whatsapp_cloud_api->sendTextMessage('34676104574', 'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es');
 ```
 
+### Send a message using BSUID recipient
+```php
+<?php
+
+$recipient_bsuid = 'US.13491208655302741918';
+
+// Send using BSUID only
+$whatsapp_cloud_api->sendTextMessage(null, 'Hello from BSUID', false, $recipient_bsuid);
+
+// Send both values in the same request (WhatsApp Cloud API gives precedence to `to`)
+$whatsapp_cloud_api->sendTextMessage('34676104574', 'Hello with both identifiers', false, $recipient_bsuid);
+```
+
+The same optional `$recipient` parameter is available in all `send*` methods that send messages to `/messages`.
+
+For `sendContact`, pass the BSUID before the phone entries:
+
+```php
+$contact_name = new \Netflie\WhatsAppCloudApi\Message\Contact\ContactName('John', 'Doe');
+$phone = new \Netflie\WhatsAppCloudApi\Message\Contact\Phone('+14155550100', \Netflie\WhatsAppCloudApi\Message\Contact\PhoneType::CELL());
+
+$whatsapp_cloud_api->sendContact(null, $contact_name, $recipient_bsuid, $phone);
+```
+
 ### Send a document
 You can send documents in two ways: by uploading a file to the WhatsApp Cloud servers (where you will receive an identifier) or from a link to a document published on internet.
 
@@ -200,7 +224,7 @@ use Netflie\WhatsAppCloudApi\Message\Contact\PhoneType;
 $name = new ContactName('Adams', 'Smith');
 $phone = new Phone('34676204577', PhoneType::CELL());
 
-$whatsapp_cloud_api->sendContact('<destination-phone-number>', $name, $phone);
+$whatsapp_cloud_api->sendContact('<destination-phone-number>', $name, null, $phone);
 ```
 
 ### Send a list message

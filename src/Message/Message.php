@@ -2,6 +2,8 @@
 
 namespace Netflie\WhatsAppCloudApi\Message;
 
+use Netflie\WhatsAppCloudApi\Message\Error\InvalidMessage;
+
 abstract class Message
 {
     /**
@@ -20,9 +22,14 @@ abstract class Message
     private string $recipient_type = 'individual';
 
     /**
-     * @var string WhatsApp ID or phone number for the person you want to send a message to.
+     * @var string|null WhatsApp ID or phone number for the person you want to send a message to.
      */
-    private string $to;
+    private ?string $to;
+
+    /**
+     * @var string|null Business-scoped user id (BSUID) recipient.
+     */
+    private ?string $recipient;
 
     /**
      * The WhatsApp Message ID to reply to.
@@ -32,20 +39,30 @@ abstract class Message
     /**
      * Creates a new Message class.
      */
-    public function __construct(string $to, ?string $reply_to)
+    public function __construct(?string $to, ?string $recipient, ?string $reply_to)
     {
         $this->to = $to;
+        $this->recipient = $recipient;
         $this->reply_to = $reply_to;
+
+        if (empty($this->to) && empty($this->recipient)) {
+            throw new InvalidMessage('Either `to` or `recipient` is required.');
+        }
     }
 
     /**
      * Return the WhatsApp ID or phone number for the person you want to send a message to.
      *
-     * @return string
+     * @return string|null
      */
-    public function to(): string
+    public function to(): ?string
     {
         return $this->to;
+    }
+
+    public function recipient(): ?string
+    {
+        return $this->recipient;
     }
 
     /**

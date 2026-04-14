@@ -31,13 +31,13 @@ final class TemplateMessage extends Message
     /**
     * {@inheritdoc}
     */
-    public function __construct(string $to, string $name, string $language = 'en_US', ?Component $components = null, ?string $reply_to = null)
+    public function __construct(?string $to, string $name, string $language = 'en_US', ?Component $components = null, ?string $reply_to = null, ?string $recipient = null)
     {
         $this->name = $name;
         $this->language = $language;
         $this->components = $components;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function name(): string

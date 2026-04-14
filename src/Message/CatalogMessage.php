@@ -18,13 +18,13 @@ final class CatalogMessage extends Message
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $to, string $body, ?string $footer, ?string $thumbnail_product_retailer_id, ?string $reply_to)
+    public function __construct(?string $to, string $body, ?string $footer, ?string $thumbnail_product_retailer_id, ?string $reply_to, ?string $recipient = null)
     {
         $this->body = $body;
         $this->footer = $footer;
         $this->thumbnail_product_retailer_id = $thumbnail_product_retailer_id;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function body(): string

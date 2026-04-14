@@ -24,7 +24,7 @@ final class MultiProductMessage extends Message
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $to, int $catalog_id, Action $action, string $header, string $body, ?string $footer, ?string $reply_to)
+    public function __construct(?string $to, int $catalog_id, Action $action, string $header, string $body, ?string $footer, ?string $reply_to, ?string $recipient = null)
     {
         $this->header = $header;
         $this->body = $body;
@@ -32,7 +32,7 @@ final class MultiProductMessage extends Message
         $this->footer = $footer;
         $this->action = $action;
 
-        parent::__construct($to, $reply_to);
+        parent::__construct($to, $recipient, $reply_to);
     }
 
     public function header(): array

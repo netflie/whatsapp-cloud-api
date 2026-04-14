@@ -16,12 +16,12 @@ final class ReactionMessage extends Message
     /**
      * {@inheritdoc}
      */
-    public function __construct(string $to, string $message_id, string $emoji)
+    public function __construct(?string $to, string $message_id, string $emoji, ?string $recipient = null)
     {
         $this->emoji = $emoji;
         $this->message_id = $message_id;
 
-        parent::__construct($to, null);
+        parent::__construct($to, $recipient, null);
     }
 
     public function emoji(): string
