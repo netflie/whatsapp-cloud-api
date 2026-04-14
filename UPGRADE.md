@@ -2,6 +2,47 @@
 
 All instructions to upgrade this project from one major version to the next will be documented in this file. Upgrades must be run sequentially, meaning you should not skip major releases while upgrading (fix releases can be skipped).
 
+## 3.x to 4.x
+
+### BSUID recipient support
+
+All `send*` methods that post to `/messages` now accept an optional `?string $recipient = null` BSUID argument. You can send a message with `to`, with `recipient`, or with both. When both are provided, WhatsApp Cloud API gives precedence to `to`.
+
+Before:
+```php
+$whatsapp_cloud_api->sendTextMessage(to: '34676104574', text: 'Hello');
+```
+
+After:
+```php
+$whatsapp_cloud_api->sendTextMessage(to: null, text: 'Hello from BSUID', preview_url: false, recipient: 'US.13491208655302741918');
+```
+
+The base message model now requires at least one of `to` or `recipient`.
+
+### `sendContact` parameter order changed
+
+`sendContact()` is the exception: the BSUID recipient now comes before the variadic phone arguments. Existing calls that passed a `Phone` as the third argument must be updated to insert `null` or the BSUID recipient first.
+
+Before:
+```php
+$whatsapp_cloud_api->sendContact(to: $to, name: $name, phone: $phone);
+```
+
+After:
+```php
+$whatsapp_cloud_api->sendContact(to: $to, name: $name, recipient: null, phone: $phone);
+```
+
+If you are sending only to a BSUID recipient:
+```php
+$whatsapp_cloud_api->sendContact(to: null, name: $name, recipient: $recipient_bsuid, phone: $phone);
+```
+
+### Webhook customer identifiers expanded
+
+`Netflie\WhatsAppCloudApi\WebHook\Notification\Support\Customer` now exposes `idType()`, `username()`, `userId()`, and `parentUserId()`. `phoneNumber()` is now nullable, and `id()` may come from either `wa_id` or `user_id`.
+
 ## 2.x to 3.x
 
 ### PHP version requirement
