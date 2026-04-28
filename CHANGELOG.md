@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.0.0 - 2026-04-14
+
+### What's Changed
+
+* Add BSUID support by @aalbarca in https://github.com/netflie/whatsapp-cloud-api/pull/245
+
+**Full Changelog**: https://github.com/netflie/whatsapp-cloud-api/compare/3.1.0...4.0.0
+
 ## 3.1.0 - 2026-03-23
 
 ### What's Changed
